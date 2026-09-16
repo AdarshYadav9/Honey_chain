@@ -1,0 +1,143 @@
+import React, { useState, useEffect } from 'react';
+import { ShieldCheck, Clock, ChevronDown, ChevronUp, CheckCircle2, AlertTriangle, ExternalLink } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
+
+const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+
+const STATUS_STYLES = {
+  HARVEST_CREATED: { bg: 'rgba(251, 191, 36, 0.12)', color: 'var(--amber-400)', border: 'rgba(251, 191, 36, 0.3)', label: 'Awaiting Verification' },
+  HARVEST_VERIFIED: { bg: 'rgba(96, 165, 250, 0.12)', color: '#60a5fa', border: 'rgba(96, 165, 250, 0.3)', label: 'Ready for Lab Test' },
+  CERTIFIED: { bg: 'var(--emerald-bg)', color: 'var(--emerald-400)', border: 'var(--emerald-border)', label: 'Certified' },
+  REJECTED: { bg: 'var(--rose-bg)', color: 'var(--rose-400)', border: 'var(--rose-border)', label: 'Rejected' },
+};
+
+export default function PendingVerification() {
+  const { sharedBatches, switchView } = useApp();
+  const [expanded, setExpanded] = useState(null);
+  const [verifying, setVerifying] = useState(null);
+  const [testing, setTesting] = useState(null);
+
+  const pending = sharedBatches.filter(b =>
+    b.status === 'HARVEST_CREATED' || b.status === 'HARVEST_VERIFIED'
+  );
+
+  const handleVerify = async (batchId) => {
+    setVerifying(batchId);
+    try {
+      await fetch(`${API_BASE}/api/batches/${batchId}/verify`, { method: 'POST' });
+    } catch (e) {}
+    setVerifying(null);
+  };
+
+  return (
+    <section className="view-pane active">
+      <div className="flow-title-row">
+        <div className="eyebrow-badge"><ShieldCheck size={13} /> Quality Assurance</div>
+        <h2 style={{ fontSize: '28px' }}>Pending Tests Queue</h2>
+        <p className="section-lede">Batches awaiting lab verification. Approve harvest registration or submit quality test results.</p>
+      </div>
+
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+        <div style={{ padding: '10px 18px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', fontSize: '13px' }}>
+          <span style={{ color: 'var(--text-dim)' }}>Pending: </span>
+          <strong style={{ color: 'var(--amber-400)' }}>{pending.length}</strong>
+        </div>
+        <div style={{ padding: '10px 18px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', fontSize: '13px' }}>
+          <span style={{ color: 'var(--text-dim)' }}>Awaiting Lab: </span>
+          <strong style={{ color: '#60a5fa' }}>{pending.filter(b => b.status === 'HARVEST_VERIFIED').length}</strong>
+        </div>
+        <button onClick={() => switchView('quality-history')} style={{ marginLeft: 'auto', padding: '10px 18px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', fontSize: '12px', color: 'var(--amber-400)', cursor: 'pointer', fontWeight: 600 }}>
+          View Test History →
+        </button>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {pending.map(batch => {
+          const st = STATUS_STYLES[batch.status] || STATUS_STYLES.HARVEST_CREATED;
+          const isExpanded = expanded === batch.id;
+
+          return (
+            <div key={batch.id} style={{ background: 'var(--bg-card)', border: `1px solid ${st.border}`, borderRadius: '14px', overflow: 'hidden' }}>
+              <div
+                onClick={() => setExpanded(isExpanded ? null : batch.id)}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', cursor: 'pointer' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: st.bg, color: st.color, fontSize: '18px' }}>
+                    {batch.status === 'HARVEST_CREATED' ? <Clock size={20} /> : <CheckCircle2 size={20} />}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--amber-400)' }}>{batch.id}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                      Hive: {batch.hiveId} | {batch.honeyType} | {batch.quantity} kg | Beekeeper: {batch.beekeeper || 'Unknown'}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ padding: '4px 12px', borderRadius: '999px', background: st.bg, color: st.color, border: `1px solid ${st.border}`, fontSize: '11px', fontWeight: 600 }}>{st.label}</span>
+                  {isExpanded ? <ChevronUp size={16} color="var(--text-dim)" /> : <ChevronDown size={16} color="var(--text-dim)" />}
+                </div>
+              </div>
+
+              {isExpanded && (
+                <div style={{ padding: '0 20px 20px', borderTop: '1px solid var(--border-subtle)' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginTop: '16px', marginBottom: '16px' }}>
+                    {[
+                      { label: 'Hive', value: batch.hiveId },
+                      { label: 'Honey Type', value: batch.honeyType },
+                      { label: 'Quantity', value: batch.quantity + ' kg' },
+                      { label: 'Extraction', value: batch.extractionMethod || 'Centrifugal' },
+                      { label: 'Floral Source', value: batch.floralSource || 'Multifloral' },
+                      { label: 'Moisture', value: batch.moisture ? batch.moisture + '%' : 'Not tested' },
+                      { label: 'Harvest Date', value: batch.harvestDate ? new Date(batch.harvestDate).toLocaleDateString() : '—' },
+                      { label: 'Batch Created', value: batch.transactions?.[0]?.date ? new Date(batch.transactions[0].date).toLocaleDateString() : '—' },
+                    ].map(item => (
+                      <div key={item.label} style={{ padding: '10px', background: 'var(--bg-inset)', borderRadius: '8px' }}>
+                        <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginBottom: '3px' }}>{item.label}</div>
+                        <div style={{ fontSize: '12.5px', fontWeight: 600 }}>{item.value}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    {batch.status === 'HARVEST_CREATED' && (
+                      <button
+                        onClick={() => handleVerify(batch.id)}
+                        disabled={verifying === batch.id}
+                        style={{ padding: '10px 24px', background: 'var(--emerald-400)', border: 'none', borderRadius: '8px', color: '#0f0b04', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        {verifying === batch.id ? 'Approving...' : 'Approve Harvest Registration'}
+                      </button>
+                    )}
+                    {batch.status === 'HARVEST_VERIFIED' && (
+                      <button
+                        onClick={() => { setTesting(batch.id); switchView('quality-test'); }}
+                        style={{ padding: '10px 24px', background: 'var(--gold-gradient)', border: 'none', borderRadius: '8px', color: '#0f0b04', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}
+                      >
+                        Submit Lab Test Results →
+                      </button>
+                    )}
+                    <button
+                      onClick={() => { window.__testingBatchId = batch.id; switchView('chain'); }}
+                      style={{ padding: '10px 18px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    >
+                      <ExternalLink size={13} /> Blockchain Trace
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {pending.length === 0 && (
+          <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-dim)', background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid var(--border-subtle)' }}>
+            <ShieldCheck size={40} style={{ marginBottom: '12px', opacity: 0.3 }} />
+            <div style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>Queue Clear</div>
+            <div style={{ fontSize: '12px' }}>No batches pending verification right now.</div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}

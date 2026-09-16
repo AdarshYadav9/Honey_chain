@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Dark Obsidian & Honey Gold Theme (Default Premium) */
+  --bg-dark: #090d14;
+  --bg-card: rgba(18, 24, 38, 0.78);
+  --bg-card-hover: rgba(26, 35, 54, 0.88);
+  --bg-panel: rgba(13, 19, 31, 0.94);
+  --bg-input: rgba(10, 15, 26, 0.85);
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --gold-glow: rgba(245, 158, 11, 0.25);
+  --gold-gradient: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  --gold-gradient-soft: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(217, 119, 6, 0.05) 100%);
+
+  --emerald-400: #4ade80;
+  --emerald-500: #22c55e;
+  --emerald-bg: rgba(74, 222, 128, 0.12);
+  --emerald-border: rgba(74, 222, 128, 0.3);
+
+  --rose-400: #fb7185;
+  --rose-bg: rgba(244, 63, 94, 0.12);
+  --rose-border: rgba(244, 63, 94, 0.3);
+
+  --border-subtle: rgba(245, 158, 11, 0.14);
+  --border-highlight: rgba(245, 158, 11, 0.35);
+
+  --bg-code: rgba(10, 15, 26, 0.6);
+  --bg-inset: rgba(10, 15, 26, 0.35);
+  --bg-input-subtle: rgba(0, 0, 0, 0.2);
+  --stroke-track: rgba(255, 255, 255, 0.08);
+
+  --font-display: 'Fraunces', serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --shadow-glow: 0 0 30px rgba(245, 158, 11, 0.12);
+  --shadow-card: 0 12px 36px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme='light'] {
+  --bg-dark: #fbf6ee;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-input: #ffffff;
+
+  --text-main: #1f1608;
+  --text-muted: #6b5638;
+  --text-dim: #947e60;
+
+  --amber-400: #c26a10;
+  --amber-500: #a6580c;
+  --amber-600: #8c4406;
+  --gold-glow: rgba(194, 106, 16, 0.10);
+  --gold-gradient: linear-gradient(135deg, #b87319 0%, #824d0e 100%);
+  --gold-gradient-soft: linear-gradient(135deg, rgba(246, 236, 214, 0.9) 0%, rgba(240, 226, 198, 0.7) 100%);
+
+  --emerald-400: #15803d;
+  --emerald-500: #166534;
+  --emerald-bg: #dcfce7;
+  --emerald-border: #86efac;
+
+  --border-subtle: #ede1cc;
+  --border-highlight: #dfcfb2;
+
+  --bg-code: #f5f0e6;
+  --bg-inset: #faf6ed;
+  --bg-input-subtle: #f0ebe0;
+  --stroke-track: rgba(0, 0, 0, 0.08);
+
+  --shadow-glow: 0 4px 20px rgba(180, 110, 20, 0.08);
+  --shadow-card: 0 10px 30px rgba(70, 45, 10, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  width: 100%;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  width: 100%;
+  line-height: 1.55;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--amber-500);
+  color: #ffffff;
+}
+
+h1, h2, h3, h4, .display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Full Width Fluid Container */
+.wrap {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 clamp(16px, 3.5vw, 56px);
+}

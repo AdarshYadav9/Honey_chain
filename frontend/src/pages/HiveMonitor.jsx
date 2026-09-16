@@ -1,0 +1,312 @@
+import React, { useMemo, useState } from 'react';
+import {
+  Search, CheckCircle2, Radio, Thermometer, Droplets, Scale, Wind, Cloud, LayoutGrid, List, Plus, X
+} from 'lucide-react';
+import { useApp } from '../context/AppContext';
+import FleetGrid from '../components/hive-monitor/FleetGrid';
+import AIHealthSnapshot from '../components/hive-monitor/AIHealthSnapshot';
+import AlertsPanel from '../components/hive-monitor/AlertsPanel';
+import DeviceMetaPanel from '../components/hive-monitor/DeviceMetaPanel';
+import TrendsPanel from '../components/hive-monitor/TrendsPanel';
+
+const STATE_META = {
+  ok: { label: 'Online', color: 'var(--emerald-400)' },
+  warn: { label: 'Watch', color: 'var(--amber-400)' },
+  low: { label: 'Low Batt.', color: '#f87171' },
+};
+
+const FLOWERS = ['Litchi Blossom', 'Mustard', 'Wildflower', 'Eucalyptus', 'Sundarbans Mangrove', 'Acacia', 'Coffee Blossom', 'Floral Mix'];
+
+export default function HiveMonitor() {
+  const { hives, activeHive, setActiveHive, curHive, currentUser, handleRegisterHarvest, handleAddHive } = useApp();
+  const [hiveSearch, setHiveSearch] = useState('');
+  const [viewMode, setViewMode] = useState('single');
+  const [timeRange, setTimeRange] = useState('24H');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addForm, setAddForm] = useState({ location: '', beekeeperName: '', floralSource: 'Wildflower', cluster: '' });
+  const [adding, setAdding] = useState(false);
+
+  const hiveList = useMemo(() => Object.entries(hives).map(([id, h]) => ({
+    id, loc: h.loc || 'Location unavailable', state: h.state || 'ok',
+  })), [hives]);
+
+  const filteredHiveList = useMemo(() => {
+    const q = hiveSearch.trim().toLowerCase();
+    if (!q) return hiveList;
+    return hiveList.filter(h => h.id.toLowerCase().includes(q) || h.loc.toLowerCase().includes(q));
+  }, [hiveList, hiveSearch]);
+
+  const goToHive = (id) => { setActiveHive(id); setViewMode('single'); };
+
+  const handleAddSubmit = async (e) => {
+    e.preventDefault();
+    if (!addForm.location.trim()) return;
+    setAdding(true);
+    const newId = await handleAddHive(addForm);
+    setAdding(false);
+    if (newId) {
+      setActiveHive(newId);
+      setViewMode('single');
+      setShowAddModal(false);
+      setAddForm({ location: '', beekeeperName: '', floralSource: 'Wildflower', cluster: '' });
+    }
+  };
+
+  return (
+    <section className="view-pane active" id="view-monitor">
+      <div className="monitor-dashboard-layout">
+        {/* LEFT SIDEBAR — HIVES */}
+        <div className="monitor-sidebar">
+          <div className="ms-search-wrap">
+            <Search size={14} className="ms-search-icon" />
+            <input
+              type="text" className="ms-search-input" placeholder="Search Hive ID/location..."
+              value={hiveSearch} onChange={e => setHiveSearch(e.target.value)}
+            />
+          </div>
+
+          <div className="ms-hive-list">
+            {filteredHiveList.map(h => {
+              const meta = STATE_META[h.state] || STATE_META.ok;
+              return (
+                <div key={h.id} className={`ms-hive-item ${viewMode === 'single' && h.id === activeHive ? 'active' : ''}`} onClick={() => goToHive(h.id)}>
+                  <div className="ms-h-top">
+                    <span className="ms-h-id">{h.id}</span>
+                    <span className="ms-h-status" style={{ color: meta.color }}>● {meta.label}</span>
+                  </div>
+                  <div className="ms-h-loc">{h.loc}</div>
+                </div>
+              );
+            })}
+            {filteredHiveList.length === 0 && (
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)', padding: '10px 4px' }}>No hives match "{hiveSearch}".</div>
+            )}
+          </div>
+
+          <button className="btn-luxury btn-luxury-ghost ms-add-btn" onClick={() => setShowAddModal(true)}>
+            <Plus size={14} /> Add New Hive
+          </button>
+        </div>
+
+        {/* ADD HIVE MODAL */}
+        {showAddModal && (
+          <div className="modal-backdrop-blur" onClick={() => setShowAddModal(false)}>
+            <div className="passport-modal-window" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
+              <button className="btn-close-modal" onClick={() => setShowAddModal(false)}><X size={16} /></button>
+              <h3 style={{ margin: '0 0 6px', fontSize: '20px' }}>Register New Hive</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '13px', margin: '0 0 20px' }}>Add a new smart hive to the monitoring network.</p>
+              <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>Location *</label>
+                  <input
+                    type="text" required placeholder="e.g. Satara Apiary, Maharashtra"
+                    value={addForm.location} onChange={e => setAddForm(f => ({ ...f, location: e.target.value }))}
+                    style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>Beekeeper Name</label>
+                  <input
+                    type="text" placeholder="e.g. Ganesh Pawar"
+                    value={addForm.beekeeperName} onChange={e => setAddForm(f => ({ ...f, beekeeperName: e.target.value }))}
+                    style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+                  />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>Floral Source</label>
+                    <select
+                      value={addForm.floralSource} onChange={e => setAddForm(f => ({ ...f, floralSource: e.target.value }))}
+                      style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+                    >
+                      {FLOWERS.map(f => <option key={f} value={f}>{f}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>Cluster</label>
+                    <input
+                      type="text" placeholder="e.g. Satara"
+                      value={addForm.cluster} onChange={e => setAddForm(f => ({ ...f, cluster: e.target.value }))}
+                      style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit" className="btn-luxury btn-luxury-primary"
+                  disabled={adding || !addForm.location.trim()}
+                  style={{ marginTop: '4px', opacity: adding || !addForm.location.trim() ? 0.6 : 1 }}
+                >
+                  {adding ? 'Registering...' : 'Register Hive'}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* MAIN CONTENT AREA */}
+        <div className="monitor-main-area">
+          {/* Header card */}
+          <div className="mm-header-card glass-card">
+            <div className="mm-h-top">
+              <div>
+                <h2 style={{ fontSize: '24px', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  {viewMode === 'fleet' ? 'All Hives — Fleet View' : `Hive ${activeHive}`}
+                  {viewMode === 'single' && <span className="mm-badge-online">Online</span>}
+                </h2>
+                <div style={{ color: 'var(--text-muted)', fontSize: '13.5px' }}>
+                  {viewMode === 'fleet'
+                    ? `${Object.keys(hives).length} hives across ${new Set(Object.values(hives).map(h => h.cluster || h.loc?.split(',')[0])).size} clusters`
+                    : (curHive?.loc || 'Location unavailable') + (curHive?.beekeeper ? ` • Beekeeper: ${curHive.beekeeper}` : '')
+                  }
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  className="btn-luxury btn-luxury-ghost"
+                  onClick={() => setViewMode(v => (v === 'fleet' ? 'single' : 'fleet'))}
+                >
+                  {viewMode === 'fleet' ? <><List size={15} /> Single Hive</> : <><LayoutGrid size={15} /> Fleet View</>}
+                </button>
+                {viewMode === 'single' && (
+                  <button className="btn-luxury btn-luxury-primary" onClick={() => alert('Mock: Export Data triggered')}>Export Data</button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {viewMode === 'fleet' ? (
+            <FleetGrid hives={hives} onSelectHive={goToHive} />
+          ) : (
+            <>
+              {/* Status strip */}
+              <div className="mm-status-strip">
+                <div className="mm-ss-item"><CheckCircle2 size={16} color="var(--emerald-400)" /> Online</div>
+                <div className="mm-ss-item"><CheckCircle2 size={16} color={curHive.state === 'ok' ? 'var(--emerald-400)' : 'var(--amber-400)'} /> {curHive.health || 'Healthy'}</div>
+                <div className="mm-ss-item"><Radio size={16} color="var(--emerald-400)" /> IoT Connected</div>
+              </div>
+
+              {/* Core Sensor Readings */}
+              <div className="mm-cb-title" style={{ margin: '20px 0 10px' }}>CORE SENSOR READINGS</div>
+              <div className="mm-sensor-grid">
+                <div className="mm-sensor-card">
+                  <div className="mm-sc-label"><Thermometer size={14} /> Internal Temp</div>
+                  <div className="mm-sc-val">{(curHive.temp ?? 34.8).toFixed(1)}°C</div>
+                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>Brood range 34–35°C</div>
+                </div>
+                <div className="mm-sensor-card">
+                  <div className="mm-sc-label"><Droplets size={14} /> Humidity</div>
+                  <div className="mm-sc-val">{Math.round(curHive.hum ?? 63)}%</div>
+                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>Optimal 45–70%</div>
+                </div>
+                <div className="mm-sensor-card">
+                  <div className="mm-sc-label"><Scale size={14} /> Hive Weight</div>
+                  <div className="mm-sc-val">{(curHive.wt ?? 34.1).toFixed(1)} kg</div>
+                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>{curHive.wtDelta || '+0.0 kg'} (24h)</div>
+                </div>
+                <div className="mm-sensor-card">
+                  <div className="mm-sc-label"><Radio size={14} /> Acoustic Buzz</div>
+                  <div className="mm-sc-val" style={{ fontSize: '18px' }}>{(curHive.act || 'Normal').split(' ')[0]}</div>
+                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>{curHive.act || 'Normal (240Hz)'}</div>
+                </div>
+                <div className="mm-sensor-card">
+                  <div className="mm-sc-label"><Cloud size={14} /> Ambient / Weather</div>
+                  <div className="mm-sc-val">{curHive.extTemp != null ? `${curHive.extTemp.toFixed(1)}°C` : '—'}</div>
+                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>{curHive.weather || 'No data'}</div>
+                </div>
+                <div className="mm-sensor-card">
+                  <div className="mm-sc-label"><Wind size={14} /> CO₂ Level</div>
+                  <div className="mm-sc-val">{curHive.co2 ?? '—'} ppm</div>
+                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>Ventilation indicator</div>
+                </div>
+              </div>
+
+              {/* AI Health & Alerts row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
+                <AIHealthSnapshot hive={curHive} />
+                <AlertsPanel hive={curHive} />
+              </div>
+
+              {/* Trends & History */}
+              <div style={{ marginTop: '20px' }}>
+                <TrendsPanel hive={curHive} range={timeRange} onChangeRange={setTimeRange} />
+              </div>
+
+              {/* Device & Metadata */}
+              <div style={{ marginTop: '20px' }}>
+                <DeviceMetaPanel hiveId={activeHive} hive={curHive} />
+              </div>
+
+              {/* Recent telemetry + event timeline */}
+              <div className="mm-bottom-grid" style={{ marginTop: '20px' }}>
+                <div className="mm-table-card glass-card">
+                  <div className="mm-cb-title">Recent Telemetry</div>
+                  <table className="mm-table">
+                    <thead><tr><th>Time</th><th>Temp</th><th>Hum</th><th>Weight</th><th>Batt</th><th>Status</th></tr></thead>
+                    <tbody>
+                      <tr><td>Just now</td><td>{(curHive.temp ?? 34.8).toFixed(1)}°C</td><td>{Math.round(curHive.hum ?? 63)}%</td><td>{(curHive.wt ?? 34.1).toFixed(1)} kg</td><td>{Math.round(curHive.batt ?? 88)}%</td><td className="status-ok">{curHive.health || 'Healthy'}</td></tr>
+                      <tr><td>3 mins ago</td><td>{((curHive.temp ?? 34.8) - 0.1).toFixed(1)}°C</td><td>{Math.round(curHive.hum ?? 63)}%</td><td>{(curHive.wt ?? 34.1).toFixed(1)} kg</td><td>{Math.round(curHive.batt ?? 88)}%</td><td className="status-ok">{curHive.health || 'Healthy'}</td></tr>
+                      <tr><td>6 mins ago</td><td>{((curHive.temp ?? 34.8) - 0.1).toFixed(1)}°C</td><td>{Math.round((curHive.hum ?? 63) - 1)}%</td><td>{((curHive.wt ?? 34.1) - 0.1).toFixed(1)} kg</td><td>{Math.round(curHive.batt ?? 88)}%</td><td className="status-ok">{curHive.health || 'Healthy'}</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mm-timeline-card glass-card">
+                  <div className="mm-cb-title">Hive Events &amp; Inspection Log</div>
+                  <div className="mm-timeline">
+                    <div className="mm-tl-item"><div className="mm-tl-dot ok"></div><div className="mm-tl-content"><div className="mm-tl-time">2 mins ago</div><div className="mm-tl-desc">Data synced successfully</div></div></div>
+                    <div className="mm-tl-item"><div className="mm-tl-dot ok"></div><div className="mm-tl-content"><div className="mm-tl-time">1 hr ago</div><div className="mm-tl-desc">Routine health check completed</div></div></div>
+                    <div className="mm-tl-item"><div className="mm-tl-dot ok"></div><div className="mm-tl-content"><div className="mm-tl-time">4 hrs ago</div><div className="mm-tl-desc">Temperature within normal range</div></div></div>
+                    <div className="mm-tl-item"><div className="mm-tl-dot info"></div><div className="mm-tl-content"><div className="mm-tl-time">12 hrs ago</div><div className="mm-tl-desc">Weight changed by {curHive.wtDelta || '+0.2kg'}</div></div></div>
+                    <div className="mm-tl-item"><div className="mm-tl-dot ok"></div><div className="mm-tl-content"><div className="mm-tl-time">1 day ago</div><div className="mm-tl-desc">Battery level normal</div></div></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Beekeeper: Register Harvest */}
+              {currentUser?.role === 'BEEKEEPER' && (
+                <div className="glass-card" style={{ marginTop: '20px', borderTop: '2px solid var(--amber-500)' }}>
+                  <h4 style={{ marginBottom: '16px', fontSize: '16px', color: 'var(--amber-400)' }}>Register Honey Harvest</h4>
+                  <form onSubmit={handleRegisterHarvest} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto', gap: '16px', alignItems: 'end' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Honey Type</label>
+                      <select style={{ width: '100%', padding: '12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} id="honeyType">
+                        <option value="Raw Multifloral Honey">Raw Multifloral Honey</option>
+                        <option value="Litchi Monofloral Honey">Litchi Monofloral Honey</option>
+                        <option value="Mustard Honey">Mustard Honey</option>
+                        <option value="Eucalyptus Honey">Eucalyptus Honey</option>
+                        <option value="Wildflower Honey">Wildflower Honey</option>
+                        <option value="Sundarbans Mangrove Honey">Sundarbans Mangrove Honey</option>
+                        <option value="Acacia Honey">Acacia Honey</option>
+                        <option value="Coffee Blossom Honey">Coffee Blossom Honey</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Extraction Method</label>
+                      <select style={{ width: '100%', padding: '12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} id="extractionMethod">
+                        <option value="Centrifugal Cold Extraction">Centrifugal Cold Extraction</option>
+                        <option value="Stainless Steel Centrifugal">Stainless Steel Centrifugal</option>
+                        <option value="Crush and Strain">Crush and Strain</option>
+                        <option value="Flow Hive Extraction">Flow Hive Extraction</option>
+                        <option value="Manual Comb Uncapping">Manual Comb Uncapping</option>
+                        <option value="Pressure Extraction">Pressure Extraction</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Quantity (kg)</label>
+                      <input type="number" id="harvestQty" defaultValue={8.4} step="0.1" required style={{ width: '100%', padding: '12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Harvest Date</label>
+                      <input type="date" id="harvestDate" defaultValue={new Date().toISOString().split('T')[0]} required style={{ width: '100%', padding: '12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} />
+                    </div>
+                    <button type="submit" className="btn-luxury btn-luxury-primary" style={{ padding: '12px 24px', height: '45px' }}>Create Batch</button>
+                  </form>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
