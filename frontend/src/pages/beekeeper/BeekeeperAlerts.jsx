@@ -15,20 +15,20 @@ function generateAlerts(hives, batches) {
   const alerts = [];
   let id = 1;
 
-  (hives || []).forEach(hive => {
-    const sensor = hive.sensorData || {};
+  Object.entries(hives || {}).forEach(([hiveId, h]) => {
+    h = h || {};
 
-    if (sensor.battery !== undefined && sensor.battery < 20) {
-      alerts.push({ id: id++, type: 'critical', icon: <Battery size={16} />, title: `Low Battery — ${hive.id}`, desc: `Battery at ${sensor.battery}%. Replace before next inspection.`, time: '2 hours ago', hive: hive.id, read: false });
+    if (h.batt !== undefined && h.batt < 20) {
+      alerts.push({ id: id++, type: 'critical', icon: <Battery size={16} />, title: `Low Battery — ${hiveId}`, desc: `Battery at ${h.batt}%. Replace before next inspection.`, time: '2 hours ago', hive: hiveId, read: false });
     }
-    if (sensor.temperature !== undefined && sensor.temperature > 40) {
-      alerts.push({ id: id++, type: 'warning', icon: <Thermometer size={16} />, title: `High Temperature — ${hive.id}`, desc: `Internal temp reached ${sensor.temperature}°C. Normal range is 35–40°C.`, time: '5 hours ago', hive: hive.id, read: false });
+    if (h.temp !== undefined && h.temp > 40) {
+      alerts.push({ id: id++, type: 'warning', icon: <Thermometer size={16} />, title: `High Temperature — ${hiveId}`, desc: `Internal temp reached ${h.temp}°C. Normal range is 35–40°C.`, time: '5 hours ago', hive: hiveId, read: false });
     }
-    if (sensor.weight !== undefined && sensor.weight < 15) {
-      alerts.push({ id: id++, type: 'warning', icon: <AlertTriangle size={16} />, title: `Low Weight — ${hive.id}`, desc: `Weight dropped to ${sensor.weight}kg. Possible swarm or extraction.`, time: '8 hours ago', hive: hive.id, read: false });
+    if (h.wt !== undefined && h.wt < 15) {
+      alerts.push({ id: id++, type: 'warning', icon: <AlertTriangle size={16} />, title: `Low Weight — ${hiveId}`, desc: `Weight dropped to ${h.wt}kg. Possible swarm or extraction.`, time: '8 hours ago', hive: hiveId, read: false });
     }
-    if (sensor.humidity !== undefined && sensor.humidity > 70) {
-      alerts.push({ id: id++, type: 'warning', icon: <Droplets size={16} />, title: `High Humidity — ${hive.id}`, desc: `Humidity at ${sensor.humidity}%. Risk of fermentation.`, time: '1 day ago', hive: hive.id, read: true });
+    if (h.hum !== undefined && h.hum > 70) {
+      alerts.push({ id: id++, type: 'warning', icon: <Droplets size={16} />, title: `High Humidity — ${hiveId}`, desc: `Humidity at ${h.hum}%. Risk of fermentation.`, time: '1 day ago', hive: hiveId, read: true });
     }
   });
 

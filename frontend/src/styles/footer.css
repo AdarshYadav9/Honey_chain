@@ -1,0 +1,37 @@
+/* ---------- Minimal Footer ---------- */
+
+footer.app-footer {
+  width: 100%;
+  margin-top: 60px;
+  padding: 32px 24px 24px;
+
+  background: transparent;
+
+  border-top: 1px solid rgba(190, 140, 60, 0.30);
+
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+footer.app-footer p {
+  margin: 0;
+}
+
+footer.app-footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+footer.app-footer a:hover {
+  color: var(--amber-600);
+}
+
+@media (max-width: 600px) {
+  footer.app-footer {
+    padding: 24px 20px;
+    font-size: 14px;
+  }
+}
+

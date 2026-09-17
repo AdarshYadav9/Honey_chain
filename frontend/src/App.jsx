@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
-import './App.css';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import './styles/index.css';
 import { AppProvider, useApp } from './context/AppContext';
+import { VIEW_PATHS } from './routeConfig';
 
 import Header from './components/Header';
 import LoginPage from './components/LoginPage';
@@ -84,8 +86,19 @@ function NotificationBanner() {
   );
 }
 
+function AppRoute({ viewKey }) {
+  const ActivePage = VIEWS[viewKey] || Overview;
+  return <ActivePage />;
+}
+
 function AppShell() {
   const { activeView, setActiveView, setBatchIdInput } = useApp();
+  const location = useLocation();
+
+  // Scroll to top whenever the URL route changes (incl. back/forward)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
 
   // Handle URL hash routing for QR code scans: #verify/BATCH_ID
   useEffect(() => {
@@ -103,15 +116,20 @@ function AppShell() {
     return <LoginPage />;
   }
 
-  const ActivePage = VIEWS[activeView] || Overview;
-
   return (
     <div className="app-container">
       <div className="comb-overlay"></div>
       <Header />
       <main className="wrap">
         <NotificationBanner />
-        <ActivePage />
+        <Routes>
+          {Object.entries(VIEW_PATHS)
+            .filter(([key]) => key !== 'login')
+            .map(([key, path]) => (
+              <Route key={path} path={path} element={<AppRoute viewKey={key} />} />
+            ))}
+          <Route path="*" element={<AppRoute viewKey="overview" />} />
+        </Routes>
       </main>
       <CertificateModal />
       <footer className="app-footer">
@@ -125,8 +143,10 @@ function AppShell() {
 
 export default function App() {
   return (
-    <AppProvider>
-      <AppShell />
-    </AppProvider>
+    <BrowserRouter>
+      <AppProvider>
+        <AppShell />
+      </AppProvider>
+    </BrowserRouter>
   );
 }
