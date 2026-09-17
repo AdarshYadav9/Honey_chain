@@ -1,0 +1,204 @@
+/* ---------- Header & Navigation ---------- */
+header.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(9, 13, 20, 0.86);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+}
+
+[data-theme='light'] header.app-header {
+  background: rgba(250, 246, 236, 0.92);
+}
+
+.headbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px clamp(16px, 3.5vw, 56px);
+  width: 100%;
+  margin: 0;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.brand-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--gold-gradient-soft);
+  border: 1px solid var(--border-highlight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px var(--gold-glow);
+  transition: transform 0.2s ease;
+}
+
+.brand:hover .brand-icon-wrap {
+  transform: scale(1.05) rotate(4deg);
+}
+
+.brand-text .name {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffffff 30%, var(--amber-400) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme='light'] .brand-text .name {
+  background: linear-gradient(135deg, #1c1306 30%, var(--amber-600) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-text .tag {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Nav Tabs */
+nav.nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(18, 24, 38, 0.75);
+  padding: 5px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+[data-theme='light'] nav.nav-tabs {
+  background: rgba(235, 224, 202, 0.75);
+  border: 1px solid rgba(190, 140, 60, 0.22);
+}
+
+nav.nav-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-button {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.tab-button:hover {
+  color: var(--text-main);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+[data-theme='light'] .tab-button {
+  color: #4a3821;
+}
+
+[data-theme='light'] .tab-button:hover:not(.active) {
+  background: rgba(180, 110, 20, 0.08);
+  color: #1f1608;
+}
+
+.tab-button.active {
+  background: var(--gold-gradient);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(184, 115, 25, 0.35);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.header-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--emerald-bg);
+  color: var(--emerald-400);
+  border: 1px solid var(--emerald-border);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--amber-400);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1040px) {
+  .headbar {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .brand {
+    order: 1;
+  }
+  .header-right {
+    order: 2;
+  }
+  nav.nav-tabs {
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 4px;
+  }
+  .tab-button {
+    font-size: 12.5px;
+    padding: 7px 12px;
+  }
+}
+

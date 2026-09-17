@@ -1,13 +1,25 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { initialHives } from '../data/mockData';
+import { VIEW_PATHS, viewForPath } from '../routeConfig';
 
 const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
 
 const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [theme, setTheme] = useState('light');
-  const [activeView, setActiveView] = useState('overview');
+  const activeView = useMemo(() => viewForPath(location.pathname), [location.pathname]);
+
+  const setActiveView = useCallback((viewName) => {
+    const path = VIEW_PATHS[viewName];
+    if (path && path !== location.pathname) {
+      navigate(path);
+    }
+  }, [location.pathname, navigate]);
   const [hives, setHives] = useState(initialHives);
   const [activeHive, setActiveHive] = useState('H001');
   const [batchIdInput, setBatchIdInput] = useState('KVIC-HC-2026-0417');
@@ -51,7 +63,7 @@ export function AppProvider({ children }) {
   const switchView = useCallback((viewName) => {
     setActiveView(viewName);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [setActiveView]);
 
   const handleLogin = useCallback(async (e) => {
     e.preventDefault();
