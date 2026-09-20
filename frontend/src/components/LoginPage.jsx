@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ShieldCheck, Award, Copy, Eye, EyeOff,
   Leaf, LineChart, Users, QrCode, Shield, User, CheckCircle, Cog, Check,
@@ -9,19 +9,14 @@ import { useApp } from '../context/AppContext';
 export default function LoginPage() {
   const {
     switchView,
+    theme, setTheme,
     loginEmail, setLoginEmail,
     loginError, handleLogin,
     showPassword, setShowPassword,
   } = useApp();
 
   const [copiedEmail, setCopiedEmail] = useState(null);
-  const [loginTheme, setLoginTheme] = useState(() => localStorage.getItem('loginTheme') || 'dark');
   const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', loginTheme);
-    localStorage.setItem('loginTheme', loginTheme);
-  }, [loginTheme]);
 
   const demoAccounts = [
     { role: 'Admin', email: 'admin@honeychain.demo', badge: 'Full Access', icon: <Award size={14} />, badgeClass: 'badge-admin' },
@@ -102,8 +97,8 @@ export default function LoginPage() {
                 <div className="lcd-sub">KVIC HONEY MISSION · BLOCKCHAIN &amp; AIOT</div>
                 <div className="lcd-desc">Sign in to access your dashboard</div>
               </div>
-              <button className="lcd-theme-toggle" onClick={() => setLoginTheme(loginTheme === 'dark' ? 'light' : 'dark')} title="Toggle theme">
-                {loginTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              <button className="lcd-theme-toggle" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} title="Toggle theme">
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
               </button>
             </div>
 

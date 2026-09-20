@@ -1,0 +1,41 @@
+/* ---------- Scale-Up Network ---------- */
+.phases-3col-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.phase-roadmap-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.hex-cluster-network {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.hex-node-item {
+  width: 76px;
+  text-align: center;
+}
+
+.hex-node-item span {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+@media (max-width: 860px) {
+  .phases-3col-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

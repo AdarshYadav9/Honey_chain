@@ -1,0 +1,383 @@
+/* ==================================================
+   LOGIN RESPONSIVE
+   ================================================== */
+
+@media (max-width: 1180px) and (min-width: 861px) {
+  .login-global-header {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .login-split-container {
+    grid-template-columns: 52% 48%;
+  }
+
+  .login-hero-pane {
+    padding-left: 34px;
+    padding-right: 34px;
+  }
+
+  .login-hero-title {
+    font-size: 42px;
+  }
+
+  .login-form-pane {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .login-form-pane .login-card {
+    max-width: 490px;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}
+
+/* Short desktop screens */
+@media (max-height: 820px) and (min-width: 861px) {
+  .login-global-header {
+    flex-basis: 60px;
+    min-height: 60px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .login-split-container {
+    height: calc(100dvh - 60px);
+  }
+
+  .login-hero-pane {
+    padding-top: 24px;
+    padding-bottom: 116px;
+  }
+
+  .login-hero-title {
+    font-size: 38px;
+  }
+
+  .login-hero-desc {
+    margin-bottom: 18px;
+    font-size: 13px;
+  }
+
+  .login-hero-features {
+    margin-bottom: 17px;
+  }
+
+  .login-hero-quote {
+    font-size: 15px;
+  }
+
+  .login-form-pane {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .login-form-pane .login-card {
+    padding-top: 19px;
+    padding-bottom: 18px;
+  }
+
+  .lc-header {
+    margin-bottom: 12px;
+  }
+
+  .lc-form {
+    gap: 9px;
+  }
+
+  .lc-demo-creds {
+    margin-top: 10px;
+    padding-top: 9px;
+  }
+}
+
+/* Tablet/mobile */
+@media (max-width: 860px) {
+  .login-page-wrapper {
+    position: relative;
+    height: auto;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .login-global-header {
+    flex: 0 0 62px;
+    min-height: 62px;
+    padding: 10px 18px;
+  }
+
+  .login-header-right {
+    display: none;
+  }
+
+  .login-split-container {
+    height: auto;
+    min-height: calc(100dvh - 62px);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .login-hero-pane {
+    flex: none;
+    min-height: 370px;
+    padding: 38px 22px 105px;
+    justify-content: center;
+  }
+
+  .login-hero-content {
+    max-width: 620px;
+  }
+
+  .login-hero-title {
+    font-size: clamp(34px, 8vw, 46px);
+  }
+
+  .login-hero-desc {
+    font-size: 14px;
+  }
+
+  .login-hero-bottom-bar {
+    padding: 12px 18px;
+  }
+
+  .lh-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+  }
+
+  .lh-stat-item {
+    gap: 5px;
+  }
+
+  .lh-stat-item div {
+    font-size: 8px;
+  }
+
+  .lh-stat-summary,
+  .lh-slogan {
+    display: none;
+  }
+
+  .login-form-pane {
+    flex: none;
+    padding: 20px 16px 28px;
+    overflow: visible;
+  }
+
+  .login-form-pane .login-card {
+    max-width: 620px;
+    max-height: none;
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .login-brand-text .login-name {
+    font-size: 18px;
+  }
+
+  .login-brand-text .login-tag {
+    font-size: 8px;
+  }
+
+  .login-hero-pane {
+    min-height: 390px;
+  }
+
+  .login-hero-features {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 310px;
+    gap: 13px;
+  }
+
+  .login-hero-quote {
+    display: none;
+  }
+
+  .lh-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 8px;
+  }
+
+  .login-form-pane .login-card {
+    border-radius: 18px;
+    padding: 22px 16px;
+  }
+
+  .lc-brand {
+    font-size: 28px;
+  }
+
+  .lc-dc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Very short mobile screens */
+@media (max-height: 700px) and (max-width: 860px) {
+  .login-hero-pane {
+    min-height: 330px;
+    padding-top: 28px;
+    padding-bottom: 95px;
+  }
+
+  .login-hero-desc {
+    margin-bottom: 18px;
+  }
+
+  .login-hero-features {
+    margin-bottom: 0;
+  }
+}
+
+/* ============================================================
+   COMPREHENSIVE MOBILE RESPONSIVE STYLES
+   ============================================================ */
+
+/* ---------- Small tablets & large phones (<= 768px) ---------- */
+@media (max-width: 768px) {
+  .headbar {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .brand-text .tag { display: none; }
+  .brand-icon-wrap { width: 34px; height: 34px; }
+  .brand-text .name { font-size: 18px; }
+
+  nav.nav-tabs {
+    gap: 2px;
+    padding: 3px;
+    border-radius: 12px;
+  }
+  .tab-button {
+    font-size: 11px;
+    padding: 6px 10px;
+    gap: 4px;
+  }
+  .tab-button svg { width: 13px; height: 13px; }
+
+  .header-live-pill { display: none; }
+
+  section.view-pane { padding: 20px 0 40px; }
+
+  .flow-title-row h2 { font-size: 22px; }
+  .section-lede { font-size: 14px; }
+
+  .overview-bottom-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+
+  .system-status-strip { flex-wrap: wrap; gap: 8px; padding: 10px 14px; }
+  .status-divider { display: none; }
+  .status-meta { font-size: 11px; }
+
+  .prod-big { font-size: 28px !important; }
+
+  .batch-meta-grid { grid-template-columns: auto 1fr !important; }
+
+  .user-profile span:first-child { display: none; }
+
+  .hero-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ---------- Mobile phones (<= 600px) ---------- */
+@media (max-width: 600px) {
+  .headbar { padding: 8px 10px; gap: 6px; }
+  .brand-text .name { font-size: 16px; }
+  .brand-icon-wrap { width: 30px; height: 30px; border-radius: 8px; }
+
+  nav.nav-tabs {
+    gap: 1px;
+    padding: 2px;
+    border-radius: 10px;
+  }
+  .tab-button {
+    font-size: 10px;
+    padding: 5px 8px;
+    gap: 3px;
+    border-radius: 8px;
+  }
+  .tab-button svg { width: 12px; height: 12px; }
+
+  section.view-pane { padding: 16px 0 32px; }
+  .flow-title-row { margin-bottom: 14px; }
+  .flow-title-row h2 { font-size: 20px; }
+  .flow-title-row .eyebrow-badge { font-size: 10px; padding: 4px 10px; }
+  .section-lede { font-size: 13px; line-height: 1.5; }
+
+  .eyebrow-badge { font-size: 10px; padding: 4px 10px; }
+
+  /* Stat cards stack */
+  [style*="gridTemplateColumns: repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; }
+  [style*="gridTemplateColumns: repeat(5"] { grid-template-columns: repeat(2, 1fr) !important; }
+  [style*="gridTemplateColumns: repeat(3"] { grid-template-columns: 1fr !important; }
+
+  /* Two-column forms/panels stack */
+  [style*="gridTemplateColumns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+
+  /* Tables horizontal scroll */
+  table { font-size: 11px !important; }
+  table th, table td { padding: 8px 10px !important; white-space: nowrap; }
+
+  .glass-card { padding: 14px !important; border-radius: 12px !important; }
+
+  /* Production chart */
+  .chart-toggles { gap: 4px; }
+  .chart-toggle { font-size: 10px; padding: 4px 10px; }
+
+  /* Buttons full width on mobile */
+  button[style*="width: 100%"] { min-height: 44px; }
+
+  /* Quality standards cards */
+  [style*="gridTemplateColumns: repeat(auto-fill"] { grid-template-columns: 1fr !important; }
+
+  /* Facility info */
+  [style*="gridTemplateColumns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+
+  /* Alert/badge text */
+  .alert-row { padding: 10px 12px !important; }
+  .alert-id { font-size: 11px !important; }
+  .alert-msg { font-size: 12px !important; }
+  .alert-meta { font-size: 10px !important; }
+  .alert-badge { font-size: 9px !important; padding: 2px 6px !important; }
+
+  /* Status badge */
+  .status-badge { font-size: 10px !important; padding: 3px 8px !important; }
+
+  /* Footer */
+  footer.app-footer { padding: 16px 12px; font-size: 12px; text-align: center; }
+}
+
+/* ---------- Very small phones (<= 400px) ---------- */
+@media (max-width: 400px) {
+  .brand-text .name { font-size: 14px; }
+  .brand-icon-wrap { width: 26px; height: 26px; }
+  .tab-button { font-size: 9px; padding: 4px 7px; }
+  .tab-button svg { width: 11px; height: 11px; }
+  .flow-title-row h2 { font-size: 18px; }
+  .section-lede { font-size: 12px; }
+}
+
+/* ---------- Scrollable table wrapper ---------- */
+.table-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 14px;
+  border: 1px solid var(--border-subtle);
+}
+.table-scroll-wrap table { width: 100%; min-width: 600px; }
+
+/* ---------- Touch-friendly tap targets ---------- */
+@media (pointer: coarse) {
+  .tab-button { min-height: 40px; }
+  button { min-height: 36px; }
+  input, select, textarea { min-height: 40px; font-size: 16px !important; }
+  .alert-row { min-height: 48px; }
+}
+
+/* ---------- Safe area for notch devices ---------- */
+@supports (padding: env(safe-area-inset-top)) {
+  header.app-header { padding-top: env(safe-area-inset-top); }
+  footer.app-footer { padding-bottom: env(safe-area-inset-bottom); }
+}
