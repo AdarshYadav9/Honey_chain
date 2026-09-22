@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Layers, ShieldCheck, Search, ChevronRight, CheckCircle2, AlertTriangle,
-  Download, FileText, MapPin, User, Clock, Hash, Link2, Calendar, Filter, X, Eye
+  Layers, ShieldCheck, Search, ChevronRight, AlertTriangle,
+  Download, FileText, MapPin, User, Clock
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import CertificateModal from '../components/CertificateModal';
@@ -14,8 +14,6 @@ const STAGE_META = {
   PACKAGED: { label: 'Packaging', icon: '📦', color: '#f472b6', stage: 5 },
   BatchCertification: { label: 'Certified', icon: '🏅', color: 'var(--emerald-400)', stage: 6 },
 };
-
-const STAGE_ORDER = ['HARVEST_CREATED', 'HARVEST_VERIFIED', 'QUALITY_VERIFIED', 'PROCESSED', 'PACKAGED', 'BatchCertification'];
 
 const MOCK_CHECKPOINTS = {
   'HONEY-BATCH-2025-001': {
@@ -127,7 +125,7 @@ function buildCheckpointsFromBatch(batch) {
 }
 
 export default function BlockchainTrace() {
-  const { batchIdInput, setBatchIdInput, sharedBatches, ledger, showFullCertModal, setShowFullCertModal } = useApp();
+  const { sharedBatches } = useApp();
   const [searchType, setSearchType] = useState('batchId');
   const [searchValue, setSearchValue] = useState('');
   const [dateFrom, setDateFrom] = useState('');

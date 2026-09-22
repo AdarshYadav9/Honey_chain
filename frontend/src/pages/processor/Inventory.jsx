@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Archive, Search, QrCode, Truck, Download, X } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const STATUS_STYLES = {
   PACKAGED: { bg: 'var(--emerald-bg)', color: 'var(--emerald-400)', border: 'var(--emerald-border)', label: 'Packaged', icon: <QrCode size={12} /> },

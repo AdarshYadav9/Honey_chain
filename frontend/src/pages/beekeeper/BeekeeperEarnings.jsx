@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { IndianRupee, Wallet, Clock, CheckCircle2, ExternalLink } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
-
 const RATE_PER_KG = { default: 280 };
 
 const STATUS_MAP = {
@@ -12,7 +10,7 @@ const STATUS_MAP = {
 };
 
 export default function BeekeeperEarnings() {
-  const { sharedBatches, currentUser } = useApp();
+  const { sharedBatches } = useApp();
   const [earnings, setEarnings] = useState([]);
 
   useEffect(() => {

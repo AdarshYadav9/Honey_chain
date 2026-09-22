@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, Save, RotateCcw, Bell, Cpu, Link2, Shield } from 'lucide-react';
+import { Settings, Save, RotateCcw, Bell, Cpu, Link2 } from 'lucide-react';
 
 const DEFAULT_SETTINGS = {
   alerts: {

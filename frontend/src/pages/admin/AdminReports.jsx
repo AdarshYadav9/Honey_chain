@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FileText, Download, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
-
 const STATUS_STYLES = {
   ready: { bg: 'var(--emerald-bg)', color: 'var(--emerald-400)', border: 'var(--emerald-border)', icon: <CheckCircle2 size={12} />, label: 'Ready' },
   generating: { bg: 'rgba(251, 191, 36, 0.12)', color: 'var(--amber-400)', border: 'rgba(251, 191, 36, 0.3)', icon: <Clock size={12} />, label: 'Generating' },

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, AlertTriangle, Battery, Thermometer, Droplets, Wifi, CheckCircle2, Clock } from 'lucide-react';
+import { Bell, AlertTriangle, Battery, Thermometer, Droplets, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
 
 const TYPE_STYLES = {
   critical: { bg: 'var(--rose-bg)', color: 'var(--rose-400)', border: 'var(--rose-border)' },

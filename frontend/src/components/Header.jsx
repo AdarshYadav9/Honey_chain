@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Cpu, ShieldCheck, Search, Layers, Award, TrendingUp, Sparkles,
-  Activity, Users, Sun, Moon, CheckCircle, BarChart3, Settings, FileText,
+  Users, Sun, Moon, BarChart3, Settings, FileText,
   Droplets, Bell, IndianRupee, User, FlaskConical, History, AlertTriangle, BookOpen,
   Inbox, Package, Archive, Truck, Building2
 } from 'lucide-react';

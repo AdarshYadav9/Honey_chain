@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Search, UserPlus, Trash2 } from 'lucide-react';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const roleBadgeColor = {
   ADMIN: { bg: 'rgba(245,158,11,0.15)', color: 'var(--amber-400)' },

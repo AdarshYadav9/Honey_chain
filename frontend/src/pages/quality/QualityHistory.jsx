@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { History, CheckCircle2, AlertTriangle, Filter, Search } from 'lucide-react';
+import { History, CheckCircle2, AlertTriangle, Search } from 'lucide-react';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export default function QualityHistory() {
   const [history, setHistory] = useState([]);
