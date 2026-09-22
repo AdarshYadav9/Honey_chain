@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, TrendingUp, Filter } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export default function QualityReports() {
   const [trends, setTrends] = useState(null);

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { User, MapPin, Phone, Mail, Edit3, Save, CheckCircle2, Calendar, Award } from 'lucide-react';
+import { User, MapPin, Phone, Mail, Edit3, CheckCircle2, Calendar } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function BeekeeperProfile() {
   const { currentUser, hives, sharedBatches } = useApp();
   const [editing, setEditing] = useState(false);
-  const [saved, setSaved] = useState(false);
 
   const hiveCount = (hives || []).length;
   const batchCount = (sharedBatches || []).length;
@@ -31,8 +30,6 @@ export default function BeekeeperProfile() {
 
   const handleSave = () => {
     setEditing(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
   };
 
   const fieldStyle = { width: '100%', padding: '9px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' };

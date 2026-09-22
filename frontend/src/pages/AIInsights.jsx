@@ -188,7 +188,7 @@ function getActions(anomalies, hive) {
 }
 
 export default function AIInsights() {
-  const { hives, activeHive, curHive } = useApp();
+  const { activeHive, curHive } = useApp();
   const hive = curHive;
   const score = hive.healthScore ?? 85;
   const risk = hive.diseaseRisk || { varroa: 8, foulbrood: 3, nosema: 5 };
@@ -201,7 +201,6 @@ export default function AIInsights() {
   const actions = useMemo(() => getActions(anomalies, hive), [anomalies, hive]);
 
   const totalRisk = risk.varroa + risk.foulbrood + risk.nosema;
-  const hiveCount = Object.keys(hives).length;
 
   // Confidence calculation based on data availability
   const dataPoints = [

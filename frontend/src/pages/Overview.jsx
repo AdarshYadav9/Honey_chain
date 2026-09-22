@@ -5,7 +5,7 @@ import {
 import { useApp } from '../context/AppContext';
 import { flowSteps } from '../data/mockData';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export default function Overview() {
   const {
@@ -15,7 +15,7 @@ export default function Overview() {
   } = useApp();
 
   const [batches, setBatches] = useState([]);
-  const [hiveList, setHiveList] = useState([]);
+  const [, setHiveList] = useState([]);
   const [lastSync, setLastSync] = useState('—');
 
   useEffect(() => {
@@ -49,10 +49,6 @@ export default function Overview() {
   }, [hives]);
 
   const verifiedBatches = allBatches.filter(b => b.status === 'CERTIFIED' || b.status === 'PROCESSED' || b.status === 'PACKAGED' || b.status === 'DISPATCHED');
-
-  const totalProduction = useMemo(() => {
-    return allBatches.reduce((sum, b) => sum + (b.quantity || 0), 0);
-  }, [allBatches]);
 
   const recentBatches = useMemo(() => {
     return [...allBatches]

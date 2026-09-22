@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
   ShieldCheck, Award, Copy, Eye, EyeOff,
-  Leaf, LineChart, Users, QrCode, Shield, User, CheckCircle, Cog, Check,
-  Mail, Lock, Info, ArrowRight, Globe, Heart, Hexagon, Sun, Moon
+  Leaf, LineChart, Users, QrCode, Shield, User, Cog, Check,
+  Mail, Lock, ArrowRight, Hexagon, Sun, Moon
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -138,7 +138,7 @@ export default function LoginPage() {
                 <label className="lcd-check">
                   <input type="checkbox" defaultChecked /> Remember me
                 </label>
-                <a href="#" className="lcd-forgot" onClick={e => { e.preventDefault(); alert('Not enabled in prototype.'); }}>Forgot password?</a>
+                <button type="button" className="lcd-forgot" onClick={() => alert('Not enabled in prototype.')}>Forgot password?</button>
               </div>
 
               {loginError && <div className="lcd-error">{loginError}</div>}
@@ -182,9 +182,9 @@ export default function LoginPage() {
           <div className="lcd-footer">
             Honey Chain · Blockchain Honey Traceability for KVIC
             <div className="lcd-footer-links">
-              <a href="#" onClick={e => e.preventDefault()}>Privacy</a>
-              <a href="#" onClick={e => e.preventDefault()}>Terms</a>
-              <a href="#" onClick={e => e.preventDefault()}>Help</a>
+              <button type="button" onClick={() => {}}>Privacy</button>
+              <button type="button" onClick={() => {}}>Terms</button>
+              <button type="button" onClick={() => {}}>Help</button>
             </div>
           </div>
         </div>

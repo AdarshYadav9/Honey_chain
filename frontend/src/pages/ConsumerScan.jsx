@@ -41,7 +41,7 @@ const MOCK_BATCH_DATA = {
   },
 };
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 const PUBLIC_BASE = window.location.hostname !== 'localhost' ? window.location.origin : 'https://certified-overfaintly-vivian.ngrok-free.dev';
 
 function normalizeLab(lab) {

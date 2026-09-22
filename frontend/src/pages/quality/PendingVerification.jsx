@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Clock, ChevronDown, ChevronUp, CheckCircle2, AlertTriangle, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, Clock, ChevronDown, ChevronUp, CheckCircle2, ExternalLink } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const STATUS_STYLES = {
   HARVEST_CREATED: { bg: 'rgba(251, 191, 36, 0.12)', color: 'var(--amber-400)', border: 'rgba(251, 191, 36, 0.3)', label: 'Awaiting Verification' },
@@ -15,7 +15,7 @@ export default function PendingVerification() {
   const { sharedBatches, switchView } = useApp();
   const [expanded, setExpanded] = useState(null);
   const [verifying, setVerifying] = useState(null);
-  const [testing, setTesting] = useState(null);
+  const [, setTesting] = useState(null);
 
   const pending = sharedBatches.filter(b =>
     b.status === 'HARVEST_CREATED' || b.status === 'HARVEST_VERIFIED'

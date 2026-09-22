@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  TrendingUp, Cpu, Wifi, Link2, Shield, BarChart3, Users, Boxes,
+  TrendingUp, Cpu, Wifi, Link2, BarChart3, Users, Boxes,
   MapPin, ChevronDown, ChevronUp, IndianRupee, Building2, Truck,
   FlaskConical, Smartphone, Globe, Layers, ArrowRight, CheckCircle2
 } from 'lucide-react';

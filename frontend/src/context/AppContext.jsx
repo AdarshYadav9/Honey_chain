@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { initialHives } from '../data/mockData';
 import { VIEW_PATHS, viewForPath } from '../routeConfig';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const AppContext = createContext(null);
 
@@ -84,7 +84,7 @@ export function AppProvider({ children }) {
     } catch (err) {
       setLoginError('Login failed. Is backend running?');
     }
-  }, [loginEmail]);
+  }, [loginEmail, setActiveView]);
 
   const handleRegisterHarvest = useCallback(async (e) => {
     e.preventDefault();
@@ -106,7 +106,7 @@ export function AppProvider({ children }) {
         setActiveView('overview');
       }
     } catch (err) { /* no-op in static demo mode */ }
-  }, [activeHive, fetchBatches, showNotification]);
+  }, [activeHive, fetchBatches, showNotification, setActiveView]);
 
   const handleVerifyBatch = useCallback(async (batchId) => {
     try {
