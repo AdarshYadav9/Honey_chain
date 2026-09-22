@@ -39,19 +39,3 @@ npm install
 node server.js
 ```
 - Consumer Portal: `http://localhost:8000/KVIC-HC-2026-0417`
-
-## Deploy
-
-### Backend on Render
-
-1. Create a new Render **Blueprint** from this repository. Render will use `render.yaml`.
-2. Deploy the `honey-chain-api` web service.
-3. Copy the service URL, such as `https://honey-chain-api.onrender.com`.
-
-### Frontend on Vercel
-
-1. Import this repository into Vercel.
-2. Set the project root directory to `frontend`.
-3. Use `npm run build` as the build command and `build` as the output directory.
-4. Add `REACT_APP_API_URL` with the Render service URL, without a trailing slash.
-5. Deploy. `frontend/vercel.json` keeps React Router routes working after refresh.

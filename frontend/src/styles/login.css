@@ -339,11 +339,6 @@
   text-decoration: none;
   font-weight: 600;
   font-size: 12px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font-family: inherit;
 }
 
 .lcd-forgot:hover {
@@ -541,20 +536,13 @@
   gap: 14px;
 }
 
-.lcd-footer-links a,
-.lcd-footer-links button {
+.lcd-footer-links a {
   color: var(--text-dim);
   text-decoration: none;
   transition: color .15s;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font: inherit;
 }
 
-.lcd-footer-links a:hover,
-.lcd-footer-links button:hover {
+.lcd-footer-links a:hover {
   color: var(--amber-400);
 }
 
