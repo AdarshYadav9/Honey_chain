@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -12,11 +11,12 @@ app.use(bodyParser.json());
 // REST API endpoints
 app.use('/api', apiRouter);
 
-// Serve React frontend build
-const frontendBuild = path.join(__dirname, '..', '..', 'frontend', 'build');
-app.use(express.static(frontendBuild));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendBuild, 'index.html'));
+// API-only deployment: frontend is hosted on Vercel
+app.use((req, res) => {
+  res.status(404).json({
+    ok: false,
+    error: 'Route not found'
+  });
 });
 
 module.exports = app;

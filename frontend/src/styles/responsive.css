@@ -279,6 +279,20 @@
   .user-profile span:first-child { display: none; }
 
   .hero-grid { grid-template-columns: 1fr !important; }
+
+  /* main.wrap already adds the clamp padding -> avoid double inset */
+  .monitor-dashboard-layout { padding: 0 !important; }
+
+  /* Tables become horizontally scrollable on tablets too */
+  section.view-pane table {
+    display: block;
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
 }
 
 /* ---------- Mobile phones (<= 600px) ---------- */
@@ -308,15 +322,39 @@
 
   .eyebrow-badge { font-size: 10px; padding: 4px 10px; }
 
-  /* Stat cards stack */
-  [style*="gridTemplateColumns: repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; }
-  [style*="gridTemplateColumns: repeat(5"] { grid-template-columns: repeat(2, 1fr) !important; }
-  [style*="gridTemplateColumns: repeat(3"] { grid-template-columns: 1fr !important; }
+  /*
+    Inline multi-column grids — React serializes inline style props as
+    kebab-case in the DOM, so match on the VALUE substring. These selectors
+    intentionally ignore the property name ('grid-template-columns: ...').
+  */
 
-  /* Two-column forms/panels stack */
-  [style*="gridTemplateColumns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+  /* Stat cards: 4-col & 5-col grids -> 2 cols */
+  [style*="repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; }
+  [style*="repeat(5"] { grid-template-columns: repeat(2, 1fr) !important; }
 
-  /* Tables horizontal scroll */
+  /* 3-col grids and auto-fill grids -> 1 col */
+  [style*="repeat(3"] { grid-template-columns: 1fr !important; }
+  [style*="repeat(auto-fill"] { grid-template-columns: 1fr !important; }
+
+  /* Collapse inline two+ column 1fr grids to a single column */
+  [style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
+
+  /* Gauge + text rows (e.g. '110px 1fr') stack vertically */
+  [style*="110px 1fr"] { grid-template-columns: 1fr !important; }
+
+  /* Keep hive-badge vitals readable at 3-across */
+  .telemetry-vitals-grid { grid-template-columns: 1fr 1fr 1fr !important; }
+
+  /* Tables: horizontal scroll instead of overflowing/clipping. */
+  section.view-pane table {
+    display: block;
+    width: max-content !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
   table { font-size: 11px !important; }
   table th, table td { padding: 8px 10px !important; white-space: nowrap; }
 
@@ -328,12 +366,6 @@
 
   /* Buttons full width on mobile */
   button[style*="width: 100%"] { min-height: 44px; }
-
-  /* Quality standards cards */
-  [style*="gridTemplateColumns: repeat(auto-fill"] { grid-template-columns: 1fr !important; }
-
-  /* Facility info */
-  [style*="gridTemplateColumns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
 
   /* Alert/badge text */
   .alert-row { padding: 10px 12px !important; }

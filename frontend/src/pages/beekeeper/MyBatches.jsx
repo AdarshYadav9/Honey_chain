@@ -47,7 +47,7 @@ export default function MyBatches() {
                 </button>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', overflowX: 'auto', paddingBottom: '4px' }}>
                 {PIPELINE.map((stage, i) => (
                   <React.Fragment key={stage.key}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '90px' }}>

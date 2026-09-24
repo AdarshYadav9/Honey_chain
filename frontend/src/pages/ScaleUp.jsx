@@ -182,7 +182,7 @@ export default function ScaleUp() {
                 onClick={() => setExpandedPhase(expandedPhase === phase.id ? null : phase.id)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '14px', padding: '16px 20px',
-                  cursor: 'pointer', userSelect: 'none',
+                  cursor: 'pointer', userSelect: 'none', flexWrap: 'wrap',
                 }}
               >
                 <div style={{
@@ -210,7 +210,7 @@ export default function ScaleUp() {
                     {phase.period} · {phase.regions}
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: '20px', marginRight: '10px' }}>
+                <div style={{ display: 'flex', gap: '20px', marginRight: '10px', flexWrap: 'wrap' }}>
                   <MetricBadge label="Hives" value={phase.hives} color={phase.color} />
                   <MetricBadge label="Clusters" value={phase.clusters} color={phase.color} />
                   <MetricBadge label="Beekeepers" value={phase.beekeepers} color={phase.color} />
