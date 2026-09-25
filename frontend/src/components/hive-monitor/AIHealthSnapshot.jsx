@@ -20,7 +20,7 @@ export default function AIHealthSnapshot({ hive }) {
 
   return (
     <div className="glass-card">
-      <div className="mm-cb-title" style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '16px' }}>
+      <div className="mm-cb-title mm-cb-title--row" style={{ marginBottom: '16px' }}>
         <Sparkles size={14} /> AI HEALTH &amp; RISK SNAPSHOT
       </div>
 
@@ -36,19 +36,19 @@ export default function AIHealthSnapshot({ hive }) {
         </svg>
         <div>
           <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Colony Health Index</div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
+          <div className="field-hint" style={{ marginTop: '4px' }}>
             Composite of thermal stability, acoustic pattern, and weight trend.
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '16px' }}>
+      <div className="grid-2" style={{ marginBottom: '16px' }}>
         <div>
-          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Queen Status</div>
+          <div className="meta-label">Queen Status</div>
           <div style={{ fontSize: '13.5px', fontWeight: 600, color: QUEEN_COLOR[queen] || 'var(--text-main)' }}>{queen}</div>
         </div>
         <div>
-          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>Swarm Risk</div>
+          <div className="meta-label">Swarm Risk</div>
           <div style={{ fontSize: '13.5px', fontWeight: 600, color: SWARM_COLOR[swarm] || 'var(--text-main)' }}>{swarm}</div>
         </div>
       </div>
@@ -60,7 +60,7 @@ export default function AIHealthSnapshot({ hive }) {
           ['Nosema Risk', risk.nosema],
         ].map(([label, val]) => (
           <div key={label} style={{ marginBottom: '10px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '4px' }}>
+            <div className="flex-between" style={{ fontSize: '12.5px', marginBottom: '4px' }}>
               <span>{label}</span>
               <span className="mono" style={{ color: val > 20 ? '#f87171' : val > 10 ? 'var(--amber-400)' : 'var(--emerald-400)' }}>{val}%</span>
             </div>
@@ -69,10 +69,10 @@ export default function AIHealthSnapshot({ hive }) {
         ))}
       </div>
 
-      <div style={{ marginTop: '14px', padding: '12px 14px', background: 'var(--bg-code)', borderRadius: '10px', border: '1px solid var(--border-subtle)' }}>
-        <div style={{ fontSize: '12.5px', color: 'var(--text-main)', fontWeight: 600 }}>
+      <div className="notice notice-warn" style={{ marginTop: '14px' }}>
+        <span style={{ fontSize: '12.5px', fontWeight: 600 }}>
           4-Week Yield Forecast: <span style={{ color: 'var(--amber-400)' }}>{yieldKg} kg</span>
-        </div>
+        </span>
       </div>
     </div>
   );

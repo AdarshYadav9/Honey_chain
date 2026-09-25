@@ -54,7 +54,7 @@
   font-size: 14px;
   line-height: 1.2;
   padding: 12px 22px;
-  border-radius: 12px;
+  border-radius: var(--btn-radius);
   border: none;
   cursor: pointer;
   display: inline-flex;
@@ -63,6 +63,10 @@
   gap: 8px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
+}
+
+.btn-luxury:focus-visible {
+  box-shadow: var(--focus-ring);
 }
 
 .btn-luxury-primary {

@@ -11,8 +11,26 @@
 .consumer-timeline h4 {
   text-transform: uppercase;
 }
-.user-profile span {
-  font-weight: 600;
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.user-profile button {
+  background: none;
+  border: none;
+  color: var(--amber-600);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 12.5px;
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+.user-profile button:hover {
+  color: var(--amber-400);
 }
 
 /* ==================================================
@@ -31,12 +49,19 @@
 .monitor-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   position: sticky;
   top: 90px;
   max-height: calc(100vh - 110px);
   overflow-y: auto;
   scrollbar-width: thin;
+}
+
+.ms-controls-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
 }
 
 .ms-search-wrap {
@@ -217,6 +242,76 @@
   color: var(--text-muted);
 }
 
+.mm-cb-title--row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+/* Meta label/value lockups (device meta + AI snapshot) */
+.meta-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.meta-value {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Charts */
+.mm-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.mm-chart-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  transition: var(--transition-fast);
+}
+
+.mm-chart-box:hover {
+  border-color: var(--border-highlight) !important;
+}
+
+.mm-table td svg {
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.chart-box-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.chart-minmax {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 10.5px;
+  color: var(--text-dim);
+}
+
+@media (max-width: 720px) {
+  .mm-charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Sensor Grid */
 .mm-sensor-grid {
   display: grid;
@@ -252,7 +347,17 @@
   font-size: 22px;
   font-weight: 700;
   color: var(--text-main);
-  line-height: 1.2;
+}
+
+.mm-h-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Bottom Grid (Telemetry + Timeline) */
@@ -384,35 +489,59 @@
   .monitor-dashboard-layout {
     grid-template-columns: 1fr;
     padding: 0 clamp(16px, 3.5vw, 56px);
+    gap: 16px;
   }
 
   .monitor-sidebar {
     position: static;
     max-height: none;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .ms-controls-row {
     flex-direction: row;
-    overflow-x: auto;
-    gap: 8px;
-    padding-bottom: 4px;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
   }
 
   .ms-search-wrap {
-    min-width: 200px;
+    flex: 1;
+    min-width: 0;
   }
 
   .ms-hive-list {
+    display: flex;
     flex-direction: row;
+    gap: 8px;
     overflow-x: auto;
-    flex: none;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    max-height: none;
+    padding-bottom: 4px;
+    width: 100%;
+  }
+
+  .ms-hive-list::-webkit-scrollbar {
+    display: none;
   }
 
   .ms-hive-item {
-    min-width: 170px;
+    min-width: 160px;
     flex-shrink: 0;
   }
 
   .ms-add-btn {
     width: auto;
     flex-shrink: 0;
+    margin-top: 0;
+    white-space: nowrap;
   }
 
   .mm-sensor-grid {

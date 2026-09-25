@@ -56,13 +56,12 @@ export function AppProvider({ children }) {
 
   useEffect(() => {
     fetchBatches();
-    const iv = setInterval(fetchBatches, 3000);
+    const iv = setInterval(fetchBatches, 10000);
     return () => clearInterval(iv);
   }, [fetchBatches]);
 
   const switchView = useCallback((viewName) => {
     setActiveView(viewName);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [setActiveView]);
 
   const handleLogin = useCallback(async (e) => {
@@ -293,11 +292,13 @@ export function AppProvider({ children }) {
   const curHive = hives[activeHive] || Object.values(hives)[0] || initialHives.H001;
 
   const tempSeriesData = useMemo(() => {
-    return Array.from({ length: 24 }, (_, i) => (curHive.temp || 34.0) + Math.sin(i / 3) * 1.4 + (Math.random() - 0.5) * 0.6);
+    const base = curHive.temp || 34.0;
+    return Array.from({ length: 24 }, (_, i) => base + Math.sin(i / 3) * 1.4 + Math.cos(i / 2) * 0.3);
   }, [curHive.temp]);
 
   const weightSeriesData = useMemo(() => {
-    return Array.from({ length: 24 }, (_, i) => (curHive.wt || 30.0) - 1.8 + i * (1.8 / 23) + (Math.random() - 0.5) * 0.15);
+    const base = curHive.wt || 30.0;
+    return Array.from({ length: 24 }, (_, i) => base - 1.8 + i * (1.8 / 23) + Math.sin(i / 4) * 0.1);
   }, [curHive.wt]);
 
   const value = {

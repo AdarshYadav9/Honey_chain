@@ -116,3 +116,61 @@
   border-color: var(--border-highlight);
 }
 
+/* Passport modal content blocks */
+.cert-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.cert-header h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin-top: 10px;
+}
+
+.cert-header p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.cert-section {
+  background: var(--bg-code);
+  border: 1px solid var(--border-highlight);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.cert-section--plain {
+  border-color: var(--border-subtle);
+}
+
+.cert-section-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--amber-400);
+  margin-bottom: 10px;
+}
+
+.cert-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--border-subtle);
+  font-size: 13.5px;
+}
+
+.cert-row:last-child {
+  border-bottom: none;
+}
+
+.cert-row strong {
+  text-align: right;
+}
+
+.cert-row strong.pass {
+  color: var(--emerald-400);
+}
+

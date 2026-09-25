@@ -10,7 +10,7 @@ export default function ProcessorBatches() {
     <section className="view-pane active" id="view-proc-batches">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Layers size={13} /> Processing Unit Records</div>
-        <h2 style={{ fontSize: '30px' }}>Batches</h2>
+        <h2>Batches</h2>
         <p className="section-lede">All batches that have passed through your processing unit, from extraction to packaging.</p>
       </div>
 
@@ -29,11 +29,11 @@ export default function ProcessorBatches() {
                 <td className={b.status === 'PACKAGED' ? 'status-ok' : ''}>{b.status}</td>
                 <td>
                   {b.status === 'PACKAGED'
-                    ? <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--emerald-400)' }}><QrCode size={14} /> Generated</span>
-                    : <span style={{ color: 'var(--text-muted)' }}>Pending</span>}
+                    ? <span className="pill" style={{ color: 'var(--emerald-400)' }}><QrCode size={14} /> Generated</span>
+                    : <span className="muted">Pending</span>}
                 </td>
                 <td>
-                  <button className="btn-luxury btn-luxury-ghost" style={{ fontSize: '12px', padding: '6px 10px' }} onClick={() => { setBatchIdInput(b.id); switchView('chain'); }}>
+                  <button className="btn-luxury btn-luxury-ghost btn-sm" onClick={() => { setBatchIdInput(b.id); switchView('chain'); }}>
                     Track →
                   </button>
                 </td>

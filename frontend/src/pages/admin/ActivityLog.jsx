@@ -43,11 +43,11 @@ export default function ActivityLog() {
     <section className="view-pane active" id="view-activity">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Activity size={13} /> System Audit Trail</div>
-        <h2 style={{ fontSize: '30px' }}>Activity Log</h2>
+        <h2>Activity Log</h2>
         <p className="section-lede">Every batch, hive alert, quality decision and account change across the platform, in one place.</p>
       </div>
 
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '18px', flexWrap: 'wrap' }}>
+      <div className="toolbar-group" style={{ marginBottom: '18px' }}>
         {['ALL', 'BATCH', 'HIVE', 'QUALITY', 'USER'].map(t => (
           <button key={t} className={`chart-toggle ${filter === t ? 'active' : ''}`} onClick={() => setFilter(t)}>
             {t === 'ALL' ? 'All Events' : t.charAt(0) + t.slice(1).toLowerCase()}
@@ -62,9 +62,9 @@ export default function ActivityLog() {
             return (
               <div className="mm-tl-item" key={a.id || i}>
                 <div className={`mm-tl-dot ${a.level === 'WARNING' ? '' : 'ok'}`} style={a.level === 'WARNING' ? { background: 'var(--amber-400)' } : {}}></div>
-                <div className="mm-tl-content" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', gap: '12px', flexWrap: 'wrap' }}>
+                <div className="mm-tl-content flex-between">
                   <div>
-                    <div className="mm-tl-desc" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div className="mm-tl-desc flex gap-8">
                       <Icon size={14} color={levelColor[a.level] || 'var(--text-muted)'} />
                       {a.message}
                     </div>
@@ -76,7 +76,7 @@ export default function ActivityLog() {
             );
           })}
           {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '24px' }}>No events for this filter yet.</div>
+            <div className="state-empty">No events for this filter yet.</div>
           )}
         </div>
       </div>

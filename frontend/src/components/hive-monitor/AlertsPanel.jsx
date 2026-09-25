@@ -29,21 +29,20 @@ export default function AlertsPanel({ hive }) {
 
   return (
     <div className="glass-card">
-      <div className="mm-cb-title" style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '14px' }}>
+      <div className="mm-cb-title mm-cb-title--row">
         <AlertTriangle size={14} /> ALERTS &amp; RECOMMENDATIONS
       </div>
 
       {alerts.length === 0 ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--emerald-400)', fontSize: '13.5px', fontWeight: 600, marginBottom: '16px' }}>
-          <CheckCircle2 size={16} /> No threshold breaches detected — all readings nominal.
+        <div className="notice notice-success">
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
+            <CheckCircle2 size={16} /> No threshold breaches detected — all readings nominal.
+          </span>
         </div>
       ) : (
-        <div style={{ marginBottom: '16px' }}>
+        <div className="alert-stack">
           {alerts.map((a, i) => (
-            <div key={i} style={{
-              display: 'flex', gap: '10px', padding: '10px 0',
-              borderTop: i > 0 ? '1px solid var(--border-subtle)' : 'none'
-            }}>
+            <div key={i} className="alert-item">
               <AlertTriangle size={15} color={a.level === 'CRITICAL' ? '#f87171' : 'var(--amber-400)'} style={{ marginTop: '2px', flexShrink: 0 }} />
               <div>
                 <div style={{ fontSize: '13px', fontWeight: 600 }}>{a.msg}</div>
@@ -54,7 +53,7 @@ export default function AlertsPanel({ hive }) {
         </div>
       )}
 
-      <div style={{ paddingTop: '14px', borderTop: '1px solid var(--border-subtle)' }}>
+      <div className="divider-top">
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600, marginBottom: '8px' }}>
           <Wrench size={13} /> MAINTENANCE REMINDERS
         </div>

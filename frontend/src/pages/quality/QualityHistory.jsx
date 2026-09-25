@@ -41,11 +41,11 @@ export default function QualityHistory() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><History size={13} /> Quality History</div>
-        <h2 style={{ fontSize: '28px' }}>Batch Quality History</h2>
+        <h2>Batch Quality History</h2>
         <p className="section-lede">Past test results per beekeeper and cluster. Flag repeat issues.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '20px' }}>
+      <div className="kpi-grid" style={{ marginBottom: '20px' }}>
         {[
           { label: 'Total Tested', value: stats.total, color: 'var(--text-main)' },
           { label: 'Passed', value: stats.pass, color: 'var(--emerald-400)' },
@@ -53,16 +53,16 @@ export default function QualityHistory() {
           { label: 'Avg Purity', value: stats.avgPurity + '%', color: '#60a5fa' },
           { label: 'Avg Moisture', value: stats.avgMoisture + '%', color: 'var(--amber-400)' },
         ].map(card => (
-          <div key={card.label} style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: card.color }}>{card.value}</div>
-            <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '2px' }}>{card.label}</div>
+          <div key={card.label} className="kpi-card">
+            <div className="kpi-value" style={{ color: card.color }}>{card.value}</div>
+            <div className="kpi-label">{card.label}</div>
           </div>
         ))}
       </div>
 
       {flaggedBeekeepers.length > 0 && (
-        <div style={{ padding: '14px 18px', background: 'var(--rose-bg)', border: '1px solid var(--rose-border)', borderRadius: '12px', marginBottom: '20px' }}>
-          <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--rose-400)', marginBottom: '6px' }}>Repeat Issues Flagged</div>
+        <div className="notice notice-danger" style={{ marginBottom: '20px' }}>
+          <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '6px' }}>Repeat Issues Flagged</div>
           {flaggedBeekeepers.map(([name, count]) => (
             <div key={name} style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '2px' }}>
               {name} — {count} failed batches. Recommend re-inspection of hives.
@@ -71,54 +71,54 @@ export default function QualityHistory() {
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', alignItems: 'center' }}>
-        <div style={{ position: 'relative', flex: 1 }}>
-          <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
-          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by batch, beekeeper, hive..." style={{ width: '100%', padding: '8px 12px 8px 32px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '12px', outline: 'none' }} />
+      <div className="toolbar">
+        <div className="search-field">
+          <Search size={14} />
+          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by batch, beekeeper, hive..." className="input" />
         </div>
-        <div style={{ display: 'flex', gap: '4px' }}>
+        <div className="chip-group">
           {['all', 'pass', 'fail'].map(f => (
-            <button key={f} onClick={() => setFilter(f)} style={{ padding: '6px 14px', borderRadius: '999px', border: '1px solid var(--border-subtle)', background: filter === f ? 'var(--gold-gradient)' : 'transparent', color: filter === f ? '#0f0b04' : 'var(--text-dim)', fontSize: '11px', fontWeight: 600, cursor: 'pointer', textTransform: 'capitalize' }}>{f}</button>
+            <button key={f} onClick={() => setFilter(f)} className={'chip' + (filter === f ? ' active' : '')}>{f}</button>
           ))}
         </div>
-        <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ padding: '6px 10px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '11px', outline: 'none' }}>
+        <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="select select-sm">
           <option value="date">Sort by Date</option>
           <option value="purity">Sort by Purity</option>
           <option value="moisture">Sort by Moisture</option>
         </select>
       </div>
 
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', overflow: 'hidden' }}>
+      <div className="panel" style={{ padding: 0, overflow: 'hidden' }}>
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-dim)' }}>Loading history...</div>
+          <div className="state-loading">Loading history...</div>
         ) : filtered.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-dim)' }}>No test results found.</div>
+          <div className="state-empty">No test results found.</div>
         ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px' }}>
+          <table className="hc-table">
             <thead>
               <tr style={{ background: 'var(--bg-inset)' }}>
                 {['Batch ID', 'Hive', 'Beekeeper', 'Type', 'Purity', 'Moisture', 'HMF', 'C4 Sugar', 'Result', 'Date'].map(h => (
-                  <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: 'var(--text-dim)', fontSize: '11px' }}>{h}</th>
+                  <th key={h}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {filtered.map(h => (
-                <tr key={h.batchId} style={{ borderTop: '1px solid var(--border-subtle)' }}>
-                  <td style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--amber-400)' }}>{h.batchId}</td>
-                  <td style={{ padding: '10px 14px' }}>{h.hiveId}</td>
-                  <td style={{ padding: '10px 14px', color: 'var(--text-muted)' }}>{h.beekeeper}</td>
-                  <td style={{ padding: '10px 14px', color: 'var(--text-muted)' }}>{h.honeyType}</td>
-                  <td style={{ padding: '10px 14px', fontWeight: 600 }}>{h.purity ? h.purity + '%' : '—'}</td>
-                  <td style={{ padding: '10px 14px' }}>{h.moisture ? h.moisture + '%' : '—'}</td>
-                  <td style={{ padding: '10px 14px' }}>{h.hmf ? h.hmf + ' mg/kg' : '—'}</td>
-                  <td style={{ padding: '10px 14px' }}>{h.c4Sugar || '—'}</td>
-                  <td style={{ padding: '10px 14px' }}>
-                    <span style={{ padding: '3px 10px', borderRadius: '999px', background: h.result === 'PASS' ? 'var(--emerald-bg)' : 'var(--rose-bg)', color: h.result === 'PASS' ? 'var(--emerald-400)' : 'var(--rose-400)', border: `1px solid ${h.result === 'PASS' ? 'var(--emerald-border)' : 'var(--rose-border)'}`, fontSize: '11px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <tr key={h.batchId}>
+                  <td style={{ fontWeight: 600, color: 'var(--amber-400)' }}>{h.batchId}</td>
+                  <td>{h.hiveId}</td>
+                  <td style={{ color: 'var(--text-muted)' }}>{h.beekeeper}</td>
+                  <td style={{ color: 'var(--text-muted)' }}>{h.honeyType}</td>
+                  <td style={{ fontWeight: 600 }}>{h.purity ? h.purity + '%' : '—'}</td>
+                  <td>{h.moisture ? h.moisture + '%' : '—'}</td>
+                  <td>{h.hmf ? h.hmf + ' mg/kg' : '—'}</td>
+                  <td>{h.c4Sugar || '—'}</td>
+                  <td>
+                    <span className="pill" style={{ background: h.result === 'PASS' ? 'var(--emerald-bg)' : 'var(--rose-bg)', color: h.result === 'PASS' ? 'var(--emerald-400)' : 'var(--rose-400)', border: `1px solid ${h.result === 'PASS' ? 'var(--emerald-border)' : 'var(--rose-border)'}` }}>
                       {h.result === 'PASS' ? <CheckCircle2 size={10} /> : <AlertTriangle size={10} />} {h.result}
                     </span>
                   </td>
-                  <td style={{ padding: '10px 14px', color: 'var(--text-dim)' }}>{h.date ? new Date(h.date).toLocaleDateString() : '—'}</td>
+                  <td style={{ color: 'var(--text-dim)' }}>{h.date ? new Date(h.date).toLocaleDateString() : '—'}</td>
                 </tr>
               ))}
             </tbody>

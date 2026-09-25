@@ -263,7 +263,7 @@ export default function BlockchainTrace() {
     <section className="view-pane active" id="view-chain">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Layers size={13} /> Permissioned Blockchain Ledger</div>
-        <h2 style={{ fontSize: '30px' }}>Immutable Batch Traceability</h2>
+        <h2>Immutable Batch Traceability</h2>
         <p className="section-lede">
           Every stage from apiary extraction to lab NMR screening and packaging writes an SHA-256 hash-linked record to the Honey Chain ledger.
         </p>
@@ -271,8 +271,8 @@ export default function BlockchainTrace() {
 
       {/* Search Bar */}
       <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '12px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', overflow: 'hidden' }}>
+        <div className="flex gap-10 flex-wrap" style={{ marginBottom: '12px' }}>
+          <div className="chip-group">
             {[
               { key: 'batchId', label: 'Batch ID' },
               { key: 'hiveId', label: 'Hive ID' },
@@ -280,44 +280,32 @@ export default function BlockchainTrace() {
               { key: 'date', label: 'Date Range' },
             ].map(s => (
               <button key={s.key} onClick={() => { setSearchType(s.key); setSearchValue(''); }}
-                style={{
-                  padding: '8px 14px', fontSize: '12px', fontWeight: 600, border: 'none', cursor: 'pointer',
-                  background: searchType === s.key ? 'var(--gold-gradient)' : 'transparent',
-                  color: searchType === s.key ? '#0f0b04' : 'var(--text-muted)',
-                  transition: 'all 0.2s',
-                }}>{s.label}</button>
+                className={searchType === s.key ? 'chip active' : 'chip'}>{s.label}</button>
             ))}
           </div>
 
           {searchType === 'date' ? (
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
-                style={{ padding: '8px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '12px' }} />
-              <span style={{ color: 'var(--text-dim)', fontSize: '12px' }}>to</span>
-              <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
-                style={{ padding: '8px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '12px' }} />
+            <div className="flex gap-8">
+              <input className="input" type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} />
+              <span className="muted">to</span>
+              <input className="input" type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} />
             </div>
           ) : (
-            <input type="text" value={searchValue} onChange={e => setSearchValue(e.target.value)}
+            <input className="input" type="text" value={searchValue} onChange={e => setSearchValue(e.target.value)}
               placeholder={searchType === 'batchId' ? 'e.g. HONEY-BATCH-2025-001' : searchType === 'hiveId' ? 'e.g. HIVE-BOX-01' : 'e.g. Rameshwar Verma'}
-              style={{ flex: 1, minWidth: '200px', padding: '8px 14px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              style={{ flex: 1, minWidth: '200px' }} />
           )}
         </div>
 
         {/* Batch Results */}
         {filteredBatches.length > 0 && (
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <div className="chip-group">
             {filteredBatches.map(b => {
               const bid = b.batchId || b.id;
               const isActive = selectedBatch === bid;
               return (
                 <button key={bid} onClick={() => { setSelectedBatch(bid); setExpandedBlock(null); }}
-                  className="btn-luxury" style={{
-                    padding: '8px 14px', fontSize: '12px',
-                    background: isActive ? 'var(--gold-gradient)' : 'var(--bg-card)',
-                    color: isActive ? '#0f0b04' : 'var(--text-main)',
-                    border: `1px solid ${isActive ? 'var(--amber-400)' : 'var(--border-subtle)'}`,
-                  }}>
+                  className={isActive ? 'chip active' : 'chip'}>
                   {bid}
                 </button>
               );
@@ -331,7 +319,7 @@ export default function BlockchainTrace() {
         <>
           {/* Batch Info Header */}
           <div className="glass-card" style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+            <div className="flex-between">
               <div>
                 <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginBottom: '4px', letterSpacing: '0.06em' }}>BATCH DETAILS</div>
                 <h3 className="mono" style={{ fontSize: '20px', margin: '0 0 8px', color: 'var(--amber-400)' }}>{activeBatch.batchId || activeBatch.id}</h3>
@@ -344,11 +332,11 @@ export default function BlockchainTrace() {
                   <div><span style={{ color: 'var(--text-dim)' }}>Harvest:</span> <strong>{activeBatch.harvestDate || 'N/A'}</strong></div>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <button className="btn-luxury btn-luxury-ghost" onClick={handleExport} style={{ fontSize: '12px', padding: '8px 14px' }}>
+              <div className="flex gap-8">
+                <button className="btn-luxury btn-luxury-ghost btn-sm" onClick={handleExport}>
                   <Download size={14} /> Export Report
                 </button>
-                <button className="btn-luxury btn-luxury-ghost" onClick={() => { setCertBatch(activeBatch); setShowCertModal(true); }} style={{ fontSize: '12px', padding: '8px 14px' }}>
+                <button className="btn-luxury btn-luxury-ghost btn-sm" onClick={() => { setCertBatch(activeBatch); setShowCertModal(true); }}>
                   <FileText size={14} /> View Certificate
                 </button>
               </div>
@@ -356,22 +344,17 @@ export default function BlockchainTrace() {
           </div>
 
           {/* Chain Integrity Status */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', marginBottom: '20px',
-            background: chainValid ? 'var(--emerald-bg)' : 'rgba(248,113,113,0.1)',
-            border: `1px solid ${chainValid ? 'var(--emerald-border)' : 'rgba(248,113,113,0.3)'}`,
-            borderRadius: '12px',
-          }}>
+          <div className={chainValid ? 'notice notice-success flex gap-10' : 'notice notice-danger flex gap-10'} style={{ marginBottom: '20px' }}>
             {chainValid ? <ShieldCheck size={20} color="var(--emerald-400)" /> : <AlertTriangle size={20} color="#f87171" />}
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: chainValid ? 'var(--emerald-400)' : '#f87171' }}>
+              <div style={{ fontWeight: 700 }}>
                 {chainValid ? 'CHAIN VERIFIED — All SHA-256 hashes match. No tampering detected.' : 'CHAIN DISCREPANCY — Hash mismatch detected!'}
               </div>
-              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+              <div className="field-hint" style={{ marginTop: '2px' }}>
                 {checkpoints.length} blocks validated • Last hash verified at {new Date().toLocaleTimeString()}
               </div>
             </div>
-            <div className="mono" style={{ fontSize: '10px', padding: '4px 10px', background: 'var(--bg-input-subtle)', borderRadius: '6px', color: 'var(--text-dim)' }}>
+            <div className="mono pill" style={{ background: 'var(--bg-input-subtle)', color: 'var(--text-dim)' }}>
               MERKLE ROOT: {checkpoints.length > 0 ? checkpoints[checkpoints.length - 1].hash.slice(0, 18) + '...' : 'N/A'}
             </div>
           </div>
@@ -384,11 +367,11 @@ export default function BlockchainTrace() {
               const isLast = i === checkpoints.length - 1;
 
               return (
-                <div key={i} style={{ display: 'flex', gap: '16px', marginBottom: isLast ? 0 : '0' }}>
+                <div key={i} className="flex gap-16">
                   {/* Vertical connector line */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '40px', flexShrink: 0 }}>
-                    <div style={{
-                      width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  <div className="flex-col flex-center" style={{ width: '40px', flexShrink: 0 }}>
+                    <div className="flex-center" style={{
+                      width: '36px', height: '36px', borderRadius: '50%',
                       background: `${meta.color}20`, border: `2px solid ${meta.color}`, fontSize: '16px', flexShrink: 0,
                       boxShadow: `0 0 12px ${meta.color}30`,
                     }}>
@@ -409,28 +392,25 @@ export default function BlockchainTrace() {
                     style={{
                       flex: 1, marginBottom: isLast ? 0 : '16px', cursor: 'pointer',
                       borderColor: isExpanded ? meta.color : undefined,
-                      transition: 'all 0.2s',
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                    <div className="flex-between">
                       <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                          <span style={{
-                            fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '999px',
-                            background: `${meta.color}15`, color: meta.color, letterSpacing: '0.04em',
+                        <div className="flex gap-8" style={{ marginBottom: '6px' }}>
+                          <span className="pill pill-sm" style={{
+                            background: `${meta.color}15`, color: meta.color, fontWeight: 700,
                           }}>STAGE {i + 1}</span>
                           <span style={{ fontSize: '14px', fontWeight: 700, color: meta.color }}>{meta.label}</span>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '12.5px', color: 'var(--text-muted)', flexWrap: 'wrap' }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><User size={12} /> {cp.actor}</span>
-                          <span style={{
-                            fontSize: '10px', padding: '1px 6px', borderRadius: '4px',
+                        <div className="muted flex gap-12 flex-wrap">
+                          <span className="flex" style={{ gap: '4px' }}><User size={12} /> {cp.actor}</span>
+                          <span className="pill pill-sm" style={{
                             background: cp.role === 'Beekeeper' ? 'rgba(52,211,153,0.1)' : cp.role === 'Quality Officer' ? 'rgba(96,165,250,0.1)' : cp.role === 'Processor' ? 'rgba(167,139,250,0.1)' : 'rgba(148,163,184,0.1)',
                             color: cp.role === 'Beekeeper' ? 'var(--emerald-400)' : cp.role === 'Quality Officer' ? '#60a5fa' : cp.role === 'Processor' ? '#a78bfa' : 'var(--text-muted)',
                           }}>{cp.role}</span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Clock size={12} /> {new Date(cp.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={12} /> {cp.location}</span>
+                          <span className="flex" style={{ gap: '4px' }}><Clock size={12} /> {new Date(cp.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                          <span className="flex" style={{ gap: '4px' }}><MapPin size={12} /> {cp.location}</span>
                         </div>
 
                         {cp.notes && (
@@ -438,9 +418,9 @@ export default function BlockchainTrace() {
                         )}
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                      <div className="flex gap-8" style={{ flexShrink: 0 }}>
                         {cp.documents?.length > 0 && (
-                          <span style={{ fontSize: '10px', padding: '3px 8px', borderRadius: '999px', background: 'rgba(96,165,250,0.1)', color: '#60a5fa', fontWeight: 600 }}>
+                          <span className="pill pill-sm" style={{ background: 'rgba(96,165,250,0.1)', color: '#60a5fa' }}>
                             {cp.documents.length} doc{cp.documents.length > 1 ? 's' : ''}
                           </span>
                         )}
@@ -453,9 +433,9 @@ export default function BlockchainTrace() {
 
                     {/* Expanded Details */}
                     {isExpanded && (
-                      <div style={{ marginTop: '14px', paddingTop: '14px', borderTop: '1px solid var(--border-subtle)' }}>
+                      <div className="divider-top" style={{ marginTop: '14px' }}>
                         {/* Hash Info */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
+                        <div className="grid-2" style={{ marginBottom: '12px' }}>
                           <div>
                             <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginBottom: '3px', letterSpacing: '0.05em' }}>BLOCK HASH</div>
                             <div className="mono" style={{ fontSize: '10.5px', padding: '6px 8px', background: 'var(--bg-code)', borderRadius: '6px', wordBreak: 'break-all', color: 'var(--amber-400)' }}>
@@ -495,12 +475,10 @@ export default function BlockchainTrace() {
                         {cp.documents?.length > 0 && (
                           <div>
                             <div style={{ fontSize: '10px', color: 'var(--text-dim)', marginBottom: '6px', letterSpacing: '0.05em' }}>ATTACHED DOCUMENTS</div>
-                            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                            <div className="flex gap-6 flex-wrap">
                               {cp.documents.map((doc, j) => (
-                                <span key={j} style={{
-                                  display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px',
-                                  padding: '4px 10px', background: 'rgba(96,165,250,0.08)', border: '1px solid rgba(96,165,250,0.2)',
-                                  borderRadius: '6px', color: '#60a5fa', fontWeight: 500,
+                                <span key={j} className="pill" style={{
+                                  background: 'rgba(96,165,250,0.08)', borderColor: 'rgba(96,165,250,0.2)', color: '#60a5fa',
                                 }}>
                                   <FileText size={11} /> {doc}
                                 </span>
@@ -517,34 +495,34 @@ export default function BlockchainTrace() {
           </div>
 
           {/* Export Footer */}
-          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '12px', flexWrap: 'wrap', gap: '12px' }}>
-            <div style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
+          <div className="summary-strip flex-between" style={{ marginTop: '24px' }}>
+            <div className="muted">
               Download the full traceability report for regulatory compliance or buyer verification.
             </div>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button className="btn-luxury btn-luxury-ghost" onClick={handleExport} style={{ fontSize: '12px', padding: '8px 14px' }}>
+            <div className="flex gap-8">
+              <button className="btn-luxury btn-luxury-ghost btn-sm" onClick={handleExport}>
                 <Download size={14} /> Export PDF Report
               </button>
-              <button className="btn-luxury btn-luxury-primary" onClick={() => { setCertBatch(activeBatch); setShowCertModal(true); }} style={{ fontSize: '12px', padding: '8px 14px' }}>
+              <button className="btn-luxury btn-luxury-primary btn-sm" onClick={() => { setCertBatch(activeBatch); setShowCertModal(true); }}>
                 <FileText size={14} /> Digital Certificate
               </button>
             </div>
           </div>
         </>
       ) : (
-        <div className="glass-card" style={{ textAlign: 'center', padding: '48px 24px' }}>
+        <div className="glass-card state-empty">
           <Search size={40} color="var(--text-dim)" style={{ marginBottom: '16px', opacity: 0.5 }} />
           <h3 style={{ fontSize: '18px', marginBottom: '8px', color: 'var(--text-muted)' }}>Search for a Batch</h3>
-          <p style={{ fontSize: '13px', color: 'var(--text-dim)', maxWidth: '400px', margin: '0 auto' }}>
+          <p style={{ maxWidth: '400px', margin: '0 auto' }}>
             Enter a Batch ID, Hive ID, or Beekeeper name to view the full blockchain traceability chain.
           </p>
           {allBatches.length > 0 && (
-            <div style={{ marginTop: '20px' }}>
+            <div className="mt-20">
               <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginBottom: '8px' }}>AVAILABLE BATCHES</div>
-              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <div className="flex-center chip-group">
                 {allBatches.map(b => (
                   <button key={b.batchId || b.id} onClick={() => setSelectedBatch(b.batchId || b.id)}
-                    className="btn-luxury btn-luxury-ghost" style={{ fontSize: '12px', padding: '6px 12px' }}>
+                    className="btn-luxury btn-luxury-ghost btn-sm">
                     {b.batchId || b.id}
                   </button>
                 ))}
