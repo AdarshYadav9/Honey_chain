@@ -33,11 +33,11 @@ export default function PendingVerification() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><ShieldCheck size={13} /> Quality Assurance</div>
-        <h2 style={{ fontSize: '28px' }}>Pending Tests Queue</h2>
+        <h2>Pending Tests Queue</h2>
         <p className="section-lede">Batches awaiting lab verification. Approve harvest registration or submit quality test results.</p>
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+      <div className="flex gap-12" style={{ marginBottom: '20px' }}>
         <div style={{ padding: '10px 18px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '10px', fontSize: '13px' }}>
           <span style={{ color: 'var(--text-dim)' }}>Pending: </span>
           <strong style={{ color: 'var(--amber-400)' }}>{pending.length}</strong>
@@ -51,7 +51,7 @@ export default function PendingVerification() {
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div className="flex-col gap-12">
         {pending.map(batch => {
           const st = STATUS_STYLES[batch.status] || STATUS_STYLES.HARVEST_CREATED;
           const isExpanded = expanded === batch.id;
@@ -60,10 +60,11 @@ export default function PendingVerification() {
             <div key={batch.id} style={{ background: 'var(--bg-card)', border: `1px solid ${st.border}`, borderRadius: '14px', overflow: 'hidden' }}>
               <div
                 onClick={() => setExpanded(isExpanded ? null : batch.id)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', cursor: 'pointer' }}
+                className="flex-between"
+                style={{ padding: '16px 20px', cursor: 'pointer' }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: st.bg, color: st.color, fontSize: '18px' }}>
+                <div className="flex" style={{ gap: '14px' }}>
+                  <div className="flex-center" style={{ width: '40px', height: '40px', borderRadius: '10px', background: st.bg, color: st.color, fontSize: '18px' }}>
                     {batch.status === 'HARVEST_CREATED' ? <Clock size={20} /> : <CheckCircle2 size={20} />}
                   </div>
                   <div>
@@ -73,15 +74,15 @@ export default function PendingVerification() {
                     </div>
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ padding: '4px 12px', borderRadius: '999px', background: st.bg, color: st.color, border: `1px solid ${st.border}`, fontSize: '11px', fontWeight: 600 }}>{st.label}</span>
+                <div className="flex gap-12">
+                  <span className="pill" style={{ background: st.bg, color: st.color, border: `1px solid ${st.border}` }}>{st.label}</span>
                   {isExpanded ? <ChevronUp size={16} color="var(--text-dim)" /> : <ChevronDown size={16} color="var(--text-dim)" />}
                 </div>
               </div>
 
               {isExpanded && (
                 <div style={{ padding: '0 20px 20px', borderTop: '1px solid var(--border-subtle)' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginTop: '16px', marginBottom: '16px' }}>
+                  <div className="grid-4 mt-16" style={{ marginBottom: '16px' }}>
                     {[
                       { label: 'Hive', value: batch.hiveId },
                       { label: 'Honey Type', value: batch.honeyType },
@@ -99,7 +100,7 @@ export default function PendingVerification() {
                     ))}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '10px' }}>
+                  <div className="flex gap-10">
                     {batch.status === 'HARVEST_CREATED' && (
                       <button
                         onClick={() => handleVerify(batch.id)}
@@ -112,14 +113,14 @@ export default function PendingVerification() {
                     {batch.status === 'HARVEST_VERIFIED' && (
                       <button
                         onClick={() => { setTesting(batch.id); switchView('quality-test'); }}
-                        style={{ padding: '10px 24px', background: 'var(--gold-gradient)', border: 'none', borderRadius: '8px', color: '#0f0b04', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}
+                        className="btn btn-gold"
                       >
                         Submit Lab Test Results →
                       </button>
                     )}
                     <button
                       onClick={() => { window.__testingBatchId = batch.id; switchView('chain'); }}
-                      style={{ padding: '10px 18px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                      className="btn btn-soft btn-sm"
                     >
                       <ExternalLink size={13} /> Blockchain Trace
                     </button>

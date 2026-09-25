@@ -66,48 +66,48 @@ export default function Inventory() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Archive size={13} /> Inventory</div>
-        <h2 style={{ fontSize: '28px' }}>Packaged Inventory</h2>
+        <h2>Packaged Inventory</h2>
         <p className="section-lede">Packaged batches ready for distribution. Generate QR codes for consumer verification.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '20px' }}>
+      <div className="kpi-grid" style={{ marginBottom: '20px' }}>
         {[
           { label: 'Total Items', value: stats.total, color: 'var(--text-main)' },
           { label: 'Packaged', value: stats.packaged, color: 'var(--emerald-400)' },
           { label: 'Dispatched', value: stats.dispatched, color: '#60a5fa' },
           { label: 'Total Kg', value: stats.totalKg.toFixed(1), color: 'var(--amber-400)' },
         ].map(card => (
-          <div key={card.label} style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: card.color }}>{card.value}</div>
-            <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '2px' }}>{card.label}</div>
+          <div key={card.label} className="kpi-card">
+            <div className="kpi-value" style={{ color: card.color }}>{card.value}</div>
+            <div className="kpi-label">{card.label}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', alignItems: 'center' }}>
-        <div style={{ position: 'relative', flex: 1 }}>
-          <Search size={14} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
-          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by batch ID or type..." style={{ width: '100%', padding: '8px 12px 8px 32px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '12px', outline: 'none' }} />
+      <div className="toolbar">
+        <div className="search-field">
+          <Search size={14} />
+          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by batch ID or type..." className="input" />
         </div>
-        <div style={{ display: 'flex', gap: '4px' }}>
+        <div className="chip-group">
           {['all', 'PACKAGED', 'DISPATCHED'].map(f => (
-            <button key={f} onClick={() => setFilter(f)} style={{ padding: '6px 14px', borderRadius: '999px', border: '1px solid var(--border-subtle)', background: filter === f ? 'var(--gold-gradient)' : 'transparent', color: filter === f ? '#0f0b04' : 'var(--text-dim)', fontSize: '11px', fontWeight: 600, cursor: 'pointer', textTransform: f === 'all' ? 'none' : 'capitalize' }}>{f === 'all' ? 'All' : f.toLowerCase()}</button>
+            <button key={f} onClick={() => setFilter(f)} className={filter === f ? 'chip active' : 'chip'}>{f === 'all' ? 'All' : f.toLowerCase()}</button>
           ))}
         </div>
       </div>
 
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', overflow: 'hidden' }}>
+      <div className="glass-card">
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-dim)' }}>Loading inventory...</div>
+          <div className="state-loading">Loading inventory...</div>
         ) : filtered.length === 0 ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-dim)' }}>No inventory items found.</div>
+          <div className="state-empty">No inventory items found.</div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12.5px', minWidth: '700px' }}>
+          <div className="table-scroll">
+            <table className="hc-table">
               <thead>
-                <tr style={{ background: 'var(--bg-inset)' }}>
+                <tr>
                   {['Batch ID', 'Honey Type', 'Qty', 'Beekeeper', 'Status', 'QR Code', ''].map(h => (
-                    <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: 'var(--text-dim)', fontSize: '11px' }}>{h}</th>
+                    <th key={h}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -115,35 +115,29 @@ export default function Inventory() {
                 {filtered.map(item => {
                   const st = STATUS_STYLES[item.status] || STATUS_STYLES.PACKAGED;
                   return (
-                    <tr key={item.id} style={{ borderTop: '1px solid var(--border-subtle)' }}>
-                      <td style={{ padding: '10px 14px', fontWeight: 600, color: 'var(--amber-400)' }}>{item.id}</td>
-                      <td style={{ padding: '10px 14px' }}>{item.honeyType}</td>
-                      <td style={{ padding: '10px 14px' }}>{item.quantity} kg</td>
-                      <td style={{ padding: '10px 14px', color: 'var(--text-muted)' }}>{item.beekeeper}</td>
-                      <td style={{ padding: '10px 14px' }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 10px', borderRadius: '999px', background: st.bg, color: st.color, border: `1px solid ${st.border}`, fontSize: '11px', fontWeight: 600 }}>
+                    <tr key={item.id}>
+                      <td style={{ fontWeight: 600, color: 'var(--amber-400)' }}>{item.id}</td>
+                      <td>{item.honeyType}</td>
+                      <td>{item.quantity} kg</td>
+                      <td className="muted">{item.beekeeper}</td>
+                      <td>
+                        <span className="pill" style={{ background: st.bg, color: st.color, border: `1px solid ${st.border}` }}>
                           {st.icon} {st.label}
                         </span>
                       </td>
-                      <td style={{ padding: '10px 14px' }}>
+                      <td>
                         <button
                           onClick={() => handleGenerateQR(item.id)}
                           disabled={qrLoading === item.id}
-                          style={{
-                            display: 'inline-flex', alignItems: 'center', gap: '5px',
-                            padding: '5px 12px', borderRadius: '6px', border: '1px solid var(--border-subtle)',
-                            background: qrLoading === item.id ? 'var(--bg-inset)' : 'var(--emerald-bg)',
-                            color: qrLoading === item.id ? 'var(--text-dim)' : 'var(--emerald-400)',
-                            cursor: qrLoading === item.id ? 'wait' : 'pointer',
-                            fontSize: '11px', fontWeight: 600,
-                          }}
+                          className="btn btn-sm btn-soft"
+                          style={{ background: qrLoading === item.id ? 'var(--bg-inset)' : 'var(--emerald-bg)', color: qrLoading === item.id ? 'var(--text-dim)' : 'var(--emerald-400)', cursor: qrLoading === item.id ? 'wait' : 'pointer' }}
                         >
                           <QrCode size={12} />
                           {qrLoading === item.id ? 'Generating...' : 'Generate QR'}
                         </button>
                       </td>
-                      <td style={{ padding: '10px 14px' }}>
-                        <button onClick={() => { setBatchIdInput(item.id); switchView('chain'); }} style={{ padding: '5px 10px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--amber-400)', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}>
+                      <td>
+                        <button onClick={() => { setBatchIdInput(item.id); switchView('chain'); }} className="btn btn-sm btn-soft" style={{ color: 'var(--amber-400)' }}>
                           Trace →
                         </button>
                       </td>
@@ -158,19 +152,19 @@ export default function Inventory() {
 
       {qrModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '20px' }} onClick={() => setQrModal(null)}>
-          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '16px', padding: '28px', maxWidth: '400px', width: '100%', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <span style={{ fontSize: '16px', fontWeight: 700 }}>QR Code</span>
+          <div className="modal-window" style={{ maxWidth: '400px', textAlign: 'center' }} onClick={e => e.stopPropagation()}>
+            <div className="panel-head">
+              <span className="modal-title">QR Code</span>
               <button onClick={() => setQrModal(null)} style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}><X size={18} /></button>
             </div>
-            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px' }}>Batch: <strong style={{ color: 'var(--amber-400)' }}>{qrModal.batchId}</strong></div>
+            <div className="muted" style={{ marginBottom: '16px' }}>Batch: <strong style={{ color: 'var(--amber-400)' }}>{qrModal.batchId}</strong></div>
             <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', display: 'inline-block', marginBottom: '16px' }}>
               <img src={qrModal.dataUrl} alt={`QR for ${qrModal.batchId}`} style={{ width: '220px', height: '220px' }} />
             </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginBottom: '16px', wordBreak: 'break-all' }}>
+            <div className="field-hint" style={{ marginBottom: '16px', wordBreak: 'break-all' }}>
               {qrModal.url}
             </div>
-            <button onClick={() => handleDownloadQR(qrModal.batchId, qrModal.dataUrl)} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 24px', background: 'var(--gold-gradient)', border: 'none', borderRadius: '8px', color: '#0f0b04', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}>
+            <button onClick={() => handleDownloadQR(qrModal.batchId, qrModal.dataUrl)} className="btn btn-gold">
               <Download size={14} /> Download QR Code
             </button>
           </div>

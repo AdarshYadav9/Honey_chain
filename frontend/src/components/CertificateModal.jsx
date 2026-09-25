@@ -87,21 +87,17 @@ export default function CertificateModal({ batch: batchProp, onClose }) {
       <div className="passport-modal-window" onClick={e => e.stopPropagation()}>
         <button className="btn-close-modal" onClick={close}>✕</button>
 
-        <div style={{ textAlign: 'center', marginBottom: '22px' }}>
+        <div className="cert-header">
           <span className="status-beacon" style={{ marginBottom: '8px' }}>
             <CheckCircle2 size={14} /> KVIC HONEY MISSION VERIFIED
           </span>
-          <h2 style={{ fontSize: '26px', color: 'var(--text-main)', marginTop: '8px' }}>Digital Provenance Passport</h2>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-            Certified Single-Apiary Raw Honey • Tamper-Proof Cryptographic Record
-          </p>
+          <h2>Digital Provenance Passport</h2>
+          <p>Certified Single-Apiary Raw Honey • Tamper-Proof Cryptographic Record</p>
         </div>
 
         {/* Lab Analysis */}
-        <div style={{ background: 'var(--bg-code)', border: '1px solid var(--border-highlight)', borderRadius: '16px', padding: '18px', marginBottom: '16px' }}>
-          <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--amber-400)', marginBottom: '10px' }}>
-            🔬 Referral Lab Analysis &amp; NMR Purity
-          </div>
+        <div className="cert-section">
+          <div className="cert-section-title">🔬 Referral Lab Analysis &amp; NMR Purity</div>
           {[
             ['NMR Purity Score', `${quality.purity || quality.nmrPurityScore || '98.6'}% (Pass ≥ 98.0%)`, true],
             ['Moisture Content', `${quality.moisture || quality.moisturePercent || '17.2'}% (Pass ≤ 20.0%)`, true],
@@ -110,7 +106,7 @@ export default function CertificateModal({ batch: batchProp, onClose }) {
             ['Antibiotics & Heavy Metals', quality.antibioticResidues || 'NOT DETECTED (0.0 ppm)', true],
             ['HMF Level', quality.hmf ? `${quality.hmf} mg/kg (Limit < 40)` : quality.h遊FurfuralHMF || '12.4 mg/kg (Limit < 40)', true],
           ].map(([label, val, isPass]) => (
-            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px dashed var(--border-subtle)', fontSize: '13.5px' }}>
+            <div key={label} className="cert-row">
               <span>{label}:</span>
               <strong style={{ color: isPass === true ? 'var(--emerald-400)' : isPass === false ? '#f87171' : 'var(--text-main)' }}>{val}</strong>
             </div>
@@ -118,10 +114,8 @@ export default function CertificateModal({ batch: batchProp, onClose }) {
         </div>
 
         {/* Beekeeper Origin */}
-        <div style={{ background: 'var(--bg-code)', border: '1px solid var(--border-subtle)', borderRadius: '16px', padding: '18px', marginBottom: '20px' }}>
-          <div style={{ fontWeight: 700, fontSize: '14px', color: 'var(--amber-400)', marginBottom: '10px' }}>
-            👨‍🌾 Rural Beekeeper Origin
-          </div>
+        <div className="cert-section cert-section--plain">
+          <div className="cert-section-title">👨‍🌾 Rural Beekeeper Origin</div>
           {[
             ['Beekeeper Name', beekeeper],
             ['KVIC Bee Box ID', `${hiveId}`],
@@ -131,7 +125,7 @@ export default function CertificateModal({ batch: batchProp, onClose }) {
             ['Quantity', `${quantity} kg`],
             ['Extraction Method', extractionMethod],
           ].map(([label, val]) => (
-            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px dashed var(--border-subtle)', fontSize: '13.5px' }}>
+            <div key={label} className="cert-row">
               <span>{label}:</span>
               <strong>{val}</strong>
             </div>
@@ -139,8 +133,7 @@ export default function CertificateModal({ batch: batchProp, onClose }) {
         </div>
 
         <button
-          className="btn-luxury btn-luxury-primary"
-          style={{ width: '100%' }}
+          className="btn-luxury btn-luxury-primary btn-block"
           onClick={handleDownload}
         >
           <Download size={16} /> Download PDF Certificate

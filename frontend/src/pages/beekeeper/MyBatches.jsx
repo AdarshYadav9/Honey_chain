@@ -22,35 +22,34 @@ export default function MyBatches() {
     <section className="view-pane active" id="view-my-batches">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Layers size={13} /> My Harvest Batches</div>
-        <h2 style={{ fontSize: '30px' }}>My Batches</h2>
+        <h2>My Batches</h2>
         <p className="section-lede">Track every batch you've registered as it moves through quality testing, processing and packaging.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px' }}>
+      <div className="flex-col gap-20">
         {sharedBatches.map(batch => {
           const idx = stageIndex(batch.status);
           return (
             <div key={batch.id} className="glass-card">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '18px' }}>
+              <div className="panel-head">
                 <div>
                   <h3 style={{ margin: 0, color: 'var(--amber-400)' }}>{batch.id}</h3>
-                  <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  <div className="muted" style={{ marginTop: '4px' }}>
                     Hive: {batch.hiveId} • {batch.honeyType} • {batch.quantity} kg
                   </div>
                 </div>
                 <button
-                  className="btn-luxury btn-luxury-ghost"
-                  style={{ fontSize: '12.5px', padding: '8px 14px' }}
+                  className="btn-luxury btn-luxury-ghost btn-sm"
                   onClick={() => { setBatchIdInput(batch.id); switchView('chain'); }}
                 >
                   View Full Trace →
                 </button>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', overflowX: 'auto', paddingBottom: '4px' }}>
+              <div className="flex table-scroll">
                 {PIPELINE.map((stage, i) => (
                   <React.Fragment key={stage.key}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '90px' }}>
+                    <div className="flex-col flex-center" style={{ minWidth: '90px' }}>
                       {i <= idx
                         ? <CheckCircle2 size={20} color="var(--emerald-400)" />
                         : <Circle size={20} color="var(--border-subtle)" />}
@@ -68,7 +67,7 @@ export default function MyBatches() {
           );
         })}
         {sharedBatches.length === 0 && (
-          <div className="glass-card" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '40px' }}>
+          <div className="glass-card state-empty">
             No batches yet — register a harvest from Hive Monitor to start one.
           </div>
         )}

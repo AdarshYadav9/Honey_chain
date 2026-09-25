@@ -63,19 +63,14 @@ export default function BeekeeperAlerts() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Bell size={13} /> Notifications</div>
-        <h2 style={{ fontSize: '28px' }}>Alerts &amp; Notifications</h2>
+        <h2>Alerts &amp; Notifications</h2>
         <p className="section-lede">Inspection reminders, low battery warnings, risk flags, and batch updates.</p>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', gap: '6px' }}>
+      <div className="toolbar">
+        <div className="chip-group">
           {filters.map(f => (
-            <button key={f} onClick={() => setFilter(f)} style={{
-              padding: '5px 12px', borderRadius: '999px', border: '1px solid var(--border-subtle)',
-              background: filter === f ? 'var(--gold-gradient)' : 'transparent',
-              color: filter === f ? '#0f0b04' : 'var(--text-dim)',
-              fontSize: '11px', fontWeight: 600, cursor: 'pointer', textTransform: 'capitalize',
-            }}>{f}</button>
+            <button key={f} onClick={() => setFilter(f)} className={`chip ${filter === f ? 'active' : ''}`} style={{ textTransform: 'capitalize' }}>{f}</button>
           ))}
         </div>
         {unread > 0 && (
@@ -83,7 +78,7 @@ export default function BeekeeperAlerts() {
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div className="flex-col gap-8">
         {filtered.map(alert => {
           const st = TYPE_STYLES[alert.type];
           return (
@@ -94,12 +89,12 @@ export default function BeekeeperAlerts() {
               borderRadius: '12px',
               opacity: alert.read ? 0.7 : 1,
             }}>
-              <div style={{
-                width: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              <div className="flex-center" style={{
+                width: '36px', height: '36px', borderRadius: '10px',
                 background: st.bg, color: st.color, flexShrink: 0,
               }}>{alert.icon}</div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                <div className="flex gap-8">
                   <span style={{ fontSize: '13px', fontWeight: 600 }}>{alert.title}</span>
                   {!alert.read && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--rose-400)' }} />}
                 </div>

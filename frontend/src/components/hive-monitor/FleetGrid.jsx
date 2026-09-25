@@ -74,15 +74,13 @@ export default function FleetGrid({ hives, onSelectHive }) {
 
   return (
     <div className="glass-card">
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-        <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{sorted.length} of {rows.length} hives shown</div>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <select value={clusterFilter} onChange={e => setClusterFilter(e.target.value)}
-            style={{ padding: '7px 10px', background: 'var(--bg-dark)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)', fontSize: '12.5px' }}>
+      <div className="toolbar" style={{ justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div className="muted">{sorted.length} of {rows.length} hives shown</div>
+        <div className="toolbar-group">
+          <select className="select select-sm" value={clusterFilter} onChange={e => setClusterFilter(e.target.value)}>
             {clusters.map(c => <option key={c} value={c}>{c === 'ALL' ? 'All Clusters' : c}</option>)}
           </select>
-          <select value={severityFilter} onChange={e => setSeverityFilter(e.target.value)}
-            style={{ padding: '7px 10px', background: 'var(--bg-dark)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)', fontSize: '12.5px' }}>
+          <select className="select select-sm" value={severityFilter} onChange={e => setSeverityFilter(e.target.value)}>
             <option value="ALL">All Alert Levels</option>
             <option value="none">None</option>
             <option value="low">Low</option>
@@ -110,15 +108,15 @@ export default function FleetGrid({ hives, onSelectHive }) {
             return (
               <tr key={r.id}>
                 <td style={{ fontWeight: 600 }}>{r.id}</td>
-                <td style={{ color: 'var(--text-muted)' }}>{r.cluster}</td>
+                <td className="muted">{r.cluster}</td>
                 <td style={{ color: stateMeta.color, fontWeight: 600 }}>● {stateMeta.label}</td>
-                <td><Thermometer size={12} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{r.temp.toFixed ? r.temp.toFixed(1) : r.temp}</td>
-                <td><Droplets size={12} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{Math.round(r.hum)}</td>
-                <td><Scale size={12} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{r.wt.toFixed ? r.wt.toFixed(1) : r.wt}</td>
-                <td><Battery size={12} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{Math.round(r.batt)}</td>
+                <td><Thermometer size={12} />{r.temp.toFixed ? r.temp.toFixed(1) : r.temp}</td>
+                <td><Droplets size={12} />{Math.round(r.hum)}</td>
+                <td><Scale size={12} />{r.wt.toFixed ? r.wt.toFixed(1) : r.wt}</td>
+                <td><Battery size={12} />{Math.round(r.batt)}</td>
                 <td style={{ color: sevMeta.color, fontWeight: 600 }}>{sevMeta.label}</td>
                 <td>
-                  <button className="btn-luxury btn-luxury-ghost" style={{ fontSize: '11.5px', padding: '5px 10px' }} onClick={() => onSelectHive(r.id)}>
+                  <button className="btn-luxury btn-luxury-ghost btn-sm" onClick={() => onSelectHive(r.id)}>
                     View →
                   </button>
                 </td>
@@ -126,7 +124,7 @@ export default function FleetGrid({ hives, onSelectHive }) {
             );
           })}
           {sorted.length === 0 && (
-            <tr><td colSpan={COLUMNS.length + 1} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '24px' }}>No hives match these filters.</td></tr>
+            <tr><td colSpan={COLUMNS.length + 1} className="state-empty" style={{ padding: '24px' }}>No hives match these filters.</td></tr>
           )}
         </tbody>
       </table>

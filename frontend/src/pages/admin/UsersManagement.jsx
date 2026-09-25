@@ -71,21 +71,21 @@ export default function UsersManagement() {
     <section className="view-pane active" id="view-users">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Users size={13} /> Access &amp; Role Management</div>
-        <h2 style={{ fontSize: '30px' }}>Users</h2>
+        <h2>Users</h2>
         <p className="section-lede">Manage admin, beekeeper, quality officer and processor accounts and their cluster assignments.</p>
       </div>
 
       <div className="glass-card" style={{ marginBottom: '20px' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flex: 1, minWidth: '220px' }}>
+        <div className="flex-between">
+          <div className="search-field">
             <Search size={15} color="var(--text-muted)" />
             <input
               type="text" placeholder="Search by name, email or cluster..."
               value={query} onChange={e => setQuery(e.target.value)}
-              style={{ flex: 1, padding: '10px 12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)' }}
+              className="input"
             />
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <div className="toolbar-group">
             {['ALL', 'ADMIN', 'BEEKEEPER', 'QUALITY_OFFICER', 'PROCESSOR'].map(r => (
               <button
                 key={r}
@@ -102,29 +102,29 @@ export default function UsersManagement() {
         </div>
 
         {showAddForm && (
-          <form onSubmit={handleAddUser} style={{ marginTop: '18px', paddingTop: '18px', borderTop: '1px solid var(--border-subtle)', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto', gap: '14px', alignItems: 'end' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Full Name</label>
-              <input name="name" required style={{ width: '100%', padding: '10px', background: 'var(--bg-dark)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} />
+          <form onSubmit={handleAddUser} className="grid-4-auto divider-top mt-16">
+            <div className="field">
+              <label className="field-label">Full Name</label>
+              <input name="name" required className="input" />
             </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Email</label>
-              <input name="email" type="email" required style={{ width: '100%', padding: '10px', background: 'var(--bg-dark)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} />
+            <div className="field">
+              <label className="field-label">Email</label>
+              <input name="email" type="email" required className="input" />
             </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Role</label>
-              <select name="role" style={{ width: '100%', padding: '10px', background: 'var(--bg-dark)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }}>
+            <div className="field">
+              <label className="field-label">Role</label>
+              <select name="role" className="select">
                 <option value="BEEKEEPER">Beekeeper</option>
                 <option value="QUALITY_OFFICER">Quality Officer</option>
                 <option value="PROCESSOR">Processor</option>
                 <option value="ADMIN">Admin</option>
               </select>
             </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Cluster</label>
-              <input name="cluster" placeholder="e.g. Satara" style={{ width: '100%', padding: '10px', background: 'var(--bg-dark)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} />
+            <div className="field">
+              <label className="field-label">Cluster</label>
+              <input name="cluster" placeholder="e.g. Satara" className="input" />
             </div>
-            <button type="submit" className="btn-luxury btn-luxury-primary" style={{ height: '42px' }}>Invite</button>
+            <button type="submit" className="btn-luxury btn-luxury-primary">Invite</button>
           </form>
         )}
       </div>
@@ -140,9 +140,8 @@ export default function UsersManagement() {
                 <td>{u.name}</td>
                 <td style={{ color: 'var(--text-muted)' }}>{u.email}</td>
                 <td>
-                  <span style={{
-                    background: (roleBadgeColor[u.role] || {}).bg, color: (roleBadgeColor[u.role] || {}).color,
-                    padding: '3px 9px', borderRadius: '99px', fontSize: '11px', fontWeight: 700
+                  <span className="pill" style={{
+                    background: (roleBadgeColor[u.role] || {}).bg, color: (roleBadgeColor[u.role] || {}).color
                   }}>
                     {u.role.replace('_', ' ')}
                   </span>
@@ -153,12 +152,12 @@ export default function UsersManagement() {
                 <td>
                   {u.role !== 'ADMIN' && (
                     confirmDelete === u.id ? (
-                      <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                        <button onClick={() => handleDeleteUser(u.id)} style={{ fontSize: '10px', padding: '3px 8px', background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '6px', cursor: 'pointer', fontWeight: 600 }}>Confirm</button>
-                        <button onClick={() => setConfirmDelete(null)} style={{ fontSize: '10px', padding: '3px 8px', background: 'var(--bg-input-subtle)', color: 'var(--text-muted)', border: '1px solid var(--border-subtle)', borderRadius: '6px', cursor: 'pointer' }}>Cancel</button>
+                      <div className="flex gap-6">
+                        <button onClick={() => handleDeleteUser(u.id)} className="btn btn-danger btn-sm">Confirm</button>
+                        <button onClick={() => setConfirmDelete(null)} className="btn btn-soft btn-sm">Cancel</button>
                       </div>
                     ) : (
-                      <button onClick={() => setConfirmDelete(u.id)} title="Remove user" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '6px', padding: '4px 8px', cursor: 'pointer', color: '#ef4444', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 600 }}>
+                      <button onClick={() => setConfirmDelete(u.id)} title="Remove user" className="btn btn-danger btn-sm">
                         <Trash2 size={13} /> Remove
                       </button>
                     )
@@ -167,7 +166,7 @@ export default function UsersManagement() {
               </tr>
             ))}
             {filtered.length === 0 && (
-              <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '24px' }}>No users match this search.</td></tr>
+              <tr><td colSpan={7} className="state-empty">No users match this search.</td></tr>
             )}
           </tbody>
         </table>

@@ -36,9 +36,9 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
 
   return (
     <div className="glass-card">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+      <div className="toolbar" style={{ marginBottom: '16px' }}>
         <div className="mm-cb-title" style={{ margin: 0 }}>TRENDS &amp; HISTORY</div>
-        <div style={{ display: 'flex', gap: '6px' }}>
+        <div className="toolbar-group" style={{ marginLeft: 'auto' }}>
           {RANGES.map(r => (
             <button key={r.key} className={`chart-toggle ${range === r.key ? 'active' : ''}`} onClick={() => onChangeRange(r.key)}>
               {r.label}
@@ -47,10 +47,10 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
         </div>
       </div>
 
-      <div className="mm-charts-row" style={{ gridTemplateColumns: '1fr 1fr' }}>
+      <div className="mm-charts-row">
         {/* Temperature Chart */}
-        <div className="mm-chart-box" style={{ border: '1px solid var(--border-subtle)', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <div className="mm-chart-box">
+          <div className="chart-box-head">
             <div className="mm-cb-title" style={{ margin: 0 }}>Temperature ({activeRange.label})</div>
             <div className="mono" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--amber-400)' }}>
               {tempMax.toFixed(1)}°C
@@ -59,7 +59,7 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
           <svg viewBox="0 0 320 110" width="100%" height="110">
             {renderAxisChart(tempSeries, 'var(--amber-400)', 'var(--amber-500)', '°C')}
           </svg>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '10.5px', color: 'var(--text-dim)' }}>
+          <div className="chart-minmax">
             <span>Min: {tempMin.toFixed(1)}°C</span>
             <span>Avg: {(tempSeries.reduce((a, b) => a + b, 0) / tempSeries.length).toFixed(1)}°C</span>
             <span>Max: {tempMax.toFixed(1)}°C</span>
@@ -67,8 +67,8 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
         </div>
 
         {/* Weight Chart */}
-        <div className="mm-chart-box" style={{ border: '1px solid var(--border-subtle)', borderRadius: '12px', padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <div className="mm-chart-box">
+          <div className="chart-box-head">
             <div className="mm-cb-title" style={{ margin: 0 }}>Weight ({activeRange.label})</div>
             <div className="mono" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--emerald-400)' }}>
               {wtMax.toFixed(1)} kg
@@ -77,7 +77,7 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
           <svg viewBox="0 0 320 110" width="100%" height="110">
             {renderAxisChart(weightSeries, 'var(--emerald-400)', 'var(--emerald-400)', ' kg')}
           </svg>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '10.5px', color: 'var(--text-dim)' }}>
+          <div className="chart-minmax">
             <span>Min: {wtMin.toFixed(1)} kg</span>
             <span>Avg: {(weightSeries.reduce((a, b) => a + b, 0) / weightSeries.length).toFixed(1)} kg</span>
             <span>Max: {wtMax.toFixed(1)} kg</span>
@@ -86,11 +86,11 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
       </div>
 
       {/* Seasonal Comparison */}
-      <div style={{ marginTop: '20px', paddingTop: '18px', borderTop: '1px solid var(--border-subtle)' }}>
+      <div className="divider-top" style={{ marginTop: '20px' }}>
         <div className="mm-cb-title" style={{ marginBottom: '14px' }}>SEASONAL COMPARISON — PROJECTED YIELD</div>
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '36px', padding: '0 12px' }}>
+        <div className="flex" style={{ alignItems: 'flex-end', gap: '36px', padding: '0 12px' }}>
           {/* Last Year Bar */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <div className="flex-col" style={{ alignItems: 'center', gap: '8px' }}>
             <div className="mono" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)' }}>
               {seasonal.lastYear.toFixed(1)} kg
             </div>
@@ -102,11 +102,11 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
               borderRadius: '6px 6px 0 0',
               minHeight: '20px',
             }} />
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>Last Year</div>
+            <div className="muted" style={{ fontWeight: 600 }}>Last Year</div>
           </div>
 
           {/* This Year Bar */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <div className="flex-col" style={{ alignItems: 'center', gap: '8px' }}>
             <div className="mono" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--amber-400)' }}>
               {seasonal.thisYear.toFixed(1)} kg
             </div>
@@ -119,17 +119,11 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
               boxShadow: '0 4px 12px rgba(245,158,11,0.2)',
               minHeight: '20px',
             }} />
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>This Year</div>
+            <div className="muted" style={{ fontWeight: 600 }}>This Year</div>
           </div>
 
           {/* Change Badge */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '6px',
-            paddingBottom: '30px',
-          }}>
+          <div className="flex-col" style={{ alignItems: 'center', gap: '6px', paddingBottom: '30px' }}>
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -144,7 +138,7 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
             }}>
               {seasonal.thisYear >= seasonal.lastYear ? '↑' : '↓'} {pctChange}%
             </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>vs last year</div>
+            <div className="muted">{'vs last year'}</div>
           </div>
         </div>
       </div>

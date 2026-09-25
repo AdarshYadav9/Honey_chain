@@ -67,34 +67,34 @@ export default function ProcessingLog() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Settings size={13} /> Processing Log</div>
-        <h2 style={{ fontSize: '28px' }}>Record Processing</h2>
+        <h2>Record Processing</h2>
         <p className="section-lede">Log extraction details: unit used, inputs pooled, output quantity.</p>
       </div>
 
       {submitted ? (
-        <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'var(--emerald-bg)', border: '2px solid var(--emerald-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+        <div className="result-hero">
+          <div className="result-icon success">
             <CheckCircle2 size={32} color="var(--emerald-400)" />
           </div>
-          <h3 style={{ fontSize: '20px', color: 'var(--emerald-400)', marginBottom: '6px' }}>Processing Logged</h3>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '24px' }}>
+          <h3 className="result-title" style={{ color: 'var(--emerald-400)' }}>Processing Logged</h3>
+          <p className="result-sub">
             {selectedBatch} — extraction complete. Ready for packaging.
           </p>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-            <button onClick={() => switchView('packaging')} style={{ padding: '10px 20px', background: 'var(--gold-gradient)', border: 'none', borderRadius: '8px', color: '#0f0b04', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}>
-              Proceed to Packaging <ArrowRight size={14} style={{ verticalAlign: 'middle' }} />
+          <div className="result-actions">
+            <button onClick={() => switchView('packaging')} className="btn btn-gold">
+              Proceed to Packaging <ArrowRight size={14} />
             </button>
-            <button onClick={() => { setSubmitted(false); setForm({ extractionUnit: '', inputQty: '', outputQty: '', poolingNote: '', temperature: '', duration: '', notes: '' }); }} style={{ padding: '10px 20px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px' }}>
+            <button onClick={() => { setSubmitted(false); setForm({ extractionUnit: '', inputQty: '', outputQty: '', poolingNote: '', temperature: '', duration: '', notes: '' }); }} className="btn btn-soft">
               Log Another
             </button>
           </div>
         </div>
       ) : (
         <div style={{ maxWidth: '760px' }}>
-          <form onSubmit={handleSubmit} style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', padding: '24px' }}>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Select Batch *</label>
-              <select value={selectedBatch} onChange={e => setSelectedBatch(e.target.value)} required style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}>
+          <form onSubmit={handleSubmit} className="panel">
+            <div className="field" style={{ marginBottom: '20px' }}>
+              <label className="field-label">Select Batch *</label>
+              <select value={selectedBatch} onChange={e => setSelectedBatch(e.target.value)} required className="select">
                 <option value="">Choose a batch to process...</option>
                 {processing.map(b => (
                   <option key={b.id} value={b.id}>{b.id} — {b.hiveId} — {b.honeyType} — {b.quantity}kg — {b.status}</option>
@@ -103,51 +103,51 @@ export default function ProcessingLog() {
             </div>
 
             {batch && (
-              <div style={{ padding: '12px', background: 'var(--bg-inset)', borderRadius: '8px', marginBottom: '20px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', fontSize: '12px' }}>
+              <div className="grid-3 notice">
                 <div><span style={{ color: 'var(--text-dim)' }}>Hive: </span><strong>{batch.hiveId}</strong></div>
                 <div><span style={{ color: 'var(--text-dim)' }}>Type: </span><strong>{batch.honeyType}</strong></div>
                 <div><span style={{ color: 'var(--text-dim)' }}>Input Qty: </span><strong>{batch.quantity} kg</strong></div>
               </div>
             )}
 
-            <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '14px', color: 'var(--amber-400)' }}>Extraction Details</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Extraction Unit *</label>
-                <select value={form.extractionUnit} onChange={e => update('extractionUnit', e.target.value)} required style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}>
+            <div className="section-title">Extraction Details</div>
+            <div className="grid-2">
+              <div className="field">
+                <label className="field-label">Extraction Unit *</label>
+                <select value={form.extractionUnit} onChange={e => update('extractionUnit', e.target.value)} required className="select">
                   <option value="">Select unit...</option>
                   {EXTRACTION_UNITS.map(u => <option key={u} value={u}>{u}</option>)}
                 </select>
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Processing Temp (°C)</label>
-                <input type="number" step="0.1" value={form.temperature} onChange={e => update('temperature', e.target.value)} placeholder="e.g. 32 (must be below 35°C)" style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Processing Temp (°C)</label>
+                <input type="number" step="0.1" value={form.temperature} onChange={e => update('temperature', e.target.value)} placeholder="e.g. 32 (must be below 35°C)" className="input" />
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Input Quantity (kg) *</label>
-                <input type="number" step="0.1" min="0" value={form.inputQty} onChange={e => update('inputQty', e.target.value)} placeholder={batch ? String(batch.quantity) : '0'} required style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Input Quantity (kg) *</label>
+                <input type="number" step="0.1" min="0" value={form.inputQty} onChange={e => update('inputQty', e.target.value)} placeholder={batch ? String(batch.quantity) : '0'} required className="input" />
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Output Quantity (kg) *</label>
-                <input type="number" step="0.1" min="0" value={form.outputQty} onChange={e => update('outputQty', e.target.value)} placeholder="e.g. 11.2 (after filtering loss)" required style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Output Quantity (kg) *</label>
+                <input type="number" step="0.1" min="0" value={form.outputQty} onChange={e => update('outputQty', e.target.value)} placeholder="e.g. 11.2 (after filtering loss)" required className="input" />
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Duration (minutes)</label>
-                <input type="number" min="0" value={form.duration} onChange={e => update('duration', e.target.value)} placeholder="e.g. 45" style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Duration (minutes)</label>
+                <input type="number" min="0" value={form.duration} onChange={e => update('duration', e.target.value)} placeholder="e.g. 45" className="input" />
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Pooling Note</label>
-                <input type="text" value={form.poolingNote} onChange={e => update('poolingNote', e.target.value)} placeholder="e.g. Pooled from HIVE-BOX-01 & 02" style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Pooling Note</label>
+                <input type="text" value={form.poolingNote} onChange={e => update('poolingNote', e.target.value)} placeholder="e.g. Pooled from HIVE-BOX-01 & 02" className="input" />
               </div>
             </div>
 
-            <div style={{ marginTop: '16px' }}>
-              <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Notes</label>
-              <textarea value={form.notes} onChange={e => update('notes', e.target.value)} rows={3} placeholder="Any observations during processing..." style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none', resize: 'vertical' }} />
+            <div className="field mt-16">
+              <label className="field-label">Notes</label>
+              <textarea value={form.notes} onChange={e => update('notes', e.target.value)} rows={3} placeholder="Any observations during processing..." className="textarea" />
             </div>
 
-            <button type="submit" disabled={submitting || !selectedBatch} style={{ marginTop: '20px', width: '100%', padding: '12px', background: submitting || !selectedBatch ? 'var(--text-dim)' : 'var(--gold-gradient)', border: 'none', borderRadius: '10px', color: '#0f0b04', fontSize: '14px', fontWeight: 700, cursor: submitting || !selectedBatch ? 'not-allowed' : 'pointer' }}>
-              <Settings size={16} style={{ verticalAlign: 'middle', marginRight: '6px' }} />
+            <button type="submit" disabled={submitting || !selectedBatch} className="btn btn-block btn-gold mt-20">
+              <Settings size={16} />
               {submitting ? 'Logging Processing...' : 'Complete Processing & Log to Blockchain'}
             </button>
           </form>

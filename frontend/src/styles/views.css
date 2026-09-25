@@ -51,10 +51,10 @@ section.view-pane.active {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
-  border-radius: 20px;
+  border-radius: var(--card-radius);
   padding: 26px;
   box-shadow: var(--shadow-card);
-  transition: all 0.25s ease;
+  transition: var(--transition);
   position: relative;
   overflow: hidden;
   width: 100%;

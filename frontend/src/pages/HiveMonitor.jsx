@@ -57,12 +57,17 @@ export default function HiveMonitor() {
       <div className="monitor-dashboard-layout">
         {/* LEFT SIDEBAR — HIVES */}
         <div className="monitor-sidebar">
-          <div className="ms-search-wrap">
-            <Search size={14} className="ms-search-icon" />
-            <input
-              type="text" className="ms-search-input" placeholder="Search Hive ID/location..."
-              value={hiveSearch} onChange={e => setHiveSearch(e.target.value)}
-            />
+          <div className="ms-controls-row">
+            <div className="ms-search-wrap">
+              <Search size={14} className="ms-search-icon" />
+              <input
+                type="text" className="ms-search-input" placeholder="Search Hive ID/location..."
+                value={hiveSearch} onChange={e => setHiveSearch(e.target.value)}
+              />
+            </div>
+            <button className="btn-luxury btn-luxury-ghost ms-add-btn" onClick={() => setShowAddModal(true)}>
+              <Plus size={14} /> <span>Add Hive</span>
+            </button>
           </div>
 
           <div className="ms-hive-list">
@@ -79,13 +84,9 @@ export default function HiveMonitor() {
               );
             })}
             {filteredHiveList.length === 0 && (
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)', padding: '10px 4px' }}>No hives match "{hiveSearch}".</div>
+              <div className="muted" style={{ padding: '10px 4px' }}>No hives match "{hiveSearch}".</div>
             )}
           </div>
-
-          <button className="btn-luxury btn-luxury-ghost ms-add-btn" onClick={() => setShowAddModal(true)}>
-            <Plus size={14} /> Add New Hive
-          </button>
         </div>
 
         {/* ADD HIVE MODAL */}
@@ -93,48 +94,48 @@ export default function HiveMonitor() {
           <div className="modal-backdrop-blur" onClick={() => setShowAddModal(false)}>
             <div className="passport-modal-window" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
               <button className="btn-close-modal" onClick={() => setShowAddModal(false)}><X size={16} /></button>
-              <h3 style={{ margin: '0 0 6px', fontSize: '20px' }}>Register New Hive</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '13px', margin: '0 0 20px' }}>Add a new smart hive to the monitoring network.</p>
-              <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <h3 className="modal-title">Register New Hive</h3>
+              <p className="muted" style={{ margin: '0 0 20px' }}>Add a new smart hive to the monitoring network.</p>
+              <form onSubmit={handleAddSubmit} className="flex-col" style={{ gap: '14px' }}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>Location *</label>
+                  <label className="field-label">Location *</label>
                   <input
                     type="text" required placeholder="e.g. Satara Apiary, Maharashtra"
                     value={addForm.location} onChange={e => setAddForm(f => ({ ...f, location: e.target.value }))}
-                    style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+                    className="input"
                   />
                 </div>
                 <div>
-                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>Beekeeper Name</label>
+                  <label className="field-label">Beekeeper Name</label>
                   <input
                     type="text" placeholder="e.g. Ganesh Pawar"
                     value={addForm.beekeeperName} onChange={e => setAddForm(f => ({ ...f, beekeeperName: e.target.value }))}
-                    style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+                    className="input"
                   />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="grid-2">
                   <div>
-                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>Floral Source</label>
+                    <label className="field-label">Floral Source</label>
                     <select
                       value={addForm.floralSource} onChange={e => setAddForm(f => ({ ...f, floralSource: e.target.value }))}
-                      style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+                      className="select"
                     >
                       {FLOWERS.map(f => <option key={f} value={f}>{f}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, marginBottom: '6px', color: 'var(--text-muted)' }}>Cluster</label>
+                    <label className="field-label">Cluster</label>
                     <input
                       type="text" placeholder="e.g. Satara"
                       value={addForm.cluster} onChange={e => setAddForm(f => ({ ...f, cluster: e.target.value }))}
-                      style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+                      className="input"
                     />
                   </div>
                 </div>
                 <button
-                  type="submit" className="btn-luxury btn-luxury-primary"
+                  type="submit" className="btn-luxury btn-luxury-primary mt-8"
                   disabled={adding || !addForm.location.trim()}
-                  style={{ marginTop: '4px', opacity: adding || !addForm.location.trim() ? 0.6 : 1 }}
+                  style={{ opacity: adding || !addForm.location.trim() ? 0.6 : 1 }}
                 >
                   {adding ? 'Registering...' : 'Register Hive'}
                 </button>
@@ -149,18 +150,18 @@ export default function HiveMonitor() {
           <div className="mm-header-card glass-card">
             <div className="mm-h-top">
               <div>
-                <h2 style={{ fontSize: '24px', margin: '0 0 4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <h2 className="mm-h-title">
                   {viewMode === 'fleet' ? 'All Hives — Fleet View' : `Hive ${activeHive}`}
                   {viewMode === 'single' && <span className="mm-badge-online">Online</span>}
                 </h2>
-                <div style={{ color: 'var(--text-muted)', fontSize: '13.5px' }}>
+                <div className="muted">
                   {viewMode === 'fleet'
                     ? `${Object.keys(hives).length} hives across ${new Set(Object.values(hives).map(h => h.cluster || h.loc?.split(',')[0])).size} clusters`
                     : (curHive?.loc || 'Location unavailable') + (curHive?.beekeeper ? ` • Beekeeper: ${curHive.beekeeper}` : '')
                   }
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div className="flex" style={{ gap: '10px' }}>
                 <button
                   className="btn-luxury btn-luxury-ghost"
                   onClick={() => setViewMode(v => (v === 'fleet' ? 'single' : 'fleet'))}
@@ -191,53 +192,53 @@ export default function HiveMonitor() {
                 <div className="mm-sensor-card">
                   <div className="mm-sc-label"><Thermometer size={14} /> Internal Temp</div>
                   <div className="mm-sc-val">{(curHive.temp ?? 34.8).toFixed(1)}°C</div>
-                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>Brood range 34–35°C</div>
+                  <div className="field-hint" style={{ marginTop: '4px' }}>Brood range 34–35°C</div>
                 </div>
                 <div className="mm-sensor-card">
                   <div className="mm-sc-label"><Droplets size={14} /> Humidity</div>
                   <div className="mm-sc-val">{Math.round(curHive.hum ?? 63)}%</div>
-                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>Optimal 45–70%</div>
+                  <div className="field-hint" style={{ marginTop: '4px' }}>Optimal 45–70%</div>
                 </div>
                 <div className="mm-sensor-card">
                   <div className="mm-sc-label"><Scale size={14} /> Hive Weight</div>
                   <div className="mm-sc-val">{(curHive.wt ?? 34.1).toFixed(1)} kg</div>
-                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>{curHive.wtDelta || '+0.0 kg'} (24h)</div>
+                  <div className="field-hint" style={{ marginTop: '4px' }}>{curHive.wtDelta || '+0.0 kg'} (24h)</div>
                 </div>
                 <div className="mm-sensor-card">
                   <div className="mm-sc-label"><Radio size={14} /> Acoustic Buzz</div>
-                  <div className="mm-sc-val" style={{ fontSize: '18px' }}>{(curHive.act || 'Normal').split(' ')[0]}</div>
-                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>{curHive.act || 'Normal (240Hz)'}</div>
+                  <div className="mm-sc-val">{(curHive.act || 'Normal').split(' ')[0]}</div>
+                  <div className="field-hint" style={{ marginTop: '4px' }}>{curHive.act || 'Normal (240Hz)'}</div>
                 </div>
                 <div className="mm-sensor-card">
                   <div className="mm-sc-label"><Cloud size={14} /> Ambient / Weather</div>
                   <div className="mm-sc-val">{curHive.extTemp != null ? `${curHive.extTemp.toFixed(1)}°C` : '—'}</div>
-                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>{curHive.weather || 'No data'}</div>
+                  <div className="field-hint" style={{ marginTop: '4px' }}>{curHive.weather || 'No data'}</div>
                 </div>
                 <div className="mm-sensor-card">
                   <div className="mm-sc-label"><Wind size={14} /> CO₂ Level</div>
                   <div className="mm-sc-val">{curHive.co2 ?? '—'} ppm</div>
-                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '4px' }}>Ventilation indicator</div>
+                  <div className="field-hint" style={{ marginTop: '4px' }}>Ventilation indicator</div>
                 </div>
               </div>
 
               {/* AI Health & Alerts row */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
+              <div className="grid-2" style={{ marginTop: '20px' }}>
                 <AIHealthSnapshot hive={curHive} />
                 <AlertsPanel hive={curHive} />
               </div>
 
               {/* Trends & History */}
-              <div style={{ marginTop: '20px' }}>
+              <div className="mt-20">
                 <TrendsPanel hive={curHive} range={timeRange} onChangeRange={setTimeRange} />
               </div>
 
               {/* Device & Metadata */}
-              <div style={{ marginTop: '20px' }}>
+              <div className="mt-20">
                 <DeviceMetaPanel hiveId={activeHive} hive={curHive} />
               </div>
 
               {/* Recent telemetry + event timeline */}
-              <div className="mm-bottom-grid" style={{ marginTop: '20px' }}>
+              <div className="mm-bottom-grid mt-20">
                 <div className="mm-table-card glass-card">
                   <div className="mm-cb-title">Recent Telemetry</div>
                   <table className="mm-table">
@@ -265,11 +266,11 @@ export default function HiveMonitor() {
               {/* Beekeeper: Register Harvest */}
               {currentUser?.role === 'BEEKEEPER' && (
                 <div className="glass-card" style={{ marginTop: '20px', borderTop: '2px solid var(--amber-500)' }}>
-                  <h4 style={{ marginBottom: '16px', fontSize: '16px', color: 'var(--amber-400)' }}>Register Honey Harvest</h4>
-                  <form onSubmit={handleRegisterHarvest} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto', gap: '16px', alignItems: 'end' }}>
+                  <h4 className="section-title">Register Honey Harvest</h4>
+                  <form onSubmit={handleRegisterHarvest} className="grid-4-auto">
                     <div>
-                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Honey Type</label>
-                      <select style={{ width: '100%', padding: '12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} id="honeyType">
+                      <label className="field-label" style={{ marginBottom: '8px' }}>Honey Type</label>
+                      <select className="select" id="honeyType">
                         <option value="Raw Multifloral Honey">Raw Multifloral Honey</option>
                         <option value="Litchi Monofloral Honey">Litchi Monofloral Honey</option>
                         <option value="Mustard Honey">Mustard Honey</option>
@@ -281,8 +282,8 @@ export default function HiveMonitor() {
                       </select>
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Extraction Method</label>
-                      <select style={{ width: '100%', padding: '12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} id="extractionMethod">
+                      <label className="field-label" style={{ marginBottom: '8px' }}>Extraction Method</label>
+                      <select className="select" id="extractionMethod">
                         <option value="Centrifugal Cold Extraction">Centrifugal Cold Extraction</option>
                         <option value="Stainless Steel Centrifugal">Stainless Steel Centrifugal</option>
                         <option value="Crush and Strain">Crush and Strain</option>
@@ -292,14 +293,14 @@ export default function HiveMonitor() {
                       </select>
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Quantity (kg)</label>
-                      <input type="number" id="harvestQty" defaultValue={8.4} step="0.1" required style={{ width: '100%', padding: '12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} />
+                      <label className="field-label" style={{ marginBottom: '8px' }}>Quantity (kg)</label>
+                      <input type="number" id="harvestQty" defaultValue={8.4} step="0.1" required className="input" />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '8px', color: 'var(--text-muted)' }}>Harvest Date</label>
-                      <input type="date" id="harvestDate" defaultValue={new Date().toISOString().split('T')[0]} required style={{ width: '100%', padding: '12px', background: 'var(--bg-input-subtle)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)' }} />
+                      <label className="field-label" style={{ marginBottom: '8px' }}>Harvest Date</label>
+                      <input type="date" id="harvestDate" defaultValue={new Date().toISOString().split('T')[0]} required className="input" />
                     </div>
-                    <button type="submit" className="btn-luxury btn-luxury-primary" style={{ padding: '12px 24px', height: '45px' }}>Create Batch</button>
+                    <button type="submit" className="btn-luxury btn-luxury-primary btn-lg">Create Batch</button>
                   </form>
                 </div>
               )}
