@@ -560,6 +560,182 @@
   text-align: center;
 }
 
+@media (max-width: 900px) {
+  .login-page-dark {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    align-items: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .login-dark-container {
+    flex-direction: column;
+    width: 100%;
+    max-width: 640px;
+    min-height: 0;
+    max-height: none;
+    margin: auto;
+    overflow: visible;
+  }
+
+  .login-left {
+    flex: none;
+    padding: 32px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .login-left-content {
+    max-width: none;
+  }
+
+  .login-logo-row {
+    margin-bottom: 22px;
+  }
+
+  .login-hero-title {
+    font-size: clamp(32px, 6vw, 40px);
+  }
+
+  .login-hero-desc {
+    margin-bottom: 22px;
+  }
+
+  .login-features-grid {
+    margin-bottom: 22px;
+  }
+
+  .login-stats-row {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .login-right {
+    flex: none;
+    padding: 32px;
+    overflow: visible;
+  }
+
+  .login-card-dark {
+    flex: none;
+  }
+
+  .lcd-footer {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 560px) {
+  .login-page-dark {
+    padding: 0;
+  }
+
+  .login-dark-container {
+    max-width: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .login-left {
+    padding: 26px 20px 22px;
+  }
+
+  .login-logo-row {
+    margin-bottom: 18px;
+  }
+
+  .login-logo-text {
+    font-size: 18px;
+  }
+
+  .login-hero-title {
+    font-size: clamp(29px, 8vw, 36px);
+  }
+
+  .login-hero-desc {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .login-features-grid {
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .login-feature-item {
+    gap: 8px;
+    padding: 10px;
+    border-radius: 9px;
+  }
+
+  .login-feature-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .login-feature-item span {
+    font-size: 11px;
+  }
+
+  .login-stats-row {
+    gap: 8px;
+  }
+
+  .login-stat {
+    font-size: 10px;
+  }
+
+  .login-stat-divider {
+    height: 13px;
+  }
+
+  .login-right {
+    padding: 26px 20px 20px;
+  }
+
+  .lcd-brand {
+    font-size: 25px;
+  }
+
+  .lcd-sub {
+    max-width: 260px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 8px;
+  }
+
+  .lcd-header {
+    padding: 0 24px;
+    margin-bottom: 22px;
+  }
+
+  .lcd-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .lcd-demo-header {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .lcd-demo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lcd-footer {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}
+
 .lc-submit-btn {
   width: 100%;
   min-height: 48px;

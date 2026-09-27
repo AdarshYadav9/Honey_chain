@@ -17,8 +17,9 @@ import honeyBeeImg from '../../images/honeybee.png';
 const HOW_STEPS = [
   { n: '01', icon: Box, t: 'Hive Registration', d: 'Every colony is registered with location, beekeeper and live IoT sensors.', view: 'monitor' },
   { n: '02', icon: Droplets, t: 'Extraction & Batch Creation', d: 'Harvest becomes a batch — GPS, weight and purity locked to its identity.', view: 'chain' },
-  { n: '03', icon: Link2, t: 'Blockchain Record + QR', d: 'Each step is sealed on-ledger and linked to a cryptographic QR code.', view: 'chain' },
-  { n: '04', icon: ScanLine, t: 'Consumer Scan & Verify', d: 'Scan the QR to see origin, lab tests and the full chain of custody.', view: 'qr' },
+  { n: '03', icon: ShieldCheck, t: 'Quality & Lab Testing', d: 'Rigorous purity checks and lab-certified testing ensure genuine raw quality.', view: 'quality-test' },
+  { n: '04', icon: Link2, t: 'Blockchain Record', d: 'Each step is sealed on-ledger and linked to a cryptographic QR code.', view: 'chain' },
+  { n: '05', icon: ScanLine, t: 'Consumer Scan & Verify', d: 'Scan the QR to see origin, lab tests and the full chain of custody.', view: 'qr' },
 ];
 
 const FEATURE_ICONS = {
@@ -370,6 +371,9 @@ export default function Landing() {
     <>
       {/* ---------- HERO ---------- */}
       <section className="lp-hero" id="hero">
+        {/* defocused cream/beige photographic atmosphere — right-weighted, purely decorative */}
+        <div className="lp-hero-atmos" aria-hidden="true" />
+
         <div className="lp-hero-glow" aria-hidden="true" />
 
         {/* atmosphere: leaves drifting around the still-life */}
@@ -424,7 +428,8 @@ export default function Landing() {
               <span className="lp-vis-deco lp-d-hexbg" aria-hidden="true"><HexBackdrop /></span>
 
               <div className="lp-hero-scene">
-                <img className="lp-scene-img" src={honeyBeeImg} alt="Raw honey jar with honeycomb, flowers and honey dipper" />
+                {/* <img className="lp-scene-img" alt="Raw honey jar with honeycomb, flowers and honey dipper" /> */}
+                 <img className="lp-scene-img" src={honeyBeeImg} alt="Raw honey jar with honeycomb, flowers and honey dipper" /> 
               </div>
 
               <div className="lp-hf-card lp-hf-qr">
