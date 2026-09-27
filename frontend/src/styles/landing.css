@@ -169,9 +169,7 @@ main.wrap:has(.view-pane.landing) .lp-stats {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 76px);
-  min-height: calc(100dvh - 76px);
-  padding: 24px 0 24px clamp(24px, 5vw, 75px);
+  padding: clamp(40px, 5vh, 60px) 0 clamp(40px, 5vh, 60px) clamp(24px, 5vw, 75px);
   background: rgb(243, 228, 198);
   overflow: hidden;
   box-sizing: border-box;
@@ -204,30 +202,34 @@ main.wrap:has(.view-pane.landing) .lp-stats {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 70% at 80% 30%, rgba(248, 240, 221, 0.4) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 80% at 90% 80%, rgba(220, 193, 141, 0.3) 0%, transparent 70%),
+    /* NEW: subtle botanical haze spreading toward the center */
+    radial-gradient(ellipse 45% 60% at 45% 55%, rgba(215, 222, 190, 0.2) 0%, transparent 65%),
+    /* NEW: subtle warm photographic depth towards center */
+    radial-gradient(ellipse 50% 65% at 55% 50%, rgba(235, 215, 175, 0.35) 0%, transparent 70%),
+    /* Existing highlights */
+    radial-gradient(ellipse 60% 70% at 80% 30%, rgba(248, 240, 221, 0.5) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 80% at 90% 80%, rgba(220, 193, 141, 0.4) 0%, transparent 70%),
     linear-gradient(
       90deg,
       rgba(248, 240, 221, 0) 0%,
-      rgba(248, 240, 221, 0) 35%,
-      rgba(243, 229, 198, 0.6) 55%,
+      rgba(248, 240, 221, 0) 30%,
+      rgba(238, 226, 196, 0.5) 45%, /* Extend warmth toward center */
+      rgba(243, 229, 198, 0.7) 55%,
       rgba(231, 208, 161, 0.9) 75%,
       rgba(220, 193, 141, 1) 100%
     );
-  filter: blur(40px);
+  filter: blur(50px);
 }
 
 .lp-hero-grid {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 48% 52%; /* Balanced two-zone layout */
   align-items: center;
   gap: clamp(16px, 2vw, 36px);
   max-width: 100%;
   width: 100%;
-  min-height: calc(100vh - 124px);
-  min-height: calc(100dvh - 124px);
   margin: 0;
 }
 
@@ -459,7 +461,6 @@ main.wrap:has(.view-pane.landing) .lp-stats {
   z-index: 1;
   width: 100%;
   height: 100%;
-  min-height: 520px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -468,10 +469,10 @@ main.wrap:has(.view-pane.landing) .lp-stats {
 /* stage holds the main visual and floating cards */
 .lp-scene-stage {
   position: relative;
+  right: 9vw; /* Creates 9vw of clean visual breathing room on the right edge */
   width: 100%;
   max-width: 100%;
   height: 100%;
-  min-height: 560px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -481,31 +482,33 @@ main.wrap:has(.view-pane.landing) .lp-stats {
 /* seamless product artwork */
 .lp-hero-scene {
   position: absolute;
-  width: 130%;
-  height: 120%;
-  left: -20%; /* Pull product slightly towards the center text */
+  width: 100%;
+  height: 100%;
+  right: 0; /* Anchor to the right half */
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end; /* Ensure product stays visually anchored to the right */
   background: transparent;
   pointer-events: none;
 }
 
 .lp-scene-img {
   width: auto;
-  max-width: none;
-  height: clamp(550px, 78vh, 900px); /* Significant scale increase (70-80% height) */
+  max-width: 55vw; /* Hard constraint to never cover the left text area */
+  height: clamp(500px, 72vh, 850px); /* Increased scale by ~10% for stronger hero presence */
   display: block;
   object-fit: contain;
-  object-position: center;
-  mix-blend-mode: multiply; /* Seamlessly merges product background with page background */
+  object-position: right center; /* Ensure internal scaling stays anchored right */
+  mix-blend-mode: multiply;
   
-  /* Removes rectangular bounds completely, creating a soft atmospheric fade into the background */
-  -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, rgba(0,0,0,1) 35%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0) 80%);
-  mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, rgba(0,0,0,1) 35%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0) 80%);
+  /* Protects the center so the jar, stone, and dipper are perfectly opaque.
+     Expanded the solid zone to keep the stone completely visible and grounded. */
+  -webkit-mask-image: radial-gradient(ellipse 49% 49% at 50% 50%, rgba(0,0,0,1) 75%, rgba(0,0,0,0.85) 92%, rgba(0,0,0,0) 100%);
+  mask-image: radial-gradient(ellipse 49% 49% at 50% 50%, rgba(0,0,0,1) 75%, rgba(0,0,0,0.85) 92%, rgba(0,0,0,0) 100%);
   
-  filter: drop-shadow(0 25px 40px rgba(110, 80, 25, 0.15)); /* Realistic soft grounding shadow */
+  filter: drop-shadow(0 25px 40px rgba(110, 80, 25, 0.15)); /* Soft ambient grounding shadow */
   pointer-events: auto;
+  transform: translateY(-4%); /* Raise slightly to ensure stone and drip have bottom breathing room */
 }
 
 /* hero-level atmosphere: leaves drifting in from the page edges */
@@ -596,8 +599,7 @@ main.wrap:has(.view-pane.landing) .lp-stats {
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
   padding: 8px 14px;
-  margin-right: clamp(10px, 8vw, 110px); /* Pushes cards left to align with the jar's new right margin */
-  margin-left: -20px; /* Included left margin just in case it was explicitly needed for spacing */
+  margin: 0; /* Remove extreme margins that caused cards to push into the left zone */
   animation: cardFloat 6s ease-in-out infinite;
   will-change: transform;
 }
@@ -635,8 +637,8 @@ main.wrap:has(.view-pane.landing) .lp-stats {
 
 /* CHIP 2 — 100% Pure (middle-right of jar) */
 .lp-hf-pure {
-  top: 45%;
-  right: 2%;
+  top: 28%;
+  right: 7%;
   width: 175px;
   min-height: 52px;
   animation-delay: 1.8s;
@@ -644,8 +646,8 @@ main.wrap:has(.view-pane.landing) .lp-stats {
 
 /* CHIP 3 — Ethically Sourced (lower-right of jar) */
 .lp-hf-ethic {
-  top: 70%;
-  right: 4%;
+  top: 38%;
+  right: 5%;
   width: 185px;
   min-height: 52px;
   animation-delay: 3.6s;
@@ -1898,8 +1900,8 @@ main.wrap:has(.view-pane.landing) .lp-stats {
   }
 
   .lp-hf-ethic {
-    right: 4%;
-    bottom: 5%;
+    right: 5%;
+    bottom: 12%;
     width: auto;
     min-height: auto;
     animation: none;
