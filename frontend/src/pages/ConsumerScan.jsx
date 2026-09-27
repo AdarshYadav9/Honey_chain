@@ -41,7 +41,7 @@ const MOCK_BATCH_DATA = {
   },
 };
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 const PUBLIC_BASE = window.location.hostname !== 'localhost' ? window.location.origin : 'https://certified-overfaintly-vivian.ngrok-free.dev';
 
 function normalizeLab(lab) {
@@ -144,22 +144,22 @@ export default function ConsumerScan() {
             Scan this QR or enter a batch code below
           </div>
 
-          <div style={{ display: 'flex', gap: '8px', marginTop: '14px' }}>
+          <div className="flex gap-8" style={{ marginTop: '14px' }}>
             <input
               type="text" value={lookupId} onChange={e => setLookupId(e.target.value)}
               placeholder="Enter Batch ID (e.g. HONEY-BATCH-2025-001)"
               onKeyDown={e => e.key === 'Enter' && handleLookup()}
-              style={{ flex: 1, padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}
+              className="input" style={{ flex: 1 }}
             />
-            <button className="btn-luxury btn-luxury-primary" onClick={handleLookup} style={{ padding: '10px 16px', fontSize: '13px' }}>
+            <button className="btn-luxury btn-luxury-primary" onClick={handleLookup}>
               <Search size={14} /> Verify
             </button>
           </div>
 
-          <div style={{ marginTop: '12px', display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div className="chip-group flex-center mt-12">
             {['HONEY-BATCH-2025-001', ...sharedBatches.slice(0, 2).map(b => b.id || b.batchId)].map(id => (
               <button key={id} onClick={() => { setLookupId(id); setBatchIdInput(id); setIsScanned(true); }}
-                style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '999px', border: '1px solid var(--border-subtle)', background: lookupId === id ? 'var(--gold-gradient)' : 'transparent', color: lookupId === id ? '#0f0b04' : 'var(--text-dim)', cursor: 'pointer', fontWeight: 600 }}>
+                className={lookupId === id ? 'chip active' : 'chip'}>
                 {id}
               </button>
             ))}
@@ -169,20 +169,21 @@ export default function ConsumerScan() {
         {/* Right — Verification Result */}
         <div className={`passport-result-card ${isScanned ? 'active' : ''}`}>
           {!resolvedBatch ? (
-            <div style={{ textAlign: 'center', padding: '32px 16px' }}>
+            <div className="state-empty">
               <Shield size={40} color="var(--text-dim)" style={{ opacity: 0.4, marginBottom: '12px' }} />
               <h3 style={{ fontSize: '16px', color: 'var(--text-muted)', marginBottom: '6px' }}>Enter a Batch Code</h3>
-              <p style={{ fontSize: '12.5px', color: 'var(--text-dim)' }}>Type a batch ID or scan a QR code to view provenance details.</p>
+              <p style={{ fontSize: '12.5px' }}>Type a batch ID or scan a QR code to view provenance details.</p>
             </div>
           ) : (
             <>
               {/* 1. Authenticity Badge */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 18px', marginBottom: '20px',
-                background: resolvedBatch.verified ? 'var(--emerald-bg)' : 'rgba(248,113,113,0.1)',
-                border: `1px solid ${resolvedBatch.verified ? 'var(--emerald-border)' : 'rgba(248,113,113,0.3)'}`,
-                borderRadius: '12px',
-              }}>
+              <div className="flex-between"
+                style={{
+                  padding: '14px 18px', marginBottom: '20px',
+                  background: resolvedBatch.verified ? 'var(--emerald-bg)' : 'rgba(248,113,113,0.1)',
+                  border: `1px solid ${resolvedBatch.verified ? 'var(--emerald-border)' : 'rgba(248,113,113,0.3)'}`,
+                  borderRadius: '12px',
+                }}>
                 {resolvedBatch.verified ? (
                   <CheckCircle2 size={22} color="var(--emerald-400)" />
                 ) : (
@@ -192,20 +193,20 @@ export default function ConsumerScan() {
                   <div style={{ fontSize: '15px', fontWeight: 700, color: resolvedBatch.verified ? 'var(--emerald-400)' : '#f87171' }}>
                     {resolvedBatch.verified ? '100% Authentic — Verified Pure Honey' : 'Verification Pending'}
                   </div>
-                  <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  <div className="field-hint" style={{ marginTop: '2px' }}>
                     Batch <strong className="mono">{resolvedBatch.batchId}</strong> • Blockchain integrity confirmed
                   </div>
                 </div>
-                <button className="btn-luxury btn-luxury-ghost" onClick={() => setShowFullCertModal(true)}
-                  style={{ fontSize: '11.5px', padding: '6px 12px', flexShrink: 0 }}>
+                <button className="btn-luxury btn-luxury-ghost btn-sm" onClick={() => setShowFullCertModal(true)}
+                  style={{ flexShrink: 0 }}>
                   <FileText size={13} /> Certificate
                 </button>
               </div>
 
               {/* 2. Source Story */}
               <div style={{ marginBottom: '20px' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.06em', fontWeight: 700, marginBottom: '10px' }}>SOURCE STORY</div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="panel-title" style={{ marginBottom: '10px' }}>SOURCE STORY</div>
+                <div className="grid-2">
                   {[
                     { icon: <User size={14} />, label: 'Beekeeper', val: resolvedBatch.beekeeper },
                     { icon: <MapPin size={14} />, label: 'Apiary Cluster', val: resolvedBatch.cluster },
@@ -214,7 +215,7 @@ export default function ConsumerScan() {
                     { icon: <Shield size={14} />, label: 'Honey Type', val: resolvedBatch.honeyType },
                     { icon: <Hash size={14} />, label: 'Extraction', val: resolvedBatch.extractionMethod },
                   ].map(item => (
-                    <div key={item.label} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <div key={item.label} className="flex gap-8">
                       <span style={{ color: 'var(--amber-400)', marginTop: '2px', flexShrink: 0 }}>{item.icon}</span>
                       <div>
                         <div style={{ fontSize: '10.5px', color: 'var(--text-dim)' }}>{item.label}</div>
@@ -228,9 +229,9 @@ export default function ConsumerScan() {
               {/* 3. Lab Results in Plain Language */}
               {resolvedBatch.lab && (
                 <div style={{ marginBottom: '20px' }}>
-                  <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.06em', fontWeight: 700, marginBottom: '10px' }}>LAB TEST RESULTS</div>
+                  <div className="panel-title" style={{ marginBottom: '10px' }}>LAB TEST RESULTS</div>
                   <div style={{ padding: '14px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '10px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div className="flex flex-col gap-10">
                       {[
                         { label: 'Purity Score', val: `${resolvedBatch.lab.nmrPurity}%`, desc: 'Nuclear Magnetic Resonance test confirms this is pure, unadulterated honey.', good: resolvedBatch.lab.nmrPurity >= 98 },
                         { label: 'Moisture Content', val: `${resolvedBatch.lab.moisture}%`, desc: 'Low moisture means the honey won\'t ferment and has a long shelf life.', good: resolvedBatch.lab.moisture <= 20 },
@@ -238,17 +239,17 @@ export default function ConsumerScan() {
                         { label: 'Antibiotic Residue', val: resolvedBatch.lab.antibiotics, desc: 'No antibiotic chemicals found — safe for all ages.', good: true },
                         { label: 'HMF Level', val: `${resolvedBatch.lab.hmf} mg/kg`, desc: 'Low HMF confirms the honey was never heated or aged improperly.', good: resolvedBatch.lab.hmf < 40 },
                       ].map(item => (
-                        <div key={item.label} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                        <div key={item.label} className="flex gap-10">
                           <span style={{
                             width: '8px', height: '8px', borderRadius: '50%', marginTop: '5px', flexShrink: 0,
                             background: item.good ? 'var(--emerald-400)' : '#f87171',
                           }} />
                           <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div className="flex-between">
                               <span style={{ fontSize: '13px', fontWeight: 600 }}>{item.label}</span>
                               <span className="mono" style={{ fontSize: '13px', fontWeight: 700, color: item.good ? 'var(--emerald-400)' : '#f87171' }}>{item.val}</span>
                             </div>
-                            <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px', lineHeight: 1.4 }}>{item.desc}</div>
+                            <div className="field-hint" style={{ marginTop: '2px', lineHeight: 1.4 }}>{item.desc}</div>
                           </div>
                         </div>
                       ))}
@@ -262,9 +263,9 @@ export default function ConsumerScan() {
 
               {/* 4. Origin Map */}
               <div style={{ marginBottom: '20px' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.06em', fontWeight: 700, marginBottom: '10px' }}>ORIGIN MAP</div>
+                <div className="panel-title" style={{ marginBottom: '10px' }}>ORIGIN MAP</div>
                 <div style={{ padding: '14px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '10px' }}>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600, marginBottom: '8px' }}>
+                  <div className="field-label" style={{ marginBottom: '8px' }}>
                     <MapPin size={13} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
                     GEO-VERIFIED ORIGIN — {resolvedBatch.cluster?.toUpperCase()}
                   </div>
@@ -300,16 +301,16 @@ export default function ConsumerScan() {
               {resolvedBatch.checkpoints?.length > 0 && (
                 <div style={{ marginBottom: '20px' }}>
                   <div
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', marginBottom: '10px' }}
+                    className="flex-between" style={{ cursor: 'pointer', marginBottom: '10px' }}
                     onClick={() => setExpandedTimeline(!expandedTimeline)}
                   >
-                    <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.06em', fontWeight: 700 }}>TRACEABILITY JOURNEY</div>
+                    <div className="panel-title">TRACEABILITY JOURNEY</div>
                     {expandedTimeline ? <ChevronUp size={14} color="var(--text-dim)" /> : <ChevronDown size={14} color="var(--text-dim)" />}
                   </div>
                   {expandedTimeline && (
                     <div style={{ padding: '14px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '10px' }}>
                       {resolvedBatch.checkpoints.map((cp, i) => (
-                        <div key={i} style={{ display: 'flex', gap: '12px', padding: '8px 0', borderBottom: i < resolvedBatch.checkpoints.length - 1 ? '1px solid var(--border-subtle)' : 'none' }}>
+                        <div key={i} className="flex gap-12" style={{ padding: '8px 0', borderBottom: i < resolvedBatch.checkpoints.length - 1 ? '1px solid var(--border-subtle)' : 'none' }}>
                           <div style={{
                             width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                             background: 'var(--emerald-bg)', border: '1px solid var(--emerald-border)', fontSize: '11px', fontWeight: 700, color: 'var(--emerald-400)',
@@ -328,16 +329,16 @@ export default function ConsumerScan() {
 
               {/* 6. Ledger Reference */}
               <div style={{ marginBottom: '20px' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-dim)', letterSpacing: '0.06em', fontWeight: 700, marginBottom: '10px' }}>LEDGER REFERENCE</div>
+                <div className="panel-title" style={{ marginBottom: '10px' }}>LEDGER REFERENCE</div>
                 <div style={{ padding: '12px 14px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                  <div className="flex gap-6" style={{ marginBottom: '8px' }}>
                     <Hash size={13} color="var(--amber-400)" />
                     <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-main)' }}>Blockchain Verification Hash</span>
                   </div>
                   <div className="mono" style={{ fontSize: '11px', padding: '8px 10px', background: 'var(--bg-code)', borderRadius: '6px', wordBreak: 'break-all', color: 'var(--amber-400)', lineHeight: 1.6 }}>
                     {resolvedBatch.hash}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', fontSize: '11px', color: 'var(--text-muted)' }}>
+                  <div className="flex gap-6 mt-8" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                     <ExternalLink size={11} />
                     <span>Anyone can independently verify this hash at <strong>honeychain.kvic.gov.in/verify</strong></span>
                   </div>
@@ -348,11 +349,10 @@ export default function ConsumerScan() {
               <div>
                 <button
                   onClick={() => setShowReport(!showReport)}
+                  className="btn flex gap-8 btn-block"
                   style={{
-                    display: 'flex', alignItems: 'center', gap: '8px', width: '100%', padding: '12px 14px',
                     background: showReport ? 'rgba(248,113,113,0.08)' : 'transparent',
-                    border: '1px dashed var(--border-subtle)', borderRadius: '10px', cursor: 'pointer',
-                    color: 'var(--text-muted)', fontSize: '12.5px', fontWeight: 600, transition: 'all 0.2s',
+                    border: '1px dashed var(--border-subtle)', color: 'var(--text-muted)',
                   }}
                 >
                   <AlertTriangle size={14} /> Report Suspected Counterfeit
@@ -370,9 +370,9 @@ export default function ConsumerScan() {
                     ) : (
                       <form onSubmit={handleReportSubmit}>
                         <div style={{ fontSize: '13px', fontWeight: 600, marginBottom: '12px', color: 'var(--text-main)' }}>Why do you suspect this product?</div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                        <div className="flex flex-col gap-8" style={{ marginBottom: '12px' }}>
                           {['Packaging looks tampered', 'Honey taste/texture seems off', 'QR code doesn\'t match product', 'Price seems too low for pure honey', 'Other concern'].map(reason => (
-                            <label key={reason} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', color: 'var(--text-main)', cursor: 'pointer' }}>
+                            <label key={reason} className="flex gap-8" style={{ fontSize: '12.5px', color: 'var(--text-main)', cursor: 'pointer' }}>
                               <input type="radio" name="reportReason" value={reason} checked={reportForm.reason === reason}
                                 onChange={e => setReportForm(f => ({ ...f, reason: e.target.value }))}
                                 style={{ accentColor: 'var(--amber-500)' }} />
@@ -384,22 +384,20 @@ export default function ConsumerScan() {
                           placeholder="Additional details (optional)..."
                           value={reportForm.description} onChange={e => setReportForm(f => ({ ...f, description: e.target.value }))}
                           rows={2}
-                          style={{ width: '100%', padding: '8px 10px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)', fontSize: '12px', resize: 'vertical', outline: 'none', marginBottom: '12px' }}
+                          className="textarea"
+                          style={{ marginBottom: '12px' }}
                         />
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '12px' }}>
+                        <div className="grid-2" style={{ marginBottom: '12px' }}>
                           <input type="text" placeholder="Your name (optional)" value={reportForm.name}
-                            onChange={e => setReportForm(f => ({ ...f, name: e.target.value }))}
-                            style={{ padding: '8px 10px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)', fontSize: '12px', outline: 'none' }} />
+                            onChange={e => setReportForm(f => ({ ...f, name: e.target.value }))} className="input" />
                           <input type="text" placeholder="Contact (optional)" value={reportForm.contact}
-                            onChange={e => setReportForm(f => ({ ...f, contact: e.target.value }))}
-                            style={{ padding: '8px 10px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)', fontSize: '12px', outline: 'none' }} />
+                            onChange={e => setReportForm(f => ({ ...f, contact: e.target.value }))} className="input" />
                         </div>
-                        <button type="submit" className="btn-luxury" disabled={!reportForm.reason}
+                        <button type="submit" className="btn-luxury btn-block" disabled={!reportForm.reason}
                           style={{
-                            width: '100%', padding: '10px', fontSize: '12.5px',
                             background: reportForm.reason ? '#dc2626' : 'var(--bg-card)',
                             color: reportForm.reason ? '#fff' : 'var(--text-dim)',
-                            border: 'none', opacity: reportForm.reason ? 1 : 0.5,
+                            opacity: reportForm.reason ? 1 : 0.5,
                           }}>
                           <Send size={13} /> Submit Counterfeit Report
                         </button>

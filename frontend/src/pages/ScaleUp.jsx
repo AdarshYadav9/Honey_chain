@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  TrendingUp, Cpu, Wifi, Link2, Shield, BarChart3, Users, Boxes,
+  TrendingUp, Cpu, Wifi, Link2, BarChart3, Users, Boxes,
   MapPin, ChevronDown, ChevronUp, IndianRupee, Building2, Truck,
   FlaskConical, Smartphone, Globe, Layers, ArrowRight, CheckCircle2
 } from 'lucide-react';
@@ -134,8 +134,8 @@ const PARTNERS = [
 function MetricBadge({ label, value, color }) {
   return (
     <div style={{ textAlign: 'center' }}>
-      <div style={{ fontSize: '22px', fontWeight: 800, color, lineHeight: 1.1 }}>{value}</div>
-      <div style={{ fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '2px' }}>{label}</div>
+      <div className="kpi-value" style={{ color }}>{value}</div>
+      <div className="kpi-label">{label}</div>
     </div>
   );
 }
@@ -156,7 +156,7 @@ export default function ScaleUp() {
       </div>
 
       {/* Summary Metrics */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '32px' }}>
+      <div className="gap-12" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', marginBottom: '32px' }}>
         {[
           { label: 'Target Hives', value: '5,000', color: 'var(--emerald-400)' },
           { label: 'Clusters', value: '60', color: 'var(--sky-400)' },
@@ -168,21 +168,20 @@ export default function ScaleUp() {
 
       {/* 1. Phased Rollout Timeline */}
       <div style={{ marginBottom: '40px' }}>
-        <div className="eyebrow-badge" style={{ marginBottom: '14px' }}>
+        <div className="eyebrow-badge">
           <Boxes size={13} /> PHASED ROLLOUT TIMELINE
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className="flex-col gap-10">
           {PHASES.map(phase => (
-            <div key={phase.id} style={{
-              background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
-              borderRadius: '12px', overflow: 'hidden',
+            <div key={phase.id} className="glass-card" style={{
+              padding: 0,
               borderColor: expandedPhase === phase.id ? phase.color : 'var(--border-subtle)',
             }}>
               <div
                 onClick={() => setExpandedPhase(expandedPhase === phase.id ? null : phase.id)}
+                className="flex-between"
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '14px', padding: '16px 20px',
-                  cursor: 'pointer', userSelect: 'none',
+                  padding: '16px 20px', cursor: 'pointer', userSelect: 'none',
                 }}
               >
                 <div style={{
@@ -195,22 +194,21 @@ export default function ScaleUp() {
                   {phase.id}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div className="flex gap-8">
                     <span style={{ fontSize: '14px', fontWeight: 700 }}>{phase.title}</span>
-                    <span style={{
-                      fontSize: '10px', padding: '2px 8px', borderRadius: '999px', fontWeight: 600,
+                    <span className="pill pill-sm" style={{
                       background: phase.status === 'active' ? 'var(--emerald-bg)' : phase.status === 'upcoming' ? 'var(--bg-inset)' : 'var(--bg-code)',
                       color: phase.status === 'active' ? 'var(--emerald-400)' : 'var(--text-dim)',
-                      border: `1px solid ${phase.status === 'active' ? 'var(--emerald-border)' : 'var(--border-subtle)'}`,
+                      borderColor: phase.status === 'active' ? 'var(--emerald-border)' : 'var(--border-subtle)',
                     }}>
                       {phase.status.toUpperCase()}
                     </span>
                   </div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  <div className="muted">
                     {phase.period} · {phase.regions}
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: '20px', marginRight: '10px' }}>
+                <div className="flex gap-20" style={{ marginRight: '10px' }}>
                   <MetricBadge label="Hives" value={phase.hives} color={phase.color} />
                   <MetricBadge label="Clusters" value={phase.clusters} color={phase.color} />
                   <MetricBadge label="Beekeepers" value={phase.beekeepers} color={phase.color} />
@@ -220,11 +218,11 @@ export default function ScaleUp() {
 
               {expandedPhase === phase.id && (
                 <div style={{ padding: '0 20px 18px', borderTop: '1px solid var(--border-subtle)' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '16px' }}>
+                  <div className="grid-2 mt-16">
                     <div>
                       <div style={{ fontSize: '11px', color: 'var(--text-dim)', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '8px' }}>KEY DELIVERABLES</div>
                       {phase.deliverables.map((d, i) => (
-                        <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px', fontSize: '12.5px' }}>
+                        <div key={i} className="flex gap-8" style={{ marginBottom: '6px', fontSize: '12.5px' }}>
                           <CheckCircle2 size={14} color={phase.color} style={{ marginTop: '1px', flexShrink: 0 }} />
                           <span>{d}</span>
                         </div>
@@ -233,7 +231,7 @@ export default function ScaleUp() {
                     <div>
                       <div style={{ fontSize: '11px', color: 'var(--text-dim)', fontWeight: 700, letterSpacing: '0.05em', marginBottom: '8px' }}>SUCCESS KPIs</div>
                       {phase.kpis.map((k, i) => (
-                        <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '6px', fontSize: '12.5px' }}>
+                        <div key={i} className="flex gap-8" style={{ marginBottom: '6px', fontSize: '12.5px' }}>
                           <span style={{ color: phase.color, fontWeight: 700 }}>→</span>
                           <span>{k}</span>
                         </div>
@@ -247,25 +245,22 @@ export default function ScaleUp() {
         </div>
 
         {/* Timeline bar */}
-        <div style={{ marginTop: '14px', display: 'flex', gap: '4px', height: '6px', borderRadius: '999px', overflow: 'hidden' }}>
+        <div className="flex" style={{ marginTop: '14px', gap: '4px', height: '6px', borderRadius: '999px', overflow: 'hidden' }}>
           <div style={{ flex: 6, background: 'var(--emerald-400)', borderRadius: '999px 0 0 999px' }} title="Phase 1: Months 0–6" />
           <div style={{ flex: 12, background: 'var(--amber-400)' }} title="Phase 2: Months 6–18" />
           <div style={{ flex: 18, background: 'var(--sky-400)', borderRadius: '0 999px 999px 0' }} title="Phase 3: Months 18–36" />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '4px' }}>
+        <div className="flex-between" style={{ fontSize: '10.5px', color: 'var(--text-dim)', marginTop: '4px' }}>
           <span>Month 0</span><span>Month 6</span><span>Month 18</span><span>Month 36</span>
         </div>
       </div>
 
       {/* 2. Cluster Network Map */}
       <div style={{ marginBottom: '40px' }}>
-        <div className="eyebrow-badge" style={{ marginBottom: '14px' }}>
+        <div className="eyebrow-badge">
           <MapPin size={13} /> CLUSTER NETWORK MAP
         </div>
-        <div style={{
-          background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
-          borderRadius: '14px', padding: '20px', position: 'relative', overflow: 'hidden',
-        }}>
+        <div className="glass-card">
           <svg viewBox="0 0 600 320" width="100%" height="320">
             {/* India outline */}
             <path d="M180 20 L260 10 L340 15 L420 30 L480 60 L510 100 L520 150 L500 200 L470 240 L420 270 L360 290 L300 300 L240 295 L200 270 L170 240 L150 200 L140 150 L150 100 L160 60 Z"
@@ -304,11 +299,11 @@ export default function ScaleUp() {
             {/* Connection lines between active clusters */}
             <line x1="235" y1="195" x2="215" y2="215" stroke="var(--emerald-400)" strokeWidth="1" opacity="0.4" strokeDasharray="3,3" />
           </svg>
-          <div style={{ display: 'flex', gap: '16px', marginTop: '10px', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)' }}>
+          <div className="flex-center gap-16" style={{ marginTop: '10px' }}>
+            <div className="flex gap-6" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--emerald-400)' }} /> Active Cluster
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--text-muted)' }}>
+            <div className="flex gap-6" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--border-highlight)' }} /> Planned (Phase 2–3)
             </div>
           </div>
@@ -317,35 +312,32 @@ export default function ScaleUp() {
 
       {/* 3. Tech Stack Summary */}
       <div style={{ marginBottom: '40px' }}>
-        <div className="eyebrow-badge" style={{ marginBottom: '14px' }}>
+        <div className="eyebrow-badge">
           <Layers size={13} /> TECH STACK SUMMARY
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+        <div className="grid-3">
           {TECH_STACK.map(tech => (
             <div
               key={tech.layer}
               onClick={() => setExpandedTech(expandedTech === tech.layer ? null : tech.layer)}
+              className="glass-card"
               style={{
-                background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
-                borderRadius: '12px', padding: '16px', cursor: 'pointer',
+                padding: '16px', cursor: 'pointer',
                 borderColor: expandedTech === tech.layer ? tech.color : 'var(--border-subtle)',
-                transition: 'border-color 0.2s',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <div className="flex gap-8" style={{ marginBottom: '8px' }}>
                 <span style={{ color: tech.color }}>{tech.icon}</span>
                 <span style={{ fontSize: '13px', fontWeight: 700 }}>{tech.layer}</span>
               </div>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '10px' }}>
+              <p className="muted" style={{ lineHeight: 1.5, marginBottom: '10px' }}>
                 {tech.purpose}
               </p>
               {expandedTech === tech.layer && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                <div className="flex flex-wrap gap-6">
                   {tech.techs.map(t => (
-                    <span key={t} style={{
-                      fontSize: '10.5px', padding: '3px 8px', borderRadius: '999px',
-                      background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)',
-                      color: 'var(--text-dim)', fontWeight: 500,
+                    <span key={t} className="pill pill-sm" style={{
+                      background: 'var(--bg-inset)', borderColor: 'var(--border-subtle)', color: 'var(--text-dim)',
                     }}>{t}</span>
                   ))}
                 </div>
@@ -357,7 +349,7 @@ export default function ScaleUp() {
 
       {/* 4. Cost & Partner Model */}
       <div style={{ marginBottom: '40px' }}>
-        <div className="eyebrow-badge" style={{ marginBottom: '14px' }}>
+        <div className="eyebrow-badge">
           <IndianRupee size={13} /> COST & PARTNER MODEL
         </div>
 
@@ -368,37 +360,35 @@ export default function ScaleUp() {
         }}>
           <div
             onClick={() => setShowCost(!showCost)}
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '14px 18px', cursor: 'pointer',
-            }}
+            className="flex-between"
+            style={{ padding: '14px 18px', cursor: 'pointer' }}
           >
             <span style={{ fontSize: '13px', fontWeight: 700 }}>Hardware Subsidy Breakdown (Phase 1–2)</span>
             {showCost ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           </div>
           {showCost && (
             <div style={{ borderTop: '1px solid var(--border-subtle)' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
+              <table className="hc-table" style={{ fontSize: '12px' }}>
                 <thead>
                   <tr style={{ background: 'var(--bg-inset)' }}>
                     {['Item', 'Unit Cost', 'Subsidized', 'Units', 'Total'].map(h => (
-                      <th key={h} style={{ padding: '10px 14px', textAlign: 'left', fontWeight: 600, color: 'var(--text-muted)', borderBottom: '1px solid var(--border-subtle)' }}>{h}</th>
+                      <th key={h}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {COST_MODEL.map((row, i) => (
-                    <tr key={i} style={{ borderBottom: i < COST_MODEL.length - 1 ? '1px solid var(--border-subtle)' : 'none' }}>
-                      <td style={{ padding: '10px 14px', fontWeight: 600 }}>{row.item}</td>
-                      <td className="mono" style={{ padding: '10px 14px', color: 'var(--text-dim)' }}>{row.unitCost}</td>
-                      <td style={{ padding: '10px 14px', color: 'var(--emerald-400)' }}>{row.subsidized}</td>
-                      <td className="mono" style={{ padding: '10px 14px', textAlign: 'center' }}>{row.units}</td>
-                      <td className="mono" style={{ padding: '10px 14px', fontWeight: 700, color: 'var(--amber-400)' }}>{row.total}</td>
+                    <tr key={i}>
+                      <td style={{ fontWeight: 600 }}>{row.item}</td>
+                      <td className="mono" style={{ color: 'var(--text-dim)' }}>{row.unitCost}</td>
+                      <td style={{ color: 'var(--emerald-400)' }}>{row.subsidized}</td>
+                      <td className="mono" style={{ textAlign: 'center' }}>{row.units}</td>
+                      <td className="mono" style={{ fontWeight: 700, color: 'var(--amber-400)' }}>{row.total}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <div style={{ padding: '10px 18px', background: 'var(--bg-inset)', display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
+              <div className="flex-between" style={{ padding: '10px 18px', background: 'var(--bg-inset)', fontSize: '12px' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Total Phase 1–2 Investment</span>
                 <span className="mono" style={{ fontWeight: 700, color: 'var(--amber-400)' }}>≈ ₹24.5 Lakhs</span>
               </div>
@@ -407,31 +397,25 @@ export default function ScaleUp() {
         </div>
 
         {/* Partner Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+        <div className="grid-3">
           {PARTNERS.map(p => (
-            <div key={p.name} style={{
-              background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
-              borderRadius: '12px', padding: '16px',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+            <div key={p.name} className="glass-card" style={{ padding: '16px' }}>
+              <div className="flex gap-8" style={{ marginBottom: '8px' }}>
                 <span style={{ color: 'var(--amber-400)' }}>{p.icon}</span>
                 <div>
                   <div style={{ fontSize: '13px', fontWeight: 700 }}>{p.name}</div>
                   <div style={{ fontSize: '10.5px', color: 'var(--text-dim)' }}>{p.role}</div>
                 </div>
               </div>
-              <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', lineHeight: 1.5 }}>{p.contribution}</p>
+              <p className="field-hint" style={{ lineHeight: 1.5 }}>{p.contribution}</p>
             </div>
           ))}
         </div>
 
         {/* KVIC Integration Flow */}
-        <div style={{
-          marginTop: '16px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
-          borderRadius: '14px', padding: '18px',
-        }}>
+        <div className="glass-card mt-16" style={{ padding: '18px' }}>
           <div style={{ fontSize: '12px', fontWeight: 700, marginBottom: '12px' }}>KVIC INTEGRATION FLOW</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div className="flex-center flex-wrap">
             {[
               'KVIC Registers Cluster',
               'Bee Box Distribution',

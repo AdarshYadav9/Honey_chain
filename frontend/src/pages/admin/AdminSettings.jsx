@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, Save, RotateCcw, Bell, Cpu, Link2, Shield } from 'lucide-react';
+import { Settings, Save, RotateCcw, Bell, Cpu, Link2 } from 'lucide-react';
 
 const DEFAULT_SETTINGS = {
   alerts: {
@@ -27,10 +27,10 @@ const DEFAULT_SETTINGS = {
 
 function SectionCard({ icon, title, children }) {
   return (
-    <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', padding: '20px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+    <div className="panel">
+      <div className="panel-head">
         <span style={{ color: 'var(--amber-400)' }}>{icon}</span>
-        <span style={{ fontSize: '14px', fontWeight: 700 }}>{title}</span>
+        <span className="panel-title">{title}</span>
       </div>
       {children}
     </div>
@@ -39,16 +39,17 @@ function SectionCard({ icon, title, children }) {
 
 function Field({ label, value, onChange, unit, type = 'number' }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-subtle)' }}>
-      <span style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>{label}</span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+    <div className="flex-between" style={{ padding: '8px 0', borderBottom: '1px solid var(--border-subtle)' }}>
+      <span className="field-label">{label}</span>
+      <div className="flex gap-6">
         <input
           type={type}
           value={value}
           onChange={e => onChange(type === 'number' ? Number(e.target.value) : e.target.value)}
-          style={{ width: '80px', padding: '6px 10px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-main)', fontSize: '12px', textAlign: 'right', outline: 'none' }}
+          className="input"
+          style={{ width: '80px', padding: '6px 10px', fontSize: '12px', textAlign: 'right' }}
         />
-        {unit && <span style={{ fontSize: '11px', color: 'var(--text-dim)', minWidth: '24px' }}>{unit}</span>}
+        {unit && <span className="field-hint" style={{ minWidth: '24px' }}>{unit}</span>}
       </div>
     </div>
   );
@@ -77,20 +78,20 @@ export default function AdminSettings() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Settings size={13} /> System Configuration</div>
-        <h2 style={{ fontSize: '28px' }}>Settings</h2>
+        <h2>Settings</h2>
         <p className="section-lede">Configure alert thresholds, sensor calibration, and blockchain node settings.</p>
       </div>
 
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '20px', justifyContent: 'flex-end' }}>
-        <button onClick={handleReset} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '12px' }}>
+      <div className="flex gap-16" style={{ marginBottom: '20px', justifyContent: 'flex-end' }}>
+        <button onClick={handleReset} className="btn btn-soft">
           <RotateCcw size={14} /> Reset
         </button>
-        <button onClick={handleSave} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: saved ? 'var(--emerald-400)' : 'var(--gold-gradient)', border: 'none', borderRadius: '8px', color: saved ? '#0f0b04' : '#0f0b04', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>
+        <button onClick={handleSave} className="btn btn-gold" style={{ background: saved ? 'var(--emerald-400)' : undefined }}>
           <Save size={14} /> {saved ? 'Saved!' : 'Save Changes'}
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+      <div className="grid-3">
         <SectionCard icon={<Bell size={16} />} title="Alert Thresholds">
           <Field label="Weight Drop Alert" value={settings.alerts.weightDropThreshold} onChange={v => update('alerts', 'weightDropThreshold', v)} unit="%" />
           <Field label="Temperature High" value={settings.alerts.temperatureHigh} onChange={v => update('alerts', 'temperatureHigh', v)} unit="°C" />

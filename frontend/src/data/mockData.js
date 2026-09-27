@@ -112,6 +112,105 @@ export const mockActivityLog = [
   { id: 'A007', type: 'USER', actor: 'System Admin', message: 'System Admin signed in', time: '1 day ago', level: 'INFO' },
 ];
 
+export const shopProducts = [
+  { id: 'P01', name: 'Wildflower Raw Honey', category: 'Raw', weight: '500 g', tone: '#F5B800', deep: '#C8860A', tag: 'Bestseller', origin: 'Satara, Maharashtra', batch: 'KVIC-00124' },
+  { id: 'P02', name: 'Litchi Blossom Honey', category: 'Seasonal', weight: '500 g', tone: '#F7C948', deep: '#D98F0B', tag: 'Limited', origin: 'Muzaffarpur, Bihar', batch: 'KVIC-00873' },
+  { id: 'P03', name: 'Sundarbans Mangrove', category: 'Raw', weight: '350 g', tone: '#E6A817', deep: '#A6650A', tag: 'Rare', origin: 'Sundarbans, West Bengal', batch: 'KVIC-00419' },
+  { id: 'P04', name: 'Turmeric Infused Honey', category: 'Infused', weight: '400 g', tone: '#F0B434', deep: '#C8860A', tag: 'Immunity', origin: 'Satara, Maharashtra', batch: 'KVIC-01106' },
+  { id: 'P05', name: 'Mustard Field Honey', category: 'Seasonal', weight: '500 g', tone: '#F7D060', deep: '#D9910B', tag: 'Spring', origin: 'Hoshiarpur, Punjab', batch: 'KVIC-00538' },
+  { id: 'P06', name: 'Ginger–Lemon Infused', category: 'Infused', weight: '400 g', tone: '#F5B800', deep: '#E67E22', tag: 'New', origin: 'Nashik, Maharashtra', batch: 'KVIC-01247' },
+  { id: 'P07', name: 'Acacia Light Honey', category: 'Organic', weight: '500 g', tone: '#FBE28A', deep: '#E0A817', tag: 'Mild', origin: 'Ratnagiri, Maharashtra', batch: 'KVIC-00392' },
+  { id: 'P08', name: 'Cashew Blossom Honey', category: 'Organic', weight: '350 g', tone: '#EFB33F', deep: '#B87319', tag: 'Premium', origin: 'Ratnagiri, Maharashtra', batch: 'KVIC-01521' },
+];
+
+export const shopCategories = ['All', 'Raw', 'Infused', 'Seasonal', 'Organic'];
+
+export const stats = [
+  { icon: '🍯', value: 12400, decimals: 0, suffix: '+', label: 'Honey Batches', sub: 'Tracked' },
+  { icon: '🔗', value: 98.7, decimals: 1, suffix: '%', label: 'Authenticity', sub: 'Rate' },
+  { icon: '📡', value: 340, decimals: 0, suffix: '+', label: 'IoT Hives', sub: 'Monitored' },
+  { icon: '👨‍🌾', value: 2800, decimals: 0, suffix: '+', label: 'Rural Beekeepers', sub: 'Empowered' },
+];
+
+export const iotFeatures = [
+  { icon: 'Thermometer', title: 'Temperature & Humidity Monitoring', desc: 'LoRaWAN nodes sample hive micro-climate every 3 minutes — always-inside vision of colony comfort.', view: 'monitor' },
+  { icon: 'Activity', title: 'AI Disease Detection', desc: 'Varroa, AFB and Nosema risk flagged by AI long before visual signs appear.', view: 'ai' },
+  { icon: 'TrendingUp', title: 'Colony Productivity Forecasting', desc: 'Acoustic and weight models project per-colony harvest yield across the season.', view: 'ai' },
+  { icon: 'AlertTriangle', title: 'Environmental Stress Alerts', desc: 'Heat, cold and humidity spikes trigger early-warning alerts straight to the beekeeper.', view: 'monitor' },
+];
+
+export const qrVerify = {
+  hash: '0x7f2c9a1e4b08d3c5a9f2e14b',
+  origin: 'Satara, Maharashtra',
+  date: '15 Apr 2026',
+  lab: 'NMR 98.6% PASS',
+  kvic: 'KVIC Certified Apiary',
+};
+
+export const testimonials = [
+  {
+    id: 'T1',
+    kvic: true,
+    quote: 'My hives and every harvest now sit on-chain with a QR. Buyers scan it and see exactly where the batch came from. Trust sells our honey.',
+    name: 'Ganesh Pawar',
+    role: 'Beekeeper, Satara Cluster',
+    initials: 'GP',
+    tone: '#C8860A',
+  },
+  {
+    id: 'T2',
+    kvic: true,
+    quote: 'The smart hive told us the colony was stressed a full day before we would have seen it. Our survival rate this season is the best we have ever had.',
+    name: 'Ramesh Shinde',
+    role: 'Beekeeper, Pune / Solapur',
+    initials: 'RS',
+    tone: '#F5B800',
+  },
+  {
+    id: 'T3',
+    kvic: true,
+    quote: 'AI alerts for Varroa and heat stress let me act early. My harvest yield is up nearly 30% since joining the Honey Chain program.',
+    name: 'Ravi Kumar',
+    role: 'Beekeeper, Muzaffarpur',
+    initials: 'RK',
+    tone: '#E67E22',
+  },
+  {
+    id: 'T4',
+    kvic: true,
+    quote: 'Farm-gate prices sit on the same ledger the buyer sees. Fair payment is no longer a promise — it is a recorded transaction.',
+    name: 'Harpreet Singh',
+    role: 'Beekeeper, Hoshiarpur',
+    initials: 'HS',
+    tone: '#8A9A5B',
+  },
+  {
+    id: 'T5',
+    kvic: true,
+    quote: 'The dashboard teaches me colony health before I ever lift a frame. I check my hive monitor on my phone every single morning.',
+    name: 'Alok Mondal',
+    role: 'Beekeeper, Sundarbans',
+    initials: 'AM',
+    tone: '#F5B800',
+  },
+  {
+    id: 'T6',
+    kvic: true,
+    quote: 'Every bottle leaving our cluster carries a verification that cannot be faked. Consumers scan it and trust it instantly.',
+    name: 'Suresh More',
+    role: 'Beekeeper, Kolhapur',
+    initials: 'SM',
+    tone: '#E67E22',
+  },
+];
+
+export const processPerks = [
+  { icon: 'ShieldCheck', label: 'Lab Verified', desc: 'NMR purity & moisture tested before sealing' },
+  { icon: 'QrCode', label: 'QR Sealed', desc: 'One cryptographic QR per glass jar' },
+  { icon: 'IndianRupee', label: 'Fair Trade', desc: 'Transparent farm-gate pricing on-ledger' },
+  { icon: 'Leaf', label: 'Raw & Cold', desc: 'Unheated extraction, zero adulteration' },
+];
+
 export const mockQualityHistory = [
   { batchId: 'KVIC-HC-2026-0417', hiveId: 'H001', moisture: 17.2, purity: 98.6, hmf: 14, result: 'PASS', testedBy: 'Dr. Anita Kulkarni', date: '15 Apr 2026' },
   { batchId: 'KVIC-HC-2026-0398', hiveId: 'H003', moisture: 18.1, purity: 97.9, hmf: 19, result: 'PASS', testedBy: 'Dr. Anita Kulkarni', date: '02 Apr 2026' },

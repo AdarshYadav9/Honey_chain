@@ -1,27 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ShieldCheck, Award, Copy, Eye, EyeOff,
-  Leaf, LineChart, Users, QrCode, Shield, User, CheckCircle, Cog, Check,
-  Mail, Lock, Info, ArrowRight, Globe, Heart, Hexagon, Sun, Moon
+  Leaf, LineChart, Users, QrCode, Shield, User, Cog, Check,
+  Mail, Lock, ArrowRight, Hexagon, Sun, Moon
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export default function LoginPage() {
   const {
     switchView,
+    theme, setTheme,
     loginEmail, setLoginEmail,
     loginError, handleLogin,
     showPassword, setShowPassword,
   } = useApp();
 
   const [copiedEmail, setCopiedEmail] = useState(null);
-  const [loginTheme, setLoginTheme] = useState(() => localStorage.getItem('loginTheme') || 'dark');
   const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', loginTheme);
-    localStorage.setItem('loginTheme', loginTheme);
-  }, [loginTheme]);
 
   const demoAccounts = [
     { role: 'Admin', email: 'admin@honeychain.demo', badge: 'Full Access', icon: <Award size={14} />, badgeClass: 'badge-admin' },
@@ -102,8 +97,8 @@ export default function LoginPage() {
                 <div className="lcd-sub">KVIC HONEY MISSION · BLOCKCHAIN &amp; AIOT</div>
                 <div className="lcd-desc">Sign in to access your dashboard</div>
               </div>
-              <button className="lcd-theme-toggle" onClick={() => setLoginTheme(loginTheme === 'dark' ? 'light' : 'dark')} title="Toggle theme">
-                {loginTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              <button className="lcd-theme-toggle" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} title="Toggle theme">
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
               </button>
             </div>
 
@@ -143,7 +138,7 @@ export default function LoginPage() {
                 <label className="lcd-check">
                   <input type="checkbox" defaultChecked /> Remember me
                 </label>
-                <a href="#" className="lcd-forgot" onClick={e => { e.preventDefault(); alert('Not enabled in prototype.'); }}>Forgot password?</a>
+                <button type="button" className="lcd-forgot" onClick={() => alert('Not enabled in prototype.')}>Forgot password?</button>
               </div>
 
               {loginError && <div className="lcd-error">{loginError}</div>}
@@ -187,9 +182,9 @@ export default function LoginPage() {
           <div className="lcd-footer">
             Honey Chain · Blockchain Honey Traceability for KVIC
             <div className="lcd-footer-links">
-              <a href="#" onClick={e => e.preventDefault()}>Privacy</a>
-              <a href="#" onClick={e => e.preventDefault()}>Terms</a>
-              <a href="#" onClick={e => e.preventDefault()}>Help</a>
+              <button type="button" onClick={() => {}}>Privacy</button>
+              <button type="button" onClick={() => {}}>Terms</button>
+              <button type="button" onClick={() => {}}>Help</button>
             </div>
           </div>
         </div>

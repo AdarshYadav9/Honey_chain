@@ -1,0 +1,32 @@
+/* Warm cream page shell */
+.app-container {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  background-color: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme='dark'] .app-container {
+  background-image:
+    radial-gradient(ellipse at 50% -10%, rgba(245, 184, 0, 0.10) 0%, transparent 60%),
+    radial-gradient(circle at 90% 80%, rgba(200, 134, 10, 0.06) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Subtle Honeycomb Pattern Overlay */
+.comb-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: radial-gradient(circle at 1px 1px, rgba(200, 134, 10, 0.16) 1px, transparent 1.1px);
+  background-size: 26px 26px;
+  z-index: 0;
+}
+
+[data-theme='dark'] .comb-overlay {
+  opacity: 0.25;
+  background-image: radial-gradient(circle at 1px 1px, rgba(245, 184, 0, 0.18) 1.2px, transparent 1.2px);
+}

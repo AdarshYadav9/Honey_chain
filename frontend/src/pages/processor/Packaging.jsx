@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Package, CheckCircle2, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const PACKAGING_TYPES = [
   'Glass Jar with Tamper-Evident Seal (500g)',
@@ -68,44 +68,44 @@ export default function Packaging() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Package size={13} /> Packaging</div>
-        <h2 style={{ fontSize: '28px' }}>Package Batch</h2>
+        <h2>Package Batch</h2>
         <p className="section-lede">Assign final batch ID, jar count, seal date, and generate QR code.</p>
       </div>
 
       {submitted ? (
-        <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'var(--emerald-bg)', border: '2px solid var(--emerald-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+        <div className="result-hero">
+          <div className="result-icon success">
             <CheckCircle2 size={32} color="var(--emerald-400)" />
           </div>
-          <h3 style={{ fontSize: '20px', color: 'var(--emerald-400)', marginBottom: '6px' }}>Packaging Complete</h3>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '24px' }}>
+          <h3 className="result-title" style={{ color: 'var(--emerald-400)' }}>Packaging Complete</h3>
+          <p className="result-sub">
             {selectedBatch} — {form.jarCount} jars sealed. QR code generated.
           </p>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
-            <button onClick={() => switchView('inventory')} style={{ padding: '10px 20px', background: 'var(--gold-gradient)', border: 'none', borderRadius: '8px', color: '#0f0b04', fontWeight: 700, cursor: 'pointer', fontSize: '13px' }}>
-              View Inventory <ArrowRight size={14} style={{ verticalAlign: 'middle' }} />
+          <div className="result-actions">
+            <button onClick={() => switchView('inventory')} className="btn btn-gold">
+              View Inventory <ArrowRight size={14} />
             </button>
-            <button onClick={() => { setSubmitted(false); setForm({ jarCount: '', jarWeight: '', sealDate: '', bestBefore: '', packagingType: '', batchNumber: '', notes: '' }); }} style={{ padding: '10px 20px', background: 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px' }}>
+            <button onClick={() => { setSubmitted(false); setForm({ jarCount: '', jarWeight: '', sealDate: '', bestBefore: '', packagingType: '', batchNumber: '', notes: '' }); }} className="btn btn-soft">
               Package Another
             </button>
           </div>
         </div>
       ) : (
         <div style={{ maxWidth: '760px' }}>
-          <form onSubmit={handleSubmit} style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', padding: '24px' }}>
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Select Processed Batch *</label>
-              <select value={selectedBatch} onChange={e => setSelectedBatch(e.target.value)} required style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}>
+          <form onSubmit={handleSubmit} className="panel">
+            <div className="field" style={{ marginBottom: '20px' }}>
+              <label className="field-label">Select Processed Batch *</label>
+              <select value={selectedBatch} onChange={e => setSelectedBatch(e.target.value)} required className="select">
                 <option value="">Choose a processed batch...</option>
                 {processed.map(b => (
                   <option key={b.id} value={b.id}>{b.id} — {b.honeyType} — {b.quantity}kg</option>
                 ))}
               </select>
-              {processed.length === 0 && <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '6px' }}>No processed batches. Complete processing first.</div>}
+              {processed.length === 0 && <div className="field-hint">No processed batches. Complete processing first.</div>}
             </div>
 
             {batch && (
-              <div style={{ padding: '12px', background: 'var(--bg-inset)', borderRadius: '8px', marginBottom: '20px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', fontSize: '12px' }}>
+              <div className="grid-4 notice">
                 <div><span style={{ color: 'var(--text-dim)' }}>Batch: </span><strong>{batch.id}</strong></div>
                 <div><span style={{ color: 'var(--text-dim)' }}>Type: </span><strong>{batch.honeyType}</strong></div>
                 <div><span style={{ color: 'var(--text-dim)' }}>Qty: </span><strong>{batch.quantity} kg</strong></div>
@@ -113,44 +113,44 @@ export default function Packaging() {
               </div>
             )}
 
-            <div style={{ fontSize: '13px', fontWeight: 700, marginBottom: '14px', color: 'var(--amber-400)' }}>Packaging Details</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Packaging Type *</label>
-                <select value={form.packagingType} onChange={e => update('packagingType', e.target.value)} required style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }}>
+            <div className="section-title">Packaging Details</div>
+            <div className="grid-2">
+              <div className="field">
+                <label className="field-label">Packaging Type *</label>
+                <select value={form.packagingType} onChange={e => update('packagingType', e.target.value)} required className="select">
                   <option value="">Select packaging...</option>
                   {PACKAGING_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Packaged Batch ID</label>
-                <input type="text" value={form.batchNumber} onChange={e => update('batchNumber', e.target.value)} placeholder={selectedBatch ? `PKG-${selectedBatch}` : 'PKG-HC-XXXX'} style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Packaged Batch ID</label>
+                <input type="text" value={form.batchNumber} onChange={e => update('batchNumber', e.target.value)} placeholder={selectedBatch ? `PKG-${selectedBatch}` : 'PKG-HC-XXXX'} className="input" />
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Jar Count *</label>
-                <input type="number" min="1" value={form.jarCount} onChange={e => update('jarCount', e.target.value)} placeholder="e.g. 24" required style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Jar Count *</label>
+                <input type="number" min="1" value={form.jarCount} onChange={e => update('jarCount', e.target.value)} placeholder="e.g. 24" required className="input" />
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Jar Weight</label>
-                <input type="text" value={form.jarWeight} onChange={e => update('jarWeight', e.target.value)} placeholder="500g" style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Jar Weight</label>
+                <input type="text" value={form.jarWeight} onChange={e => update('jarWeight', e.target.value)} placeholder="500g" className="input" />
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Seal Date *</label>
-                <input type="date" value={form.sealDate || today} onChange={e => update('sealDate', e.target.value)} required style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Seal Date *</label>
+                <input type="date" value={form.sealDate || today} onChange={e => update('sealDate', e.target.value)} required className="input" />
               </div>
-              <div>
-                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Best Before</label>
-                <input type="date" value={form.bestBefore} onChange={e => update('bestBefore', e.target.value)} style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none' }} />
+              <div className="field">
+                <label className="field-label">Best Before</label>
+                <input type="date" value={form.bestBefore} onChange={e => update('bestBefore', e.target.value)} className="input" />
               </div>
             </div>
 
-            <div style={{ marginTop: '16px' }}>
-              <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Notes</label>
-              <textarea value={form.notes} onChange={e => update('notes', e.target.value)} rows={2} placeholder="Packaging notes..." style={{ width: '100%', padding: '10px 12px', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-main)', fontSize: '13px', outline: 'none', resize: 'vertical' }} />
+            <div className="field mt-16">
+              <label className="field-label">Notes</label>
+              <textarea value={form.notes} onChange={e => update('notes', e.target.value)} rows={2} placeholder="Packaging notes..." className="textarea" />
             </div>
 
-            <button type="submit" disabled={submitting || !selectedBatch} style={{ marginTop: '20px', width: '100%', padding: '12px', background: submitting || !selectedBatch ? 'var(--text-dim)' : 'var(--gold-gradient)', border: 'none', borderRadius: '10px', color: '#0f0b04', fontSize: '14px', fontWeight: 700, cursor: submitting || !selectedBatch ? 'not-allowed' : 'pointer' }}>
-              <Package size={16} style={{ verticalAlign: 'middle', marginRight: '6px' }} />
+            <button type="submit" disabled={submitting || !selectedBatch} className="btn btn-block btn-gold mt-20">
+              <Package size={16} />
               {submitting ? 'Packaging...' : 'Complete Packaging & Generate QR'}
             </button>
           </form>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, AlertTriangle, Battery, Thermometer, Droplets, Wifi, CheckCircle2, Clock } from 'lucide-react';
+import { Bell, AlertTriangle, Battery, Thermometer, Droplets, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
 
 const TYPE_STYLES = {
   critical: { bg: 'var(--rose-bg)', color: 'var(--rose-400)', border: 'var(--rose-border)' },
@@ -15,20 +13,20 @@ function generateAlerts(hives, batches) {
   const alerts = [];
   let id = 1;
 
-  (hives || []).forEach(hive => {
-    const sensor = hive.sensorData || {};
+  Object.entries(hives || {}).forEach(([hiveId, h]) => {
+    h = h || {};
 
-    if (sensor.battery !== undefined && sensor.battery < 20) {
-      alerts.push({ id: id++, type: 'critical', icon: <Battery size={16} />, title: `Low Battery — ${hive.id}`, desc: `Battery at ${sensor.battery}%. Replace before next inspection.`, time: '2 hours ago', hive: hive.id, read: false });
+    if (h.batt !== undefined && h.batt < 20) {
+      alerts.push({ id: id++, type: 'critical', icon: <Battery size={16} />, title: `Low Battery — ${hiveId}`, desc: `Battery at ${h.batt}%. Replace before next inspection.`, time: '2 hours ago', hive: hiveId, read: false });
     }
-    if (sensor.temperature !== undefined && sensor.temperature > 40) {
-      alerts.push({ id: id++, type: 'warning', icon: <Thermometer size={16} />, title: `High Temperature — ${hive.id}`, desc: `Internal temp reached ${sensor.temperature}°C. Normal range is 35–40°C.`, time: '5 hours ago', hive: hive.id, read: false });
+    if (h.temp !== undefined && h.temp > 40) {
+      alerts.push({ id: id++, type: 'warning', icon: <Thermometer size={16} />, title: `High Temperature — ${hiveId}`, desc: `Internal temp reached ${h.temp}°C. Normal range is 35–40°C.`, time: '5 hours ago', hive: hiveId, read: false });
     }
-    if (sensor.weight !== undefined && sensor.weight < 15) {
-      alerts.push({ id: id++, type: 'warning', icon: <AlertTriangle size={16} />, title: `Low Weight — ${hive.id}`, desc: `Weight dropped to ${sensor.weight}kg. Possible swarm or extraction.`, time: '8 hours ago', hive: hive.id, read: false });
+    if (h.wt !== undefined && h.wt < 15) {
+      alerts.push({ id: id++, type: 'warning', icon: <AlertTriangle size={16} />, title: `Low Weight — ${hiveId}`, desc: `Weight dropped to ${h.wt}kg. Possible swarm or extraction.`, time: '8 hours ago', hive: hiveId, read: false });
     }
-    if (sensor.humidity !== undefined && sensor.humidity > 70) {
-      alerts.push({ id: id++, type: 'warning', icon: <Droplets size={16} />, title: `High Humidity — ${hive.id}`, desc: `Humidity at ${sensor.humidity}%. Risk of fermentation.`, time: '1 day ago', hive: hive.id, read: true });
+    if (h.hum !== undefined && h.hum > 70) {
+      alerts.push({ id: id++, type: 'warning', icon: <Droplets size={16} />, title: `High Humidity — ${hiveId}`, desc: `Humidity at ${h.hum}%. Risk of fermentation.`, time: '1 day ago', hive: hiveId, read: true });
     }
   });
 
@@ -65,19 +63,14 @@ export default function BeekeeperAlerts() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Bell size={13} /> Notifications</div>
-        <h2 style={{ fontSize: '28px' }}>Alerts &amp; Notifications</h2>
+        <h2>Alerts &amp; Notifications</h2>
         <p className="section-lede">Inspection reminders, low battery warnings, risk flags, and batch updates.</p>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', gap: '6px' }}>
+      <div className="toolbar">
+        <div className="chip-group">
           {filters.map(f => (
-            <button key={f} onClick={() => setFilter(f)} style={{
-              padding: '5px 12px', borderRadius: '999px', border: '1px solid var(--border-subtle)',
-              background: filter === f ? 'var(--gold-gradient)' : 'transparent',
-              color: filter === f ? '#0f0b04' : 'var(--text-dim)',
-              fontSize: '11px', fontWeight: 600, cursor: 'pointer', textTransform: 'capitalize',
-            }}>{f}</button>
+            <button key={f} onClick={() => setFilter(f)} className={`chip ${filter === f ? 'active' : ''}`} style={{ textTransform: 'capitalize' }}>{f}</button>
           ))}
         </div>
         {unread > 0 && (
@@ -85,7 +78,7 @@ export default function BeekeeperAlerts() {
         )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div className="flex-col gap-8">
         {filtered.map(alert => {
           const st = TYPE_STYLES[alert.type];
           return (
@@ -96,12 +89,12 @@ export default function BeekeeperAlerts() {
               borderRadius: '12px',
               opacity: alert.read ? 0.7 : 1,
             }}>
-              <div style={{
-                width: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              <div className="flex-center" style={{
+                width: '36px', height: '36px', borderRadius: '10px',
                 background: st.bg, color: st.color, flexShrink: 0,
               }}>{alert.icon}</div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                <div className="flex gap-8">
                   <span style={{ fontSize: '13px', fontWeight: 600 }}>{alert.title}</span>
                   {!alert.read && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--rose-400)' }} />}
                 </div>

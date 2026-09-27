@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { FileText, Download, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
-
 const STATUS_STYLES = {
   ready: { bg: 'var(--emerald-bg)', color: 'var(--emerald-400)', border: 'var(--emerald-border)', icon: <CheckCircle2 size={12} />, label: 'Ready' },
   generating: { bg: 'rgba(251, 191, 36, 0.12)', color: 'var(--amber-400)', border: 'rgba(251, 191, 36, 0.3)', icon: <Clock size={12} />, label: 'Generating' },
@@ -84,27 +82,23 @@ export default function AdminReports() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><FileText size={13} /> Compliance &amp; Export</div>
-        <h2 style={{ fontSize: '28px' }}>Reports</h2>
+        <h2>Reports</h2>
         <p className="section-lede">Generate and export compliance reports for KVIC, FSSAI, and regulatory bodies.</p>
       </div>
 
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+      <div className="chip-group">
         {types.map(t => (
-          <button key={t} onClick={() => setFilter(t)} style={{
-            padding: '6px 14px', borderRadius: '999px', border: '1px solid var(--border-subtle)',
-            background: filter === t ? 'var(--gold-gradient)' : 'transparent',
-            color: filter === t ? '#0f0b04' : 'var(--text-dim)',
-            fontSize: '12px', fontWeight: 600, cursor: 'pointer',
-          }}>{t}</button>
+          <button key={t} onClick={() => setFilter(t)} className={`chip ${filter === t ? 'active' : ''}`}>{t}</button>
         ))}
       </div>
 
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+      <div className="glass-card">
+        <div className="table-scroll">
+          <table className="hc-table">
           <thead>
-            <tr style={{ background: 'var(--bg-inset)' }}>
+            <tr>
               {['Report', 'Type', 'Period', 'Batches', 'Status', 'Generated', ''].map(h => (
-                <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 600, color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.04em' }}>{h}</th>
+                <th key={h}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -112,28 +106,29 @@ export default function AdminReports() {
             {filtered.map(r => {
               const st = STATUS_STYLES[r.status];
               return (
-                <tr key={r.id} style={{ borderTop: '1px solid var(--border-subtle)' }}>
-                  <td style={{ padding: '12px 16px' }}>
+                <tr key={r.id}>
+                  <td>
                     <div style={{ fontWeight: 600, fontSize: '12.5px' }}>{r.title}</div>
                     <div style={{ fontSize: '10.5px', color: 'var(--text-dim)' }}>{r.id}</div>
                   </td>
-                  <td style={{ padding: '12px 16px' }}>
-                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '999px', background: 'var(--bg-inset)', color: 'var(--text-dim)' }}>{r.type}</span>
+                  <td>
+                    <span className="pill" style={{ background: 'var(--bg-inset)', color: 'var(--text-dim)' }}>{r.type}</span>
                   </td>
-                  <td style={{ padding: '12px 16px', color: 'var(--text-muted)', fontSize: '12px' }}>{r.period}</td>
-                  <td className="mono" style={{ padding: '12px 16px', color: r.batches > 0 ? 'var(--text-main)' : 'var(--text-dim)' }}>{r.batches || '—'}</td>
-                  <td style={{ padding: '12px 16px' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 10px', borderRadius: '999px', background: st.bg, color: st.color, border: `1px solid ${st.border}`, fontSize: '11px', fontWeight: 600 }}>
+                  <td style={{ color: 'var(--text-muted)' }}>{r.period}</td>
+                  <td className="mono" style={{ color: r.batches > 0 ? 'var(--text-main)' : 'var(--text-dim)' }}>{r.batches || '—'}</td>
+                  <td>
+                    <span className="pill" style={{ background: st.bg, color: st.color, border: `1px solid ${st.border}` }}>
                       {st.icon} {st.label}
                     </span>
                   </td>
-                  <td style={{ padding: '12px 16px', color: 'var(--text-dim)', fontSize: '12px' }}>{r.generated}</td>
-                  <td style={{ padding: '12px 16px' }}>
+                  <td style={{ color: 'var(--text-dim)' }}>{r.generated}</td>
+                  <td>
                     {r.status === 'ready' && (
                       <button
                         onClick={() => { setExporting(r.id); exportReport(r, sharedBatches); setTimeout(() => setExporting(null), 1000); }}
                         disabled={exporting === r.id}
-                        style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '5px 12px', background: exporting === r.id ? 'var(--emerald-bg)' : 'var(--bg-inset)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: exporting === r.id ? 'var(--emerald-400)' : 'var(--amber-400)', cursor: 'pointer', fontSize: '11px', fontWeight: 600 }}
+                        className="btn btn-soft btn-sm"
+                        style={{ background: exporting === r.id ? 'var(--emerald-bg)' : 'var(--bg-inset)', color: exporting === r.id ? 'var(--emerald-400)' : 'var(--amber-400)' }}
                       >
                         <Download size={12} /> {exporting === r.id ? 'Downloaded' : 'Export'}
                       </button>
@@ -143,7 +138,8 @@ export default function AdminReports() {
               );
             })}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
     </section>
   );

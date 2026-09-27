@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# Honey_chain
-=======
 # Honey Chain — Traceable Honey, Verified at the Source
 
 Honey Chain is an integrated blockchain, AI, and IoT-based digital platform developed for **KVIC's Honey Mission** and rural beekeepers.
@@ -42,4 +39,3 @@ npm install
 node server.js
 ```
 - Consumer Portal: `http://localhost:8000/KVIC-HC-2026-0417`
->>>>>>> 6b3d493 (Honey_Chain_V1)

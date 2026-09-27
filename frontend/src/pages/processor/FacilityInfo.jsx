@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, Cpu, Shield, Users, Link2, RefreshCw } from 'lucide-react';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export default function FacilityInfo() {
   const [facility, setFacility] = useState(null);
@@ -22,9 +22,9 @@ export default function FacilityInfo() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Building2 size={13} /> Facility</div>
-        <h2 style={{ fontSize: '28px' }}>Processing Facility</h2>
+        <h2>Processing Facility</h2>
       </div>
-      <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-dim)' }}>Loading facility info...</div>
+      <div className="state-loading">Loading facility info...</div>
     </section>
   );
 
@@ -32,9 +32,9 @@ export default function FacilityInfo() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Building2 size={13} /> Facility</div>
-        <h2 style={{ fontSize: '28px' }}>Processing Facility</h2>
+        <h2>Processing Facility</h2>
       </div>
-      <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-dim)' }}>Facility data unavailable.</div>
+      <div className="state-empty">Facility data unavailable.</div>
     </section>
   );
 
@@ -42,21 +42,20 @@ export default function FacilityInfo() {
     <section className="view-pane active">
       <div className="flow-title-row">
         <div className="eyebrow-badge"><Building2 size={13} /> Facility</div>
-        <h2 style={{ fontSize: '28px' }}>Processing Facility</h2>
+        <h2>Processing Facility</h2>
         <p className="section-lede">Processing unit details tied to blockchain entries.</p>
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-        <button onClick={fetchFacility} style={{ padding: '8px 14px', background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '8px', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+      <div className="toolbar">
+        <button onClick={fetchFacility} className="btn btn-soft btn-sm">
           <RefreshCw size={13} /> Refresh
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-            <Building2 size={16} color="var(--amber-400)" />
-            <span style={{ fontSize: '14px', fontWeight: 700 }}>Unit Information</span>
+      <div className="grid-2" style={{ marginBottom: '16px' }}>
+        <div className="panel">
+          <div className="panel-head">
+            <div className="flex gap-8"><Building2 size={16} color="var(--amber-400)" /><span className="panel-title">Unit Information</span></div>
           </div>
           {[
             { label: 'Facility ID', value: facility.id },
@@ -66,17 +65,16 @@ export default function FacilityInfo() {
             { label: 'GPS', value: facility.gps },
             { label: 'Capacity', value: facility.capacity },
           ].map(item => (
-            <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid var(--border-subtle)' }}>
-              <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{item.label}</span>
+            <div key={item.label} className="flex-between" style={{ padding: '7px 0', borderBottom: '1px solid var(--border-subtle)' }}>
+              <span className="muted">{item.label}</span>
               <span style={{ fontSize: '12px', fontWeight: 600, textAlign: 'right', maxWidth: '60%' }}>{item.value}</span>
             </div>
           ))}
         </div>
 
-        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-            <Shield size={16} color="var(--emerald-400)" />
-            <span style={{ fontSize: '14px', fontWeight: 700 }}>Certifications</span>
+        <div className="panel">
+          <div className="panel-head">
+            <div className="flex gap-8"><Shield size={16} color="var(--emerald-400)" /><span className="panel-title">Certifications</span></div>
           </div>
           {facility.certifications.map((cert, i) => (
             <div key={i} style={{ padding: '8px 12px', background: 'var(--emerald-bg)', border: '1px solid var(--emerald-border)', borderRadius: '8px', marginBottom: '8px', fontSize: '12px', color: 'var(--emerald-400)', fontWeight: 600 }}>
@@ -86,10 +84,9 @@ export default function FacilityInfo() {
         </div>
       </div>
 
-      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', padding: '20px', marginBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-          <Cpu size={16} color="#60a5fa" />
-          <span style={{ fontSize: '14px', fontWeight: 700 }}>Equipment</span>
+      <div className="panel" style={{ marginBottom: '16px' }}>
+        <div className="panel-head">
+          <div className="flex gap-8"><Cpu size={16} color="#60a5fa" /><span className="panel-title">Equipment</span></div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '12px' }}>
           {facility.equipment.map((eq, i) => (
@@ -105,27 +102,25 @@ export default function FacilityInfo() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-            <Users size={16} color="var(--amber-400)" />
-            <span style={{ fontSize: '14px', fontWeight: 700 }}>Operators</span>
+      <div className="grid-2">
+        <div className="panel">
+          <div className="panel-head">
+            <div className="flex gap-8"><Users size={16} color="var(--amber-400)" /><span className="panel-title">Operators</span></div>
           </div>
           {facility.operators.map((op, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border-subtle)' }}>
+            <div key={i} className="flex-between" style={{ padding: '8px 0', borderBottom: '1px solid var(--border-subtle)' }}>
               <div>
                 <div style={{ fontSize: '12.5px', fontWeight: 600 }}>{op.name}</div>
                 <div style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{op.role}</div>
               </div>
-              <span style={{ fontSize: '11px', color: 'var(--text-dim)', padding: '2px 8px', background: 'var(--bg-inset)', borderRadius: '4px' }}>{op.badge}</span>
+              <span className="pill-sm" style={{ color: 'var(--text-dim)', background: 'var(--bg-inset)' }}>{op.badge}</span>
             </div>
           ))}
         </div>
 
-        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: '14px', padding: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-            <Link2 size={16} color="#a78bfa" />
-            <span style={{ fontSize: '14px', fontWeight: 700 }}>Blockchain Node</span>
+        <div className="panel">
+          <div className="panel-head">
+            <div className="flex gap-8"><Link2 size={16} color="#a78bfa" /><span className="panel-title">Blockchain Node</span></div>
           </div>
           {[
             { label: 'Network', value: facility.blockchainNode.network },
@@ -134,8 +129,8 @@ export default function FacilityInfo() {
             { label: 'Blocks Anchored', value: facility.blockchainNode.blocksAnchored },
             { label: 'Last Sync', value: new Date(facility.blockchainNode.lastSync).toLocaleTimeString() },
           ].map(item => (
-            <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid var(--border-subtle)' }}>
-              <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{item.label}</span>
+            <div key={item.label} className="flex-between" style={{ padding: '7px 0', borderBottom: '1px solid var(--border-subtle)' }}>
+              <span className="muted">{item.label}</span>
               <span style={{ fontSize: '12px', fontWeight: 600, textAlign: 'right' }}>{item.value}</span>
             </div>
           ))}

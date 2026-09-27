@@ -1,11 +1,8 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import {
-  Sparkles, Settings, Search, ShieldCheck, ChevronRight, Activity, Battery
-} from 'lucide-react';
 import { useApp } from '../context/AppContext';
-import { flowSteps } from '../data/mockData';
+import Landing from '../components/landing/Landing';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 export default function Overview() {
   const {
@@ -15,7 +12,7 @@ export default function Overview() {
   } = useApp();
 
   const [batches, setBatches] = useState([]);
-  const [hiveList, setHiveList] = useState([]);
+  const [, setHiveList] = useState([]);
   const [lastSync, setLastSync] = useState('—');
 
   useEffect(() => {
@@ -49,10 +46,6 @@ export default function Overview() {
   }, [hives]);
 
   const verifiedBatches = allBatches.filter(b => b.status === 'CERTIFIED' || b.status === 'PROCESSED' || b.status === 'PACKAGED' || b.status === 'DISPATCHED');
-
-  const totalProduction = useMemo(() => {
-    return allBatches.reduce((sum, b) => sum + (b.quantity || 0), 0);
-  }, [allBatches]);
 
   const recentBatches = useMemo(() => {
     return [...allBatches]
@@ -114,87 +107,9 @@ export default function Overview() {
   const latestBatch = recentBatches[0] || null;
 
   return (
-    <section className="view-pane active" id="view-overview">
+    <section className={`view-pane ${!currentUser ? 'landing' : 'active'}`} id="view-overview">
       {!currentUser && (
-        <>
-          <div className="hero-grid">
-            <div className="hero-content">
-              <div className="eyebrow-badge">
-                <Sparkles size={13} /> KVIC Honey Mission Prototype
-              </div>
-              <h1>
-                Every jar carries <span className="gold-highlight" style={{ fontStyle: 'italic' }}>immutable proof</span> of where it came from.
-              </h1>
-              <p className="section-lede">
-                Honey Chain connects rural beekeepers, smart hives, AI analytics and blockchain traceability into one trusted honey ecosystem.
-              </p>
-              <div className="hero-cta-row">
-                <button className="btn-luxury btn-luxury-primary" onClick={() => switchView('monitor')}>
-                  <Settings size={16} /> Open Hive Telemetry
-                </button>
-                <button className="btn-luxury btn-luxury-ghost" onClick={() => switchView('qr')}>
-                  <Search size={16} /> Try Consumer Scanner
-                </button>
-              </div>
-            </div>
-
-            <div className="live-hive-badge-wrap">
-              <div className="live-hive-badge">
-                <div className="live-badge-top">
-                  <div className="live-badge-meta">
-                    <div className="hive-code">FLEET PULSE</div>
-                    <div className="hive-loc-title">{pulse.total} hives reporting</div>
-                  </div>
-                  <span className="status-beacon">
-                    <span className="beacon-dot"></span> {pulse.healthy}/{pulse.total} HEALTHY
-                  </span>
-                </div>
-
-                <div className="telemetry-vitals-grid" style={{ gridTemplateColumns: '1fr 1fr 1fr' }}>
-                  <div className="vital-cell">
-                    <div className="vital-lbl"><Activity size={14} /> Avg Health Score</div>
-                    <div className="vital-val">{pulse.avgScore} <span className="vital-unit">/100</span></div>
-                  </div>
-                  <div className="vital-cell">
-                    <div className="vital-lbl"><ShieldCheck size={14} /> Active Alerts</div>
-                    <div className="vital-val">{pulse.alerts}</div>
-                  </div>
-                  <div className="vital-cell">
-                    <div className="vital-lbl"><Battery size={14} /> Avg Battery</div>
-                    <div className="vital-val">{pulse.avgBattery} <span className="vital-unit">%</span></div>
-                  </div>
-                </div>
-
-                <button className="btn-luxury btn-luxury-ghost popover-btn" style={{ marginTop: '16px', width: '100%' }} onClick={() => switchView('monitor')}>
-                  View Full Hive Monitor →
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="flow-container">
-            <div className="flow-title-row">
-              <div className="eyebrow-badge">
-                <ShieldCheck size={13} /> Supply Chain Architecture
-              </div>
-              <h2>From Hive to Hand, One Continuous Audit Trail</h2>
-            </div>
-            <div className="flow-cards-scroll">
-              {flowSteps.map((s, i) => (
-                <React.Fragment key={s.n}>
-                  <div className="flow-stage-card clickable" onClick={() => switchView(s.view)}>
-                    <div className="stage-num">{s.n}</div>
-                    <div className="stage-title">{s.t}</div>
-                    <div className="stage-desc">{s.d}</div>
-                  </div>
-                  {i < flowSteps.length - 1 && (
-                    <div className="flow-conduit"><ChevronRight size={22} /></div>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
-        </>
+        <Landing />
       )}
 
       {currentUser && (
@@ -215,10 +130,10 @@ export default function Overview() {
             </div>
             <div className="status-divider"></div>
             <div className="status-meta clickable" onClick={() => switchView('chain')}>
-              <span style={{ color: 'var(--text-muted)' }}>Blockchain Sync:</span> {lastSync}
+              <span className="muted">Blockchain Sync:</span> {lastSync}
             </div>
             <div className="status-meta clickable" onClick={() => switchView('monitor')}>
-              <span style={{ color: 'var(--text-muted)' }}>IoT Network:</span> <span style={{ color: 'var(--emerald-400)' }}>Online</span>
+              <span className="muted">IoT Network:</span> <span style={{ color: 'var(--emerald-400)' }}>Online</span>
             </div>
           </div>
 
@@ -279,12 +194,12 @@ export default function Overview() {
                     <div className="bm-label">Hive:</div>
                     <div className="bm-val">{latestBatch.hiveId || '—'}</div>
                   </div>
-                  <button className="btn-luxury btn-luxury-primary" style={{ width: '100%', marginTop: '16px' }} onClick={(e) => { e.stopPropagation(); switchView('chain'); setBatchIdInput(latestBatch.id); }}>
+                  <button className="btn-luxury btn-luxury-primary btn-block mt-16" onClick={(e) => { e.stopPropagation(); switchView('chain'); setBatchIdInput(latestBatch.id); }}>
                     View Full Trace →
                   </button>
                 </div>
               ) : (
-                <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-dim)', fontSize: '12px' }}>
+                <div className="state-empty">
                   No batches yet. Create one from Harvest tab.
                 </div>
               )}

@@ -1,13 +1,25 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { initialHives } from '../data/mockData';
+import { VIEW_PATHS, viewForPath } from '../routeConfig';
 
-const API_BASE = window.location.hostname !== 'localhost' ? '' : 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const AppContext = createContext(null);
 
 export function AppProvider({ children }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [theme, setTheme] = useState('light');
-  const [activeView, setActiveView] = useState('overview');
+  const activeView = useMemo(() => viewForPath(location.pathname), [location.pathname]);
+
+  const setActiveView = useCallback((viewName) => {
+    const path = VIEW_PATHS[viewName];
+    if (path && path !== location.pathname) {
+      navigate(path);
+    }
+  }, [location.pathname, navigate]);
   const [hives, setHives] = useState(initialHives);
   const [activeHive, setActiveHive] = useState('H001');
   const [batchIdInput, setBatchIdInput] = useState('KVIC-HC-2026-0417');
@@ -44,14 +56,13 @@ export function AppProvider({ children }) {
 
   useEffect(() => {
     fetchBatches();
-    const iv = setInterval(fetchBatches, 3000);
+    const iv = setInterval(fetchBatches, 10000);
     return () => clearInterval(iv);
   }, [fetchBatches]);
 
   const switchView = useCallback((viewName) => {
     setActiveView(viewName);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [setActiveView]);
 
   const handleLogin = useCallback(async (e) => {
     e.preventDefault();
@@ -72,7 +83,7 @@ export function AppProvider({ children }) {
     } catch (err) {
       setLoginError('Login failed. Is backend running?');
     }
-  }, [loginEmail]);
+  }, [loginEmail, setActiveView]);
 
   const handleRegisterHarvest = useCallback(async (e) => {
     e.preventDefault();
@@ -94,7 +105,7 @@ export function AppProvider({ children }) {
         setActiveView('overview');
       }
     } catch (err) { /* no-op in static demo mode */ }
-  }, [activeHive, fetchBatches, showNotification]);
+  }, [activeHive, fetchBatches, showNotification, setActiveView]);
 
   const handleVerifyBatch = useCallback(async (batchId) => {
     try {
@@ -281,11 +292,13 @@ export function AppProvider({ children }) {
   const curHive = hives[activeHive] || Object.values(hives)[0] || initialHives.H001;
 
   const tempSeriesData = useMemo(() => {
-    return Array.from({ length: 24 }, (_, i) => (curHive.temp || 34.0) + Math.sin(i / 3) * 1.4 + (Math.random() - 0.5) * 0.6);
+    const base = curHive.temp || 34.0;
+    return Array.from({ length: 24 }, (_, i) => base + Math.sin(i / 3) * 1.4 + Math.cos(i / 2) * 0.3);
   }, [curHive.temp]);
 
   const weightSeriesData = useMemo(() => {
-    return Array.from({ length: 24 }, (_, i) => (curHive.wt || 30.0) - 1.8 + i * (1.8 / 23) + (Math.random() - 0.5) * 0.15);
+    const base = curHive.wt || 30.0;
+    return Array.from({ length: 24 }, (_, i) => base - 1.8 + i * (1.8 / 23) + Math.sin(i / 4) * 0.1);
   }, [curHive.wt]);
 
   const value = {
