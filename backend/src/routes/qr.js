@@ -9,8 +9,11 @@ router.get('/:batchId', async (req, res) => {
   const batch = batches[batchId];
   if (!batch) return res.status(404).json({ ok: false, error: 'Batch not found' });
 
-  // Direct consumer verification link — always point at the hosted app, never a dev tunnel
-  const appBase = (process.env.QR_BASE_URL || process.env.PUBLIC_APP_URL || 'https://honey-chain-ruddy.vercel.app').replace(/\/+$/, '');
+  // Consumer link is opened by a phone scanner — never a loopback/dev address.
+  const HOSTED_APP = 'https://honey-chain-ruddy.vercel.app';
+  const isLoopback = u => /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?(\/|$)/i.test(u || '');
+  const appBase = ([process.env.PUBLIC_APP_URL, process.env.QR_BASE_URL, HOSTED_APP]
+    .find(u => u && !isLoopback(u)) || HOSTED_APP).replace(/\/+$/, '');
   const verificationUrl = `${appBase}/#verify/${encodeURIComponent(batchId)}`;
   try {
     const dataUrl = await QRCode.toDataURL(verificationUrl, {
