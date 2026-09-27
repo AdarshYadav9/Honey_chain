@@ -42,7 +42,9 @@ const MOCK_BATCH_DATA = {
 };
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-const PUBLIC_BASE = window.location.hostname !== 'localhost' ? window.location.origin : 'https://certified-overfaintly-vivian.ngrok-free.dev';
+const HOSTED_APP = 'https://honey-chain-ruddy.vercel.app';
+const IS_LOCAL = ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
+const PUBLIC_BASE = (process.env.REACT_APP_PUBLIC_URL || (IS_LOCAL ? HOSTED_APP : window.location.origin)).replace(/\/+$/, '');
 
 function normalizeLab(lab) {
   if (!lab) return null;

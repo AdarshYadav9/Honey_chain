@@ -9,8 +9,9 @@ router.get('/:batchId', async (req, res) => {
   const batch = batches[batchId];
   if (!batch) return res.status(404).json({ ok: false, error: 'Batch not found' });
 
-  // Direct consumer verification link — use ngrok for external access
-  const verificationUrl = `https://certified-overfaintly-vivian.ngrok-free.dev/#verify/${encodeURIComponent(batchId)}`;
+  // Direct consumer verification link — always point at the hosted app, never a dev tunnel
+  const appBase = (process.env.QR_BASE_URL || process.env.PUBLIC_APP_URL || 'https://honey-chain-ruddy.vercel.app').replace(/\/+$/, '');
+  const verificationUrl = `${appBase}/#verify/${encodeURIComponent(batchId)}`;
   try {
     const dataUrl = await QRCode.toDataURL(verificationUrl, {
       color: {
