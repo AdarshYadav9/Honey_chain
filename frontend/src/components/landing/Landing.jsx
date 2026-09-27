@@ -371,6 +371,9 @@ export default function Landing() {
     <>
       {/* ---------- HERO ---------- */}
       <section className="lp-hero" id="hero">
+        {/* defocused cream/beige photographic atmosphere — right-weighted, purely decorative */}
+        <div className="lp-hero-atmos" aria-hidden="true" />
+
         <div className="lp-hero-glow" aria-hidden="true" />
 
         {/* atmosphere: leaves drifting around the still-life */}
@@ -425,7 +428,8 @@ export default function Landing() {
               <span className="lp-vis-deco lp-d-hexbg" aria-hidden="true"><HexBackdrop /></span>
 
               <div className="lp-hero-scene">
-                <img className="lp-scene-img" src={honeyBeeImg} alt="Raw honey jar with honeycomb, flowers and honey dipper" />
+                {/* <img className="lp-scene-img" alt="Raw honey jar with honeycomb, flowers and honey dipper" /> */}
+                 <img className="lp-scene-img" src={honeyBeeImg} alt="Raw honey jar with honeycomb, flowers and honey dipper" /> 
               </div>
 
               <div className="lp-hf-card lp-hf-qr">
