@@ -1561,384 +1561,266 @@ main.wrap:has(.view-pane.landing) .lp-stats {
    ============================================================ */
 
 /* ------------------------------------------------------------
-   LARGE DESKTOP (1200px - 1400px)
+   B. DESKTOP / LAPTOP (1200px - 1439px)
    ------------------------------------------------------------ */
-@media (min-width: 1200px) and (max-width: 1400px) {
+@media (min-width: 1200px) and (max-width: 1439px) {
   .lp-hero-grid {
-    grid-template-columns: 45% 55%;
-    gap: 32px;
+    grid-template-columns: 48% 52%;
   }
-  
-  .lp-hero-title {
-    font-size: clamp(48px, 4.5vw, 64px);
+  .lp-scene-img {
+    max-width: 50vw; /* Reduced slightly to stay safe */
   }
-
   .lp-scene-stage {
-    width: min(100%, 540px);
+    right: 4vw; /* 3-5vw right margin */
   }
 }
 
 /* ------------------------------------------------------------
-   LAPTOP & TABLET LANDSCAPE (901px - 1199px)
+   C. SMALL LAPTOP / TABLET LANDSCAPE (1024px - 1199px)
    ------------------------------------------------------------ */
-@media (min-width: 901px) and (max-width: 1199px) {
-  /* hero atmosphere: ease off slightly on narrower desktops/tablets */
-  .lp-hero-atmos {
-    opacity: 0.78;
-  }
-
+@media (min-width: 1024px) and (max-width: 1199px) {
   .lp-hero-grid {
-    grid-template-columns: 48% 52%;
+    grid-template-columns: 49% 51%; /* Compact two-column */
     gap: 24px;
   }
-
   .lp-hero-title {
     font-size: clamp(40px, 4vw, 54px);
   }
-
   .lp-scene-stage {
-    width: min(100%, 460px);
+    right: 3vw;
   }
-
-  .lp-hf-qr {
-    width: 212px;
+  .lp-scene-img {
+    max-width: 45vw; /* approx 42-48vw wide */
   }
-
-  .lp-hero-visual {
-    max-width: 580px;
-  }
-
-  .lp-steps {
-    gap: 12px;
-  }
-
-  .lp-step-t {
-    font-size: 14px;
-  }
-
-  .lp-step-d {
-    font-size: 11.5px;
-  }
-
-  .lp-card {
-    flex: 0 0 calc((100% - 24px) / 2);
-    min-width: calc((100% - 24px) / 2);
-    max-width: calc((100% - 24px) / 2);
-  }
+  /* Scale cards slightly to prevent overlap */
+  .lp-hf-qr { width: 190px; top: 12%; right: 2%; }
+  .lp-hf-pure { width: 160px; top: 38%; right: 1%; }
+  .lp-hf-ethic { width: 170px; top: 65%; right: 2%; }
   
-  .lp-iot-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
+  /* Rest of page layout compacting */
+  .lp-steps { gap: 12px; }
+  .lp-step-t { font-size: 14px; }
+  .lp-step-d { font-size: 11.5px; }
+  .lp-card { flex: 0 0 calc((100% - 24px) / 2); min-width: calc((100% - 24px) / 2); max-width: calc((100% - 24px) / 2); }
+  .lp-iot-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
 }
 
 /* ------------------------------------------------------------
-   TABLET PORTRAIT (641px - 900px)
+   D. TABLET (768px - 1023px)
    ------------------------------------------------------------ */
-@media (max-width: 900px) {
-  /* hero atmosphere: soften the ramp for tablet portrait */
-  .lp-hero-atmos {
-    opacity: 0.58;
-    background:
-      linear-gradient(
-        90deg,
-        rgba(248, 240, 221, 0) 0%,
-        rgba(248, 240, 221, 0) 20%,
-        rgba(243, 229, 198, 0.4) 50%,
-        rgba(231, 208, 161, 0.7) 75%,
-        rgba(220, 193, 141, 1) 100%
-      );
-  }
-
+@media (min-width: 768px) and (max-width: 1023px) {
   .lp-hero {
-    min-height: auto;
     padding: clamp(48px, 6vw, 64px) clamp(24px, 4vw, 40px) clamp(56px, 6vw, 80px);
     text-align: center;
   }
-
   .lp-hero-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-
   .lp-hero-copy {
-    justify-self: stretch;
+    justify-self: center;
     margin: 0 auto;
     max-width: 680px;
     padding-top: 0;
   }
-
-  .lp-hero-lead {
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 17px;
-  }
-
-  .lp-hero-cta,
-  .lp-hero-trust {
-    justify-content: center;
-  }
-
-  .lp-hero-title {
-    font-size: clamp(42px, 7vw, 56px);
-    line-height: 1.1;
-  }
-
-  .lp-bee-nearbadge {
-    right: -42px;
-    top: -30px;
-    width: 40px;
-  }
-
-  .lp-hero-visual {
-    width: min(100%, 560px);
-    margin: 0 auto;
-    min-height: 480px;
-  }
-
+  .lp-hero-lead { margin: 0 auto; font-size: 17px; }
+  .lp-hero-cta, .lp-hero-trust { justify-content: center; }
+  .lp-hero-title { font-size: clamp(42px, 7vw, 56px); line-height: 1.1; }
+  
   .lp-scene-stage {
+    right: 0;
     justify-content: center;
+    /* Allow height to be determined naturally */
+    height: auto;
   }
-
+  .lp-hero-scene {
+    position: relative; /* Release from absolute to block */
+    justify-content: center;
+    height: auto;
+  }
   .lp-scene-img {
-    margin-left: 0;
-    margin-bottom: 0;
-  }
-
-  /* full hero page edge still clips the drifting leaves' blur */
-  .lp-hd-leaf-fall1,
-  .lp-hd-leaf-fall2 {
-    display: none;
-  }
-
-  .lp-stats-grid {
-    grid-template-columns: 1fr 1fr;
-    row-gap: 48px;
-  }
-
-  .lp-stat:nth-child(3),
-  .lp-stat:nth-child(2) {
-    border-left: none;
+    max-width: 80vw; /* Product 75-85vw */
+    height: auto;
+    object-position: center;
   }
   
-  .lp-stat:nth-child(even) {
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .lp-card {
-    flex: 0 0 calc((100% - 24px) / 2);
-    min-width: calc((100% - 24px) / 2);
-    max-width: calc((100% - 24px) / 2);
-  }
-
-  .lp-steps {
-    grid-template-columns: 1fr 1fr;
-    gap: 48px 32px;
-  }
-
-  .lp-step-connector {
-    display: none;
-  }
-
-  .lp-iot-grid {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
+  /* Reposition floating cards relative to product */
+  .lp-hf-qr { top: 10%; right: 10%; width: 200px; }
+  .lp-hf-pure { top: 40%; right: 5%; width: 160px; }
+  .lp-hf-ethic { top: 70%; right: 8%; width: 170px; }
   
-  .lp-iot-media {
-    max-width: 600px;
-    margin: 0 auto;
-  }
+  .lp-hero-atmos { opacity: 0.6; }
+  .lp-hd-leaf-fall1, .lp-hd-leaf-fall2 { display: none; }
   
-  .lp-t-card:nth-child(even),
-  .lp-t-card:nth-child(odd) {
-    margin: 0 auto;
-    width: 100%;
-  }
+  .lp-stats-grid { grid-template-columns: 1fr 1fr; row-gap: 48px; }
+  .lp-stat:nth-child(3), .lp-stat:nth-child(2) { border-left: none; }
+  .lp-stat:nth-child(even) { border-left: 1px solid rgba(255, 255, 255, 0.1); }
+  .lp-card { flex: 0 0 calc((100% - 24px) / 2); min-width: calc((100% - 24px) / 2); max-width: calc((100% - 24px) / 2); }
+  .lp-steps { grid-template-columns: 1fr 1fr; gap: 48px 32px; }
+  .lp-step-connector { display: none; }
+  .lp-iot-grid { grid-template-columns: 1fr; gap: 48px; }
+  .lp-iot-media { max-width: 600px; margin: 0 auto; }
+  .lp-t-card:nth-child(even), .lp-t-card:nth-child(odd) { margin: 0 auto; width: 100%; }
 }
 
 /* ------------------------------------------------------------
-   MOBILE (0px - 640px)
+   E. LARGE MOBILE (600px - 767px)
    ------------------------------------------------------------ */
-@media (max-width: 640px) {
-  /* hero atmosphere: drop the left/right split entirely and become a soft wash for mobile */
-  .lp-hero-atmos {
-    opacity: 0.46;
-    background: radial-gradient(circle at 50% 50%, rgba(243, 229, 198, 0.3) 0%, rgba(220, 193, 141, 0.6) 100%);
-  }
-
-  .lp-section {
-    padding: clamp(56px, 8vw, 80px) clamp(16px, 4vw, 24px);
-  }
-
-  .lp-card {
-    flex: 0 0 calc(100% - 16px);
-    min-width: calc(100% - 16px);
-    max-width: calc(100% - 16px);
-    margin-right: 16px;
-  }
-
-  .lp-shop-head {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .lp-stats-grid {
-    grid-template-columns: 1fr;
-    row-gap: 32px;
-  }
-  
-  .lp-stat + .lp-stat,
-  .lp-stat:nth-child(even) {
-    border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 24px;
-  }
-
-  .lp-steps {
-    grid-template-columns: 1fr;
-    gap: 36px;
-  }
-
-  .lp-iot-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .lp-qr-facts {
-    grid-template-columns: 1fr;
-  }
-
-  .lp-t-card {
-    flex-direction: column;
-    padding: 24px;
-    align-items: center;
+@media (min-width: 600px) and (max-width: 767px) {
+  .lp-hero {
+    padding: clamp(40px, 6vw, 56px) 24px clamp(48px, 6vw, 64px);
     text-align: center;
   }
+  .lp-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .lp-hero-copy { justify-self: center; margin: 0 auto; max-width: 100%; }
+  .lp-hero-lead { margin: 0 auto; }
+  .lp-hero-cta, .lp-hero-trust { justify-content: center; }
+  .lp-hero-title { font-size: clamp(38px, 8vw, 48px); line-height: 1.1; }
   
-  .lp-t-avatar {
-    margin-bottom: 8px;
+  .lp-scene-stage { right: 0; flex-direction: column; height: auto; padding-top: 16px; }
+  .lp-hero-scene { position: relative; justify-content: center; height: auto; }
+  .lp-scene-img {
+    max-width: 88vw; /* Product 85-92vw */
+    height: auto;
+    object-position: center;
+    transform: none;
   }
-
-  .lp-t-kvic {
-    display: none;
-  }
-
-  /* soft single-column stack: badge → headline → lead → CTAs → trust → jar */
-  .lp-hero-grid {
-    gap: 28px;
-  }
-
-  .lp-hero-title {
-    font-size: clamp(34px, 10vw, 44px);
-    line-height: 1.1;
-  }
-
-  .lp-hero-lead {
-    font-size: 15.5px;
-  }
-
-  .lp-hero-cta {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .lp-hero-cta .lp-btn {
-    width: 100%;
-    height: 52px;
-    font-size: 15px;
-  }
-
-  .lp-hero-trust {
-    gap: 12px;
-    justify-content: center;
-  }
-
-  .lp-t-item + .lp-t-item {
-    border-left: none;
-    padding-left: 0;
-  }
-
-  .lp-t-item {
-    font-size: 12.5px;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .lp-bee-nearbadge {
-    right: -36px;
-    top: -26px;
-    width: 34px;
-  }
-
-  .lp-hero-visual {
-    width: 100%;
-    min-height: 420px;
-  }
-
-  /* chips become a clean 2-up row beneath the still-life so nothing overflows */
+  
+  /* Convert 3 floating cards into a compact vertical stack */
   .lp-hf-card {
-    border-radius: 14px;
-    padding: 8px 12px;
-  }
-
-  .lp-hf-qr {
-    top: 5%;
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%) !important;
-    width: 230px;
-    min-height: 60px;
+    position: relative;
+    top: auto !important; right: auto !important; left: auto !important; bottom: auto !important;
+    transform: none !important;
+    margin: 8px auto;
+    width: 90%;
+    max-width: 280px;
+    justify-content: flex-start;
     animation: none;
   }
-
-  .lp-hf-pure {
-    left: 4%;
-    bottom: 5%;
-    width: auto;
-    min-height: auto;
-    animation: none;
+  
+  .lp-hero-atmos {
+    opacity: 0.6;
+    background: radial-gradient(circle at 50% 50%, rgba(243, 229, 198, 0.3) 0%, rgba(220, 193, 141, 0.6) 100%);
   }
-
-  .lp-hf-ethic {
-    right: 5%;
-    bottom: 12%;
-    width: auto;
-    min-height: auto;
-    animation: none;
-  }
-
-  .lp-hd-leaf-large {
-    display: none;
-  }
+  
+  .lp-section { padding: clamp(56px, 8vw, 80px) clamp(16px, 4vw, 24px); }
+  .lp-card { flex: 0 0 calc(100% - 16px); min-width: calc(100% - 16px); max-width: calc(100% - 16px); margin-right: 16px; }
+  .lp-shop-head { flex-direction: column; align-items: flex-start; }
+  .lp-stats-grid { grid-template-columns: 1fr; row-gap: 32px; }
+  .lp-stat + .lp-stat, .lp-stat:nth-child(even) { border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 24px; }
+  .lp-steps { grid-template-columns: 1fr; gap: 36px; }
+  .lp-iot-cards { grid-template-columns: 1fr; }
+  .lp-qr-facts { grid-template-columns: 1fr; }
+  .lp-t-card { flex-direction: column; padding: 24px; align-items: center; text-align: center; }
+  .lp-t-avatar { margin-bottom: 8px; }
+  .lp-t-kvic { display: none; }
+  .lp-hd-leaf-large { display: none; }
 }
 
 /* ------------------------------------------------------------
-   ULTRA SMALL MOBILE (0px - 380px)
+   F. MOBILE (480px - 599px)
    ------------------------------------------------------------ */
-@media (max-width: 380px) {
-  .lp-hero-title {
-    font-size: clamp(28px, 10vw, 32px);
+@media (min-width: 480px) and (max-width: 599px) {
+  .lp-hero {
+    padding: 32px 20px 48px;
+    text-align: center;
   }
-
-  .lp-hd-leaf-left {
-    display: none;
-  }
-
-  .lp-hf-pure, .lp-hf-ethic {
+  .lp-hero-grid { grid-template-columns: 1fr; gap: 28px; }
+  .lp-hero-copy { justify-self: stretch; padding: 0; }
+  .lp-hero-lead { margin: 0 auto; font-size: 15.5px; }
+  .lp-hero-title { font-size: clamp(34px, 9vw, 42px); line-height: 1.1; }
+  
+  .lp-hero-cta { flex-direction: column; gap: 12px; align-items: center; }
+  .lp-hero-cta .lp-btn { width: 100%; max-width: 360px; height: 52px; justify-content: center; }
+  
+  .lp-hero-trust { justify-content: center; flex-wrap: wrap; gap: 12px; }
+  .lp-t-item { width: auto; border: none; padding: 0; }
+  
+  .lp-scene-stage { right: 0; flex-direction: column; height: auto; }
+  .lp-hero-scene { position: relative; justify-content: center; height: auto; }
+  .lp-scene-img { max-width: 92vw; height: auto; object-position: center; transform: none; }
+  
+  .lp-hf-card {
     position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    margin-bottom: 12px;
+    top: auto !important; right: auto !important; left: auto !important; bottom: auto !important;
+    transform: none !important;
+    margin: 8px auto;
     width: 100%;
+    max-width: 300px;
     justify-content: flex-start;
+    animation: none;
   }
   
-  .lp-scene-stage {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  .lp-hero-atmos {
+    opacity: 0.5;
+    background: radial-gradient(circle at 50% 50%, rgba(243, 229, 198, 0.3) 0%, rgba(220, 193, 141, 0.5) 100%);
   }
+  
+  .lp-section { padding: clamp(56px, 8vw, 80px) clamp(16px, 4vw, 24px); }
+  .lp-card { flex: 0 0 calc(100% - 16px); min-width: calc(100% - 16px); max-width: calc(100% - 16px); margin-right: 16px; }
+  .lp-shop-head { flex-direction: column; align-items: flex-start; }
+  .lp-stats-grid { grid-template-columns: 1fr; row-gap: 32px; }
+  .lp-stat + .lp-stat, .lp-stat:nth-child(even) { border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 24px; }
+  .lp-steps { grid-template-columns: 1fr; gap: 36px; }
+  .lp-iot-cards { grid-template-columns: 1fr; }
+  .lp-qr-facts { grid-template-columns: 1fr; }
+  .lp-t-card { flex-direction: column; padding: 24px; align-items: center; text-align: center; }
+  .lp-t-avatar { margin-bottom: 8px; }
+  .lp-t-kvic { display: none; }
+  .lp-hd-leaf-large { display: none; }
+}
+
+/* ------------------------------------------------------------
+   G. SMALL MOBILE (below 480px)
+   ------------------------------------------------------------ */
+@media (max-width: 479px) {
+  .lp-hero {
+    padding: 24px 16px 40px;
+    text-align: center;
+  }
+  .lp-hero-grid { grid-template-columns: 1fr; gap: 24px; }
+  .lp-hero-copy { justify-self: stretch; padding: 0; }
+  .lp-hero-lead { margin: 0 auto; font-size: 15px; }
+  .lp-hero-title { font-size: clamp(30px, 11vw, 36px); line-height: 1.1; }
+  
+  .lp-hero-cta { flex-direction: column; gap: 12px; align-items: center; }
+  .lp-hero-cta .lp-btn { width: 100%; max-width: 360px; height: 50px; justify-content: center; }
+  
+  .lp-hero-trust { justify-content: center; flex-wrap: wrap; gap: 8px; flex-direction: column; }
+  .lp-t-item { width: 100%; border: none; padding: 0; justify-content: center; }
+  
+  .lp-scene-stage { right: 0; flex-direction: column; height: auto; padding-top: 8px; }
+  .lp-hero-scene { position: relative; justify-content: center; height: auto; }
+  .lp-scene-img { width: 100%; max-width: 96vw; height: auto; object-position: center; transform: none; }
+  
+  .lp-hf-card {
+    position: relative;
+    top: auto !important; right: auto !important; left: auto !important; bottom: auto !important;
+    transform: none !important;
+    margin: 6px auto;
+    width: 100%;
+    max-width: 320px;
+    justify-content: flex-start;
+    animation: none;
+  }
+  
+  .lp-hero-atmos {
+    opacity: 0.4;
+    background: radial-gradient(circle at 50% 50%, rgba(243, 229, 198, 0.3) 0%, rgba(220, 193, 141, 0.4) 100%);
+  }
+  .lp-hd-leaf-left, .lp-hd-leaf-large { display: none; }
+  
+  .lp-section { padding: clamp(56px, 8vw, 80px) clamp(16px, 4vw, 24px); }
+  .lp-card { flex: 0 0 calc(100% - 16px); min-width: calc(100% - 16px); max-width: calc(100% - 16px); margin-right: 16px; }
+  .lp-shop-head { flex-direction: column; align-items: flex-start; }
+  .lp-stats-grid { grid-template-columns: 1fr; row-gap: 32px; }
+  .lp-stat + .lp-stat, .lp-stat:nth-child(even) { border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 24px; }
+  .lp-steps { grid-template-columns: 1fr; gap: 36px; }
+  .lp-iot-cards { grid-template-columns: 1fr; }
+  .lp-qr-facts { grid-template-columns: 1fr; }
+  .lp-t-card { flex-direction: column; padding: 24px; align-items: center; text-align: center; }
+  .lp-t-avatar { margin-bottom: 8px; }
+  .lp-t-kvic { display: none; }
 }
 
 /* respect reduced motion — stop hero decorative motion entirely */
