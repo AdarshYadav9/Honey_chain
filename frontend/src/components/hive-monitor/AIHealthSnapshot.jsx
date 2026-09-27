@@ -4,16 +4,28 @@ import { Sparkles } from 'lucide-react';
 const SWARM_COLOR = { Low: 'var(--emerald-400)', Medium: 'var(--amber-400)', High: '#f87171' };
 const QUEEN_COLOR = {
   'Confirmed Present': 'var(--emerald-400)',
+  'Active (Mated)': 'var(--emerald-400)',
+  'Active': 'var(--emerald-400)',
   'Uncertain': 'var(--amber-400)',
+  'Awaiting first inspection': 'var(--amber-400)',
   'Possibly Absent': '#f87171',
 };
 
 export default function AIHealthSnapshot({ hive }) {
-  const score = hive.healthScore ?? 85;
-  const risk = hive.diseaseRisk || { varroa: 10, foulbrood: 5, nosema: 5 };
+  const rawScore = Number(hive.healthScore);
+  const score = Number.isFinite(rawScore) && rawScore > 0 ? Math.min(100, rawScore) : 85;
+  const rawRisk = hive.diseaseRisk;
+  const risk = (rawRisk && typeof rawRisk === 'object')
+    ? {
+      varroa: Number(rawRisk.varroa) || 0,
+      foulbrood: Number(rawRisk.foulbrood) || 0,
+      nosema: Number(rawRisk.nosema) || 0,
+    }
+    : { varroa: 10, foulbrood: 5, nosema: 5 };
   const queen = hive.queenStatus || 'Confirmed Present';
   const swarm = hive.swarmRisk || 'Low';
-  const yieldKg = hive.yieldForecastKg ?? 30;
+  const rawYield = Number(hive.yieldForecastKg);
+  const yieldKg = Number.isFinite(rawYield) && rawYield > 0 ? rawYield : 30;
   const circumference = 2 * Math.PI * 42;
   const offset = circumference - (score / 100) * circumference;
   const scoreColor = score >= 80 ? 'var(--emerald-400)' : score >= 60 ? 'var(--amber-400)' : '#f87171';

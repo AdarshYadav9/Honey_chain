@@ -1,10 +1,30 @@
 import React from 'react';
 import { Battery, Radio, MapPin, User, Cpu } from 'lucide-react';
 
+// Backend seeds use { lat, lon } while mock hives use { lat, lng }.
+// Never assume either key exists — a missing key used to crash the whole view.
+function formatGps(gps) {
+  if (!gps) return null;
+  const lat = Number(gps.lat);
+  const lng = Number(gps.lng !== undefined && gps.lng !== null ? gps.lng : gps.lon);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  if (lat === 0 && lng === 0) return null;
+  return `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E`;
+}
+
+function formatAgo(hive) {
+  const updated = hive.lastUpdated ? new Date(hive.lastUpdated).getTime() : NaN;
+  if (Number.isFinite(updated)) {
+    const secs = Math.max(0, Math.round((Date.now() - updated) / 1000));
+    return secs < 60 ? `${secs}s ago` : `${Math.round(secs / 60)}m ago`;
+  }
+  const secs = hive.lastSyncSec ?? 12;
+  return secs < 60 ? `${secs}s ago` : `${Math.round(secs / 60)}m ago`;
+}
+
 export default function DeviceMetaPanel({ hiveId, hive }) {
-  const lastSync = hive.lastSyncSec != null
-    ? (hive.lastSyncSec < 60 ? `${hive.lastSyncSec}s ago` : `${Math.round(hive.lastSyncSec / 60)}m ago`)
-    : '12s ago';
+  const lastSync = formatAgo(hive);
+  const gpsLabel = formatGps(hive.gps);
 
   return (
     <div className="glass-card">
@@ -31,7 +51,7 @@ export default function DeviceMetaPanel({ hiveId, hive }) {
           <div className="meta-label">GPS Location</div>
           <div className="meta-value">
             <MapPin size={12} />
-            {hive.gps ? `${hive.gps.lat.toFixed(4)}° N, ${hive.gps.lng.toFixed(4)}° E` : 'Not available'}
+            {gpsLabel || 'Awaiting first GPS fix'}
           </div>
         </div>
         <div>

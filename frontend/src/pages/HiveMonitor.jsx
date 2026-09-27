@@ -8,6 +8,7 @@ import AIHealthSnapshot from '../components/hive-monitor/AIHealthSnapshot';
 import AlertsPanel from '../components/hive-monitor/AlertsPanel';
 import DeviceMetaPanel from '../components/hive-monitor/DeviceMetaPanel';
 import TrendsPanel from '../components/hive-monitor/TrendsPanel';
+import { HiveApprovalState, ApprovalQueue } from '../components/hive-monitor/ApprovalPanel';
 
 const STATE_META = {
   ok: { label: 'Online', color: 'var(--emerald-400)' },
@@ -18,17 +19,42 @@ const STATE_META = {
 const FLOWERS = ['Litchi Blossom', 'Mustard', 'Wildflower', 'Eucalyptus', 'Sundarbans Mangrove', 'Acacia', 'Coffee Blossom', 'Floral Mix'];
 
 export default function HiveMonitor() {
-  const { hives, activeHive, setActiveHive, curHive, currentUser, handleRegisterHarvest, handleAddHive } = useApp();
+  const {
+    hives, activeHive, setActiveHive, curHive, currentUser,
+    handleRegisterHarvest, handleAddHive, approveHive, rejectHive
+  } = useApp();
   const [hiveSearch, setHiveSearch] = useState('');
   const [viewMode, setViewMode] = useState('single');
   const [timeRange, setTimeRange] = useState('24H');
   const [showAddModal, setShowAddModal] = useState(false);
   const [addForm, setAddForm] = useState({ location: '', beekeeperName: '', floralSource: 'Wildflower', cluster: '' });
   const [adding, setAdding] = useState(false);
+  const [reviewingId, setReviewingId] = useState(null);
+
+  const isApprover = currentUser?.role === 'ADMIN';
+  const activeApproval = curHive?.approvalStatus || 'APPROVED';
 
   const hiveList = useMemo(() => Object.entries(hives).map(([id, h]) => ({
-    id, loc: h.loc || 'Location unavailable', state: h.state || 'ok',
+    id,
+    loc: h.loc || 'Location unavailable',
+    state: h.state || 'ok',
+    approval: h.approvalStatus || 'APPROVED',
+    beekeeper: h.beekeeper,
+    cluster: h.cluster,
   })), [hives]);
+
+  const pendingList = useMemo(
+    () => hiveList.filter(h => h.approval === 'PENDING'),
+    [hiveList]
+  );
+
+  const liveHives = useMemo(() => {
+    const out = {};
+    Object.entries(hives).forEach(([id, h]) => {
+      if ((h.approvalStatus || 'APPROVED') === 'APPROVED') out[id] = h;
+    });
+    return out;
+  }, [hives]);
 
   const filteredHiveList = useMemo(() => {
     const q = hiveSearch.trim().toLowerCase();
@@ -37,6 +63,14 @@ export default function HiveMonitor() {
   }, [hiveList, hiveSearch]);
 
   const goToHive = (id) => { setActiveHive(id); setViewMode('single'); };
+
+  const review = async (decision, hive) => {
+    const id = (hive && (hive.id || hive.hiveId)) || activeHive;
+    setReviewingId(id);
+    const mapped = await (decision === 'approve' ? approveHive(id) : rejectHive(id));
+    setReviewingId(null);
+    if (mapped && decision === 'approve') goToHive(id);
+  };
 
   const handleAddSubmit = async (e) => {
     e.preventDefault();
@@ -70,14 +104,25 @@ export default function HiveMonitor() {
             </button>
           </div>
 
+          {pendingList.length > 0 && (
+            <div className={`notice ${isApprover ? 'notice-warn' : 'notice-info'}`} style={{ fontSize: '12px' }}>
+              {pendingList.length} registration{pendingList.length > 1 ? 's' : ''} awaiting admin approval
+            </div>
+          )}
+
           <div className="ms-hive-list">
             {filteredHiveList.map(h => {
               const meta = STATE_META[h.state] || STATE_META.ok;
+              const status = h.approval === 'PENDING'
+                ? { label: 'Pending', color: 'var(--amber-400)' }
+                : h.approval === 'REJECTED'
+                  ? { label: 'Rejected', color: '#f87171' }
+                  : meta;
               return (
                 <div key={h.id} className={`ms-hive-item ${viewMode === 'single' && h.id === activeHive ? 'active' : ''}`} onClick={() => goToHive(h.id)}>
                   <div className="ms-h-top">
                     <span className="ms-h-id">{h.id}</span>
-                    <span className="ms-h-status" style={{ color: meta.color }}>● {meta.label}</span>
+                    <span className="ms-h-status" style={{ color: status.color }}>● {status.label}</span>
                   </div>
                   <div className="ms-h-loc">{h.loc}</div>
                 </div>
@@ -95,7 +140,9 @@ export default function HiveMonitor() {
             <div className="passport-modal-window" onClick={e => e.stopPropagation()} style={{ maxWidth: '480px' }}>
               <button className="btn-close-modal" onClick={() => setShowAddModal(false)}><X size={16} /></button>
               <h3 className="modal-title">Register New Hive</h3>
-              <p className="muted" style={{ margin: '0 0 20px' }}>Add a new smart hive to the monitoring network.</p>
+              <p className="muted" style={{ margin: '0 0 20px' }}>
+                The hive is queued for admin approval — sensor data goes live only after it is accepted.
+              </p>
               <form onSubmit={handleAddSubmit} className="flex-col" style={{ gap: '14px' }}>
                 <div>
                   <label className="field-label">Location *</label>
@@ -146,17 +193,37 @@ export default function HiveMonitor() {
 
         {/* MAIN CONTENT AREA */}
         <div className="monitor-main-area">
+          {/* Admin: registration approval queue */}
+          {isApprover && (
+            <ApprovalQueue
+              pending={pendingList}
+              onApprove={h => review('approve', h)}
+              onReject={h => review('reject', h)}
+              busyId={reviewingId}
+            />
+          )}
+
           {/* Header card */}
           <div className="mm-header-card glass-card">
             <div className="mm-h-top">
               <div>
                 <h2 className="mm-h-title">
                   {viewMode === 'fleet' ? 'All Hives — Fleet View' : `Hive ${activeHive}`}
-                  {viewMode === 'single' && <span className="mm-badge-online">Online</span>}
+                  {viewMode === 'single' && activeApproval === 'APPROVED' && <span className="mm-badge-online">Online</span>}
+                  {viewMode === 'single' && activeApproval === 'PENDING' && (
+                    <span className="pill" style={{ background: 'var(--gold-gradient-soft)', color: 'var(--amber-400)', border: '1px solid var(--border-highlight)' }}>
+                      Pending approval
+                    </span>
+                  )}
+                  {viewMode === 'single' && activeApproval === 'REJECTED' && (
+                    <span className="pill" style={{ background: 'var(--rose-bg)', color: 'var(--rose-400)', border: '1px solid var(--rose-border)' }}>
+                      Rejected
+                    </span>
+                  )}
                 </h2>
                 <div className="muted">
                   {viewMode === 'fleet'
-                    ? `${Object.keys(hives).length} hives across ${new Set(Object.values(hives).map(h => h.cluster || h.loc?.split(',')[0])).size} clusters`
+                    ? `${Object.keys(liveHives).length} hives across ${new Set(Object.values(liveHives).map(h => h.cluster || h.loc?.split(',')[0])).size} clusters`
                     : (curHive?.loc || 'Location unavailable') + (curHive?.beekeeper ? ` • Beekeeper: ${curHive.beekeeper}` : '')
                   }
                 </div>
@@ -168,7 +235,7 @@ export default function HiveMonitor() {
                 >
                   {viewMode === 'fleet' ? <><List size={15} /> Single Hive</> : <><LayoutGrid size={15} /> Fleet View</>}
                 </button>
-                {viewMode === 'single' && (
+                {viewMode === 'single' && activeApproval === 'APPROVED' && (
                   <button className="btn-luxury btn-luxury-primary" onClick={() => alert('Mock: Export Data triggered')}>Export Data</button>
                 )}
               </div>
@@ -176,7 +243,22 @@ export default function HiveMonitor() {
           </div>
 
           {viewMode === 'fleet' ? (
-            <FleetGrid hives={hives} onSelectHive={goToHive} />
+            <>
+              {pendingList.length > 0 && (
+                <div className="notice notice-warn" style={{ fontSize: '12.5px' }}>
+                  {pendingList.length} hive{pendingList.length > 1 ? 's' : ''} awaiting admin approval — hidden from fleet view until accepted.
+                </div>
+              )}
+              <FleetGrid hives={liveHives} onSelectHive={goToHive} />
+            </>
+          ) : activeApproval !== 'APPROVED' ? (
+            <HiveApprovalState
+              hive={curHive}
+              isApprover={isApprover}
+              onApprove={h => review('approve', h)}
+              onReject={h => review('reject', h)}
+              busy={reviewingId === (curHive?.hiveId || activeHive)}
+            />
           ) : (
             <>
               {/* Status strip */}

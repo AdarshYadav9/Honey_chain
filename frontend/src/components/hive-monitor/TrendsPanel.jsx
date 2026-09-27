@@ -30,9 +30,13 @@ export default function TrendsPanel({ hive, range, onChangeRange }) {
   const wtMin = Math.min(...weightSeries);
   const wtMax = Math.max(...weightSeries);
 
-  const seasonal = { thisYear: (hive.yieldForecastKg ?? 30) * 0.92, lastYear: (hive.yieldForecastKg ?? 30) * 0.78 };
-  const seasonalMax = Math.max(seasonal.thisYear, seasonal.lastYear) * 1.2;
-  const pctChange = ((seasonal.thisYear - seasonal.lastYear) / seasonal.lastYear * 100).toFixed(0);
+  const rawYield = Number(hive.yieldForecastKg);
+  const baseYield = Number.isFinite(rawYield) && rawYield > 0 ? rawYield : 30;
+  const seasonal = { thisYear: baseYield * 0.92, lastYear: baseYield * 0.78 };
+  const seasonalMax = Math.max(seasonal.thisYear, seasonal.lastYear, 1) * 1.2;
+  const pctChange = seasonal.lastYear > 0
+    ? ((seasonal.thisYear - seasonal.lastYear) / seasonal.lastYear * 100).toFixed(0)
+    : '0';
 
   return (
     <div className="glass-card">
